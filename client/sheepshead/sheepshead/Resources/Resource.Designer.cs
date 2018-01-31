@@ -41,22 +41,6 @@ namespace sheepshead
 			}
 		}
 		
-		public partial class Id
-		{
-			
-			// aapt resource value: 0x7f040000
-			public const int textView1 = 2130968576;
-			
-			static Id()
-			{
-				global::Android.Runtime.ResourceIdManager.UpdateIdValues();
-			}
-			
-			private Id()
-			{
-			}
-		}
-		
 		public partial class Layout
 		{
 			

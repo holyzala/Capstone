@@ -55,6 +55,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MainActivity.cs" />
+    <Compile Include="Resources\models\Card.cs" />
+    <Compile Include="Resources\models\Hand.cs" />
+    <Compile Include="Resources\models\ICard.cs" />
+    <Compile Include="Resources\models\Suit.cs" />
     <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
