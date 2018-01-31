@@ -14,6 +14,12 @@ namespace sheepshead.Resources.models
 {
     class Card : ICard
     {
+
+        public int Num { get; set; }
+        public int Value { get; set; }
+        public int Power { get; set; }
+        public Suit CardSuit { get; set; }
+
         public Card(){}
         public Card(int num, int value, int power, Suit cardSuit)
         {
@@ -23,10 +29,6 @@ namespace sheepshead.Resources.models
             this.CardSuit = CardSuit;
         }
 
-        public int Num { get ; set ; }
-        public int Value { get ; set ; }
-        public int Power { get ; set ; }
-        public Suit CardSuit { get ; set ; }
 
         public bool isHigher(ICard otherCard)
         {
