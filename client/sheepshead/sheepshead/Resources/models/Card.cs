@@ -10,32 +10,31 @@ using Android.Runtime;
 using Android.Views;
 using Android.Widget;
 
+using iface = sheepshead.Resources.models.interfaces;
+
 namespace sheepshead.Resources.models
 {
-    class Card : ICard
+    class Card : iface.ICard
     {
+        public CardID ID { get; private set; }
+        public int Value { get; private set; }
+        public CardPower Power { get; private set; }
+        public Suit CardSuit { get; private set; }
 
-        public int Num { get; set; }
-        public int Value { get; set; }
-        public int Power { get; set; }
-        public Suit CardSuit { get; set; }
-
-        public Card(){}
-        public Card(int num, int value, int power, Suit cardSuit)
+        public Card(CardID num, int value, CardPower power, Suit cardSuit)
         {
-            this.Num = num;
+            this.ID = num;
             this.Value = value;
             this.Power = power;
             this.CardSuit = CardSuit;
         }
 
-
-        public bool isHigher(ICard otherCard)
+        public bool IsHigher(iface.ICard otherCard)
         {
             return this.Power > otherCard.Power;
         }
 
-        public bool isTrump()
+        public bool IsTrump()
         {
             return this.CardSuit == Suit.Trump;
         }
