@@ -9,6 +9,8 @@ using Android.OS;
 using Android.Runtime;
 using Android.Views;
 using Android.Widget;
+using System.Security.Cryptography;
+
 
 using iface = sheepshead.Resources.models.interfaces;
 
@@ -23,6 +25,7 @@ namespace sheepshead.Resources.models
         public Piquet()
         {
             SetAllCards(Cards);
+            Shuffle(Cards);
         }
 
         public void AddCard()
@@ -45,9 +48,21 @@ namespace sheepshead.Resources.models
             throw new NotImplementedException();
         }
 
-        public void Shuffle()
+        public void Shuffle(List<iface.ICard> cards)
         {
-            throw new NotImplementedException();
+            RNGCryptoServiceProvider provider = new RNGCryptoServiceProvider();
+            int n = cards.Count;
+            while (n > 1)
+            {
+                byte[] box = new byte[1];
+                do provider.GetBytes(box);
+                while (!(box[0] < n * (Byte.MaxValue / n)));
+                int k = (box[0] % n);
+                n--;
+                iface.ICard value = cards[k];
+                cards[k] = cards[n];
+                cards[n] = value;
+            }
         }
 
         public int Size()
