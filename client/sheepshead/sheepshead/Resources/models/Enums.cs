@@ -5,7 +5,7 @@
 
 public enum CardID
 {
-    Seven, Eight, Nine, Ten, Jack, Queen, King, Ace
+    Seven, Eight, Nine, Ten, King, Ace, Jack , Queen
 };
 
 public enum CardPower

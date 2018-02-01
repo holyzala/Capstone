@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
+
 namespace sheepshead.Resources.models.interfaces
 {
     public interface IHand
     {
-        ICard[] Cards { get; set; }
+        List<ICard> Cards { get; set; }
 
         int GetNumOfRemainingCards();
         ICard GetCard(int index);
