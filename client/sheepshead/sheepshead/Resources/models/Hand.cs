@@ -10,43 +10,44 @@ using Android.Runtime;
 using Android.Views;
 using Android.Widget;
 
+using iface = sheepshead.Resources.models.interfaces;
+
 namespace sheepshead.Resources.models
 {
-    class Hand
+    class Hand: iface.IHand
     {
-        private Card[] cards = new Card[6];
-        
-       
+        public iface.ICard[] Cards { get; set; }
+
         public Hand() { }
         
-        public int getNumOfRemainingCards()
+        public int GetNumOfRemainingCards()
         {
             int size = 0;
-            for (int i=0; i < cards.Length; i++)
+            for (int i=0; i < Cards.Length; i++)
             {
-                if(cards[i] != null)  size++;
+                if(Cards[i] != null)  size++;
             }
             return size;
         }
 
-
-
-        public Card getCard(int index)
+        public iface.ICard GetCard(int index)
         {
-            if (index >= 6 || index < 0) throw new IndexOutOfRangeException();
-            else if (cards[index] == null) throw new NullReferenceException("Card doesn't exist");
+            if (index >= 6 || index < 0)
+                throw new IndexOutOfRangeException();
+            else if (Cards[index] == null)
+                throw new NullReferenceException("Card doesn't exist");
 
             else
-            return cards[index];
+            return Cards[index];
         }
 
 
-        public int numOfThisSuit(Suit suit)
+        public int NumOfThisSuit(Suit suit)
         {
             int numOfCards = 0;
-            for(int i=0; i< cards.Length; i++)
+            for(int i=0; i< Cards.Length; i++)
             {
-                if (this.cards[i].CardSuit == suit)
+                if (this.Cards[i].CardSuit == suit)
                     numOfCards++;
             }
             return numOfCards;
