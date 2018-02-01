@@ -22,7 +22,7 @@ namespace sheepshead.Resources.models
 
         public Piquet()
         {
-
+            SetAllCards(Cards);
         }
 
         public void AddCard()
@@ -54,5 +54,97 @@ namespace sheepshead.Resources.models
         {
             throw new NotImplementedException();
         }
+
+
+        private void SetAllCards(List<iface.ICard> cards)
+        {
+            foreach (CardID cID in Enum.GetValues(typeof(CardID)))
+            {
+                switch (cID)
+                {
+                    case CardID.Seven:
+                        for (int i = 0; i < 4; i++)
+                        {
+                            if (i == 3)
+                                cards.Add(new Card(cID, 0, CardPower.SevenTrump, Suit.Trump));
+                            else
+                                cards.Add(new Card(cID, 0, CardPower.SevenFail, (Suit)i + 1));
+                        }
+                        break;
+
+                    case CardID.Eight:
+                        for (int i = 0; i < 4; i++)
+                        {
+                            if (i == 3)
+                                cards.Add(new Card(cID, 0, CardPower.EightTrump, Suit.Trump));
+                            else
+                                cards.Add(new Card(cID, 0, CardPower.EightFail, (Suit)i + 1));
+                        }
+                        break;
+
+                    case CardID.Nine:
+                        for (int i = 0; i < 4; i++)
+                        {
+                            if (i == 3)
+                                cards.Add(new Card(cID, 0, CardPower.NineTrump, Suit.Trump));
+                            else
+                                cards.Add(new Card(cID, 0, CardPower.NineFail, (Suit)i + 1));
+                        }
+                        break;
+
+                    case CardID.Ten:
+                        for (int i = 0; i < 4; i++)
+                        {
+                            if (i == 3)
+                                cards.Add(new Card(cID, 10, CardPower.TenTrump, Suit.Trump));
+                            else
+                                cards.Add(new Card(cID, 10, CardPower.TenFail, (Suit)i + 1));
+                        }
+                        break;
+
+                    case CardID.Jack:
+                        int pow = 13;
+                        for (int i = 0; i < 4; i++)
+                        {
+                            cards.Add(new Card(cID, 2, (CardPower)pow, Suit.Trump));
+                            pow++;
+                        }
+                        break;
+
+                    case CardID.Queen:
+                        pow = 17;
+                        for (int i = 0; i < 4; i++)
+                        {
+                            cards.Add(new Card(cID, 3, (CardPower)pow, Suit.Trump));
+                            pow++;
+                        }
+                        break;
+
+                    case CardID.King:
+                        for (int i = 0; i < 4; i++)
+                        {
+                            if (i == 3)
+                                cards.Add(new Card(cID, 4, CardPower.KingTrump, Suit.Trump));
+                            else
+                                cards.Add(new Card(cID, 4, CardPower.KingFail, (Suit)i + 1));
+                        }
+                        break;
+
+                    case CardID.Ace:
+                        for (int i = 0; i < 4; i++)
+                        {
+                            if (i == 3)
+                                cards.Add(new Card(cID, 11, CardPower.AceTrump, Suit.Trump));
+                            else
+                                cards.Add(new Card(cID, 11, CardPower.AceTrump, (Suit)i + 1));
+                        }
+                        break;
+                }
+            }
+        }
+
+
+
+
     }
 }
