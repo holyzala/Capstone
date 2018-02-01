@@ -57,7 +57,7 @@
     <Compile Include="MainActivity.cs" />
     <Compile Include="Resources\models\Card.cs" />
     <Compile Include="Resources\models\Hand.cs" />
-    <Compile Include="Resources\models\interfaces\Deck.cs" />
+    <Compile Include="Resources\models\interfaces\IDeck.cs" />
     <Compile Include="Resources\models\interfaces\ICard.cs" />
     <Compile Include="Resources\models\Enums.cs" />
     <Compile Include="Resources\models\Piquet.cs" />

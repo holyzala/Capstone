@@ -28,25 +28,35 @@ namespace sheepshead.Resources.models
             Shuffle(Cards);
         }
 
-        public void AddCard()
+        public iface.ICard GetTopCard()
         {
-            throw new NotImplementedException();
+            iface.ICard topCard= null;
+
+            for (int i = 0; i < Cards.Count; i++)
+            {
+                if (Cards[i] != null)
+                {
+                    topCard = Cards[i];
+                    return topCard;
+                }
+            }
+            return topCard;
         }
 
-        public Card GetTopCard()
+
+        public bool RemoveCardByIndex(int index)
         {
-            throw new NotImplementedException();
+            if (Cards[index] == null)
+                return false;
+            else Cards.RemoveAt(index);
+            return true;
         }
 
-        public Card RemoveCardBy(int index)
+        public void ResetDeck()
         {
-            throw new NotImplementedException();
+            SetAllCards(this.Cards);
         }
 
-        public void Reset()
-        {
-            throw new NotImplementedException();
-        }
 
         public void Shuffle(List<iface.ICard> cards)
         {
@@ -67,7 +77,7 @@ namespace sheepshead.Resources.models
 
         public int Size()
         {
-            throw new NotImplementedException();
+            return Cards.Count;
         }
 
 
