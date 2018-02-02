@@ -17,15 +17,16 @@ using iface = sheepshead.Resources.models.interfaces;
 
 namespace sheepshead.Resources.models
 {
-    class Piquet : iface.IDeck
+    public class Piquet : iface.IDeck
     {
         public List<iface.ICard> Cards { get ; set ; }
 
 
         public Piquet()
         {
-            SetAllCards(Cards);
-            Shuffle(Cards);
+            Cards = new List<iface.ICard>();
+            SetAllCards();
+            Shuffle();
         }
 
         public iface.ICard GetTopCard()
@@ -54,14 +55,14 @@ namespace sheepshead.Resources.models
 
         public void ResetDeck()
         {
-            SetAllCards(this.Cards);
+            SetAllCards();
         }
 
 
-        public void Shuffle(List<iface.ICard> cards)
+        public void Shuffle()
         {
             RNGCryptoServiceProvider provider = new RNGCryptoServiceProvider();
-            int n = cards.Count;
+            int n = Cards.Count;
             while (n > 1)
             {
                 byte[] box = new byte[1];
@@ -69,9 +70,9 @@ namespace sheepshead.Resources.models
                 while (!(box[0] < n * (Byte.MaxValue / n)));
                 int k = (box[0] % n);
                 n--;
-                iface.ICard value = cards[k];
-                cards[k] = cards[n];
-                cards[n] = value;
+                iface.ICard value = Cards[k];
+                Cards[k] = Cards[n];
+                Cards[n] = value;
             }
         }
 
@@ -81,7 +82,7 @@ namespace sheepshead.Resources.models
         }
 
 
-        private void SetAllCards(List<iface.ICard> cards)
+        private void SetAllCards()
         {
             foreach (CardID cID in Enum.GetValues(typeof(CardID)))
             {
@@ -91,9 +92,9 @@ namespace sheepshead.Resources.models
                         for (int i = 0; i < 4; i++)
                         {
                             if (i == 3)
-                                cards.Add(new Card(cID, 0, CardPower.SevenTrump, Suit.Trump));
+                                Cards.Add(new Card(cID, 0, CardPower.SevenTrump, Suit.Trump));
                             else
-                                cards.Add(new Card(cID, 0, CardPower.SevenFail, (Suit)i + 1));
+                                Cards.Add(new Card(cID, 0, CardPower.SevenFail, (Suit)i + 1));
                         }
                         break;
 
@@ -101,9 +102,9 @@ namespace sheepshead.Resources.models
                         for (int i = 0; i < 4; i++)
                         {
                             if (i == 3)
-                                cards.Add(new Card(cID, 0, CardPower.EightTrump, Suit.Trump));
+                                Cards.Add(new Card(cID, 0, CardPower.EightTrump, Suit.Trump));
                             else
-                                cards.Add(new Card(cID, 0, CardPower.EightFail, (Suit)i + 1));
+                                Cards.Add(new Card(cID, 0, CardPower.EightFail, (Suit)i + 1));
                         }
                         break;
 
@@ -111,9 +112,9 @@ namespace sheepshead.Resources.models
                         for (int i = 0; i < 4; i++)
                         {
                             if (i == 3)
-                                cards.Add(new Card(cID, 0, CardPower.NineTrump, Suit.Trump));
+                                Cards.Add(new Card(cID, 0, CardPower.NineTrump, Suit.Trump));
                             else
-                                cards.Add(new Card(cID, 0, CardPower.NineFail, (Suit)i + 1));
+                                Cards.Add(new Card(cID, 0, CardPower.NineFail, (Suit)i + 1));
                         }
                         break;
 
@@ -121,9 +122,9 @@ namespace sheepshead.Resources.models
                         for (int i = 0; i < 4; i++)
                         {
                             if (i == 3)
-                                cards.Add(new Card(cID, 10, CardPower.TenTrump, Suit.Trump));
+                                Cards.Add(new Card(cID, 10, CardPower.TenTrump, Suit.Trump));
                             else
-                                cards.Add(new Card(cID, 10, CardPower.TenFail, (Suit)i + 1));
+                                Cards.Add(new Card(cID, 10, CardPower.TenFail, (Suit)i + 1));
                         }
                         break;
 
@@ -131,7 +132,7 @@ namespace sheepshead.Resources.models
                         int pow = 13;
                         for (int i = 0; i < 4; i++)
                         {
-                            cards.Add(new Card(cID, 2, (CardPower)pow, Suit.Trump));
+                            Cards.Add(new Card(cID, 2, (CardPower)pow, Suit.Trump));
                             pow++;
                         }
                         break;
@@ -140,7 +141,7 @@ namespace sheepshead.Resources.models
                         pow = 17;
                         for (int i = 0; i < 4; i++)
                         {
-                            cards.Add(new Card(cID, 3, (CardPower)pow, Suit.Trump));
+                            Cards.Add(new Card(cID, 3, (CardPower)pow, Suit.Trump));
                             pow++;
                         }
                         break;
@@ -149,9 +150,9 @@ namespace sheepshead.Resources.models
                         for (int i = 0; i < 4; i++)
                         {
                             if (i == 3)
-                                cards.Add(new Card(cID, 4, CardPower.KingTrump, Suit.Trump));
+                                Cards.Add(new Card(cID, 4, CardPower.KingTrump, Suit.Trump));
                             else
-                                cards.Add(new Card(cID, 4, CardPower.KingFail, (Suit)i + 1));
+                                Cards.Add(new Card(cID, 4, CardPower.KingFail, (Suit)i + 1));
                         }
                         break;
 
@@ -159,9 +160,9 @@ namespace sheepshead.Resources.models
                         for (int i = 0; i < 4; i++)
                         {
                             if (i == 3)
-                                cards.Add(new Card(cID, 11, CardPower.AceTrump, Suit.Trump));
+                                Cards.Add(new Card(cID, 11, CardPower.AceTrump, Suit.Trump));
                             else
-                                cards.Add(new Card(cID, 11, CardPower.AceTrump, (Suit)i + 1));
+                                Cards.Add(new Card(cID, 11, CardPower.AceTrump, (Suit)i + 1));
                         }
                         break;
                 }

@@ -16,7 +16,7 @@ namespace sheepshead.Resources.models.interfaces
     {
         List<ICard> Cards { get; set; }
         
-        void Shuffle(List<ICard> cards);
+        void Shuffle();
         int Size();
         void ResetDeck();
         bool RemoveCardByIndex(int index);
