@@ -31,16 +31,8 @@ namespace sheepshead.Resources.models
 
         public iface.ICard GetTopCard()
         {
-            iface.ICard topCard= null;
-
-            for (int i = 0; i < Cards.Count; i++)
-            {
-                if (Cards[i] != null)
-                {
-                    topCard = Cards[i];
-                    return topCard;
-                }
-            }
+            iface.ICard topCard = Cards[0];
+            Cards.RemoveAt(0);
             return topCard;
         }
 
@@ -55,6 +47,7 @@ namespace sheepshead.Resources.models
 
         public void ResetDeck()
         {
+            Cards.Clear();
             SetAllCards();
         }
 
@@ -89,48 +82,48 @@ namespace sheepshead.Resources.models
                 switch (cID)
                 {
                     case CardID.Seven:
-                        for (int i = 0; i < 4; i++)
+                        foreach (Suit suit in Enum.GetValues(typeof(Suit)))
                         {
-                            if (i == 3)
-                                Cards.Add(new Card(cID, 0, CardPower.SevenTrump, Suit.Trump));
+                            if (suit == Suit.Trump)
+                                Cards.Add(new Card(cID, 0, CardPower.SevenTrump, suit));
                             else
-                                Cards.Add(new Card(cID, 0, CardPower.SevenFail, (Suit)i + 1));
+                                Cards.Add(new Card(cID, 0, CardPower.SevenFail, suit));
                         }
                         break;
 
                     case CardID.Eight:
-                        for (int i = 0; i < 4; i++)
+                        foreach (Suit suit in Enum.GetValues(typeof(Suit)))
                         {
-                            if (i == 3)
-                                Cards.Add(new Card(cID, 0, CardPower.EightTrump, Suit.Trump));
+                            if (suit == Suit.Trump)
+                                Cards.Add(new Card(cID, 0, CardPower.EightTrump, suit));
                             else
-                                Cards.Add(new Card(cID, 0, CardPower.EightFail, (Suit)i + 1));
+                                Cards.Add(new Card(cID, 0, CardPower.EightFail, suit));
                         }
                         break;
 
                     case CardID.Nine:
-                        for (int i = 0; i < 4; i++)
+                        foreach (Suit suit in Enum.GetValues(typeof(Suit)))
                         {
-                            if (i == 3)
-                                Cards.Add(new Card(cID, 0, CardPower.NineTrump, Suit.Trump));
+                            if (suit == Suit.Trump)
+                                Cards.Add(new Card(cID, 0, CardPower.NineTrump, suit));
                             else
-                                Cards.Add(new Card(cID, 0, CardPower.NineFail, (Suit)i + 1));
+                                Cards.Add(new Card(cID, 0, CardPower.NineFail, suit));
                         }
                         break;
 
                     case CardID.Ten:
-                        for (int i = 0; i < 4; i++)
+                        foreach (Suit suit in Enum.GetValues(typeof(Suit)))
                         {
-                            if (i == 3)
-                                Cards.Add(new Card(cID, 10, CardPower.TenTrump, Suit.Trump));
+                            if (suit == Suit.Trump)
+                                Cards.Add(new Card(cID, 0, CardPower.TenTrump, suit));
                             else
-                                Cards.Add(new Card(cID, 10, CardPower.TenFail, (Suit)i + 1));
+                                Cards.Add(new Card(cID, 0, CardPower.TenFail, suit));
                         }
                         break;
 
                     case CardID.Jack:
-                        int pow = 13;
-                        for (int i = 0; i < 4; i++)
+                        CardPower pow = CardPower.JackDiamond;
+                        foreach (Suit suit in Enum.GetValues(typeof(Suit)))
                         {
                             Cards.Add(new Card(cID, 2, (CardPower)pow, Suit.Trump));
                             pow++;
@@ -138,8 +131,8 @@ namespace sheepshead.Resources.models
                         break;
 
                     case CardID.Queen:
-                        pow = 17;
-                        for (int i = 0; i < 4; i++)
+                        pow = CardPower.QueenDiamond;
+                        foreach (Suit suit in Enum.GetValues(typeof(Suit)))
                         {
                             Cards.Add(new Card(cID, 3, (CardPower)pow, Suit.Trump));
                             pow++;
@@ -147,30 +140,26 @@ namespace sheepshead.Resources.models
                         break;
 
                     case CardID.King:
-                        for (int i = 0; i < 4; i++)
+                        foreach (Suit suit in Enum.GetValues(typeof(Suit)))
                         {
-                            if (i == 3)
-                                Cards.Add(new Card(cID, 4, CardPower.KingTrump, Suit.Trump));
+                            if (suit == Suit.Trump)
+                                Cards.Add(new Card(cID, 0, CardPower.KingTrump, suit));
                             else
-                                Cards.Add(new Card(cID, 4, CardPower.KingFail, (Suit)i + 1));
+                                Cards.Add(new Card(cID, 0, CardPower.KingFail, suit));
                         }
                         break;
 
                     case CardID.Ace:
-                        for (int i = 0; i < 4; i++)
+                        foreach (Suit suit in Enum.GetValues(typeof(Suit)))
                         {
-                            if (i == 3)
-                                Cards.Add(new Card(cID, 11, CardPower.AceTrump, Suit.Trump));
+                            if (suit == Suit.Trump)
+                                Cards.Add(new Card(cID, 0, CardPower.AceTrump, suit));
                             else
-                                Cards.Add(new Card(cID, 11, CardPower.AceTrump, (Suit)i + 1));
+                                Cards.Add(new Card(cID, 0, CardPower.AceFail, suit));
                         }
                         break;
                 }
             }
         }
-
-
-
-
     }
 }

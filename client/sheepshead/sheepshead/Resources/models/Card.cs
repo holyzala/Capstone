@@ -14,7 +14,7 @@ using iface = sheepshead.Resources.models.interfaces;
 
 namespace sheepshead.Resources.models
 {
-    class Card : iface.ICard
+    public class Card : iface.ICard
     {
         public CardID ID { get; private set; }
         public int Value { get; private set; }
@@ -27,6 +27,16 @@ namespace sheepshead.Resources.models
             this.Value = value;
             this.Power = power;
             this.CardSuit = CardSuit;
+        }
+
+        public override bool Equals(object obj)
+        {
+            // Check for null values and compare run-time types.
+            if (obj == null || GetType() != obj.GetType())
+                return false;
+
+            Card c = (Card)obj;
+            return (ID == c.ID) && (Value == c.Value) && (Power == c.Power) && (CardSuit == c.CardSuit);
         }
 
         public bool IsHigher(iface.ICard otherCard)
