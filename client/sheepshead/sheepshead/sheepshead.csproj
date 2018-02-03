@@ -57,9 +57,13 @@
     <Compile Include="MainActivity.cs" />
     <Compile Include="Resources\models\Card.cs" />
     <Compile Include="Resources\models\Hand.cs" />
+    <Compile Include="Resources\models\Blind.cs" />
+    <Compile Include="Resources\models\interfaces\IBlind.cs" />
     <Compile Include="Resources\models\interfaces\IDeck.cs" />
     <Compile Include="Resources\models\interfaces\ICard.cs" />
     <Compile Include="Resources\models\Enums.cs" />
+    <Compile Include="Resources\models\interfaces\ITrick.cs" />
+    <Compile Include="Resources\models\LocalPlayer.cs" />
     <Compile Include="Resources\models\Piquet.cs" />
     <Compile Include="Resources\models\Trick.cs" />
     <Compile Include="Resources\Resource.Designer.cs" />
@@ -70,6 +74,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="GettingStarted.Xamarin" />
+    <None Include="packages.config" />
     <None Include="Resources\AboutResources.txt" />
     <None Include="Properties\AndroidManifest.xml" />
     <None Include="Assets\AboutAssets.txt" />

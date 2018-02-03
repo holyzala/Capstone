@@ -57,6 +57,7 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resources\models\PiquetTests.cs" />
+    <Compile Include="Resources\models\TrickTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
