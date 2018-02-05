@@ -8,10 +8,14 @@ namespace SharedSheep.Trick
     public class Trick : ITrick
     {
 
-        public List<(IPlayer, ICard)> TrickCards { get; private set ; }
+        public List<(IPlayer, ICard)> TrickCards { get; private set; }
 
 
 
+        public Trick()
+        {
+
+        }
         public Trick(List<(IPlayer, ICard)> cards)
         {
             TrickCards = new List<(IPlayer, ICard)>(5);
@@ -20,18 +24,25 @@ namespace SharedSheep.Trick
 
 
 
+
         public ICard LeadingCard()
         {
             return TrickCards[0].Item2;
         }
+
+
         public IPlayer TheWinnerPlayer()
         {
+            ICard card ;
             IPlayer winner = TrickCards[0].Item1;
             for (int i=0; i<TrickCards.Count;i++)
             {
-                ICard card = TrickCards[i].Item2;
+                card = TrickCards[i].Item2;
                 if (TheWinnerCard().Equals(card))
+                {
                     winner = TrickCards[i].Item1;
+                    break;
+                }
             } 
             return winner;
         }
