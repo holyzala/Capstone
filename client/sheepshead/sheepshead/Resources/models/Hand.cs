@@ -16,14 +16,14 @@ namespace sheepshead.Resources.models
 {
     class Hand: iface.IHand
     {
-        public iface.ICard[] Cards { get; set; }
+        public List<iface.ICard> Cards { get; set; }
 
         public Hand() { }
         
         public int GetNumOfRemainingCards()
         {
             int size = 0;
-            for (int i=0; i < Cards.Length; i++)
+            for (int i=0; i < Cards.Count; i++)
             {
                 if(Cards[i] != null)  size++;
             }
@@ -45,7 +45,7 @@ namespace sheepshead.Resources.models
         public int NumOfThisSuit(Suit suit)
         {
             int numOfCards = 0;
-            for(int i=0; i< Cards.Length; i++)
+            for(int i=0; i< Cards.Count; i++)
             {
                 if (this.Cards[i].CardSuit == suit)
                     numOfCards++;

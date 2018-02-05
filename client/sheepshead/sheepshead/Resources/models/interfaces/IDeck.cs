@@ -12,16 +12,15 @@ using Android.Widget;
 
 namespace sheepshead.Resources.models.interfaces
 {
-    interface Deck
+    interface IDeck
     {
-        Card[] cards { get; set; }
-
-        void shuffle();
-        int size();
-        void reset();
-        Card removeCardBy(int index);
-        void addCard();
-        Card getTopCard();
+        List<ICard> Cards { get; set; }
+        
+        void Shuffle();
+        int Size();
+        void ResetDeck();
+        bool RemoveCardByIndex(int index);
+        ICard GetTopCard();
 
     }
 }

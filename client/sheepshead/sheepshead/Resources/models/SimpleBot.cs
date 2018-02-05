@@ -11,6 +11,7 @@ namespace sheepshead.Resources.models
 
         public SimpleBot(String name)
         {
+            Partner = false;
             Name = name;
         }
 
