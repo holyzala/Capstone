@@ -2,9 +2,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Input.Touch;
-using mface = SH_Android.Resources.Models;
-
-namespace SH_Android
+namespace AndroidSheep
 {
     /// <summary>
     /// This is the main type for your game.

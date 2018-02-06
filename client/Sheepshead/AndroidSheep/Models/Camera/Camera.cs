@@ -1,10 +1,9 @@
 ﻿using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
-using iface = SH_Android.Resources.Models.Interfaces;
 
-namespace SH_Android.Resources.Models
+namespace AndroidSheep.Models
 {
-    class Camera : iface.ICamera
+    class Camera : ICamera
     {
         GraphicsDevice graphicsDevice;
 

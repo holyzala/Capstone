@@ -3,7 +3,7 @@ using Android.Content.PM;
 using Android.OS;
 using Android.Views;
 
-namespace SH_Android
+namespace AndroidSheep
 {
     [Activity(Label = "AndroidSheep"
         , MainLauncher = true

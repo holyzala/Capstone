@@ -1,7 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace SH_Android.Resources.Models.Interfaces
+namespace AndroidSheep.Models
 {
     interface ICamera
     {
