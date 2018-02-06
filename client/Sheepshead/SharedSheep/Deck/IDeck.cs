@@ -4,7 +4,7 @@ using SharedSheep.Card;
 
 namespace SharedSheep.Deck
 {
-    interface IDeck
+    public interface IDeck
     {
         List<ICard> Cards { get; set; }
         
