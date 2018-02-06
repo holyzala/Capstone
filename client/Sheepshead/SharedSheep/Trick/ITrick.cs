@@ -5,7 +5,7 @@ using SharedSheep.Card;
 
 namespace SharedSheep.Trick
 {
-    interface ITrick
+    public interface ITrick
     {
         List<(IPlayer, ICard)> TrickCards { get; }
 

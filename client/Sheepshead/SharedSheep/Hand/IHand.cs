@@ -11,5 +11,6 @@ namespace SharedSheep.Hand
         int GetNumOfRemainingCards();
         ICard GetCard(int index);
         int NumOfThisSuit(Suit suit);
+        void AddCard(ICard card);
     }
 }

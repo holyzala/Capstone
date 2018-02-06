@@ -1,9 +1,9 @@
 ﻿using System;
 using SharedSheep.Card;
 using SharedSheep.Hand;
-using SharedSheep.Player;
+using SharedSheep.Blind;
 
-namespace sheepshead.Resources.models
+namespace SharedSheep.Player
 {
     public class SimpleBot: IPlayer
     {
@@ -15,6 +15,7 @@ namespace sheepshead.Resources.models
         {
             Partner = false;
             Name = name;
+            Hand = new Hand.Hand();
         }
 
         public Boolean IsPartner()
@@ -30,6 +31,16 @@ namespace sheepshead.Resources.models
         public ICard PlayCard()
         {
             return Hand.Cards[0];
+        }
+
+        public IBlind Pick(IBlind blind)
+        {
+            return blind;
+        }
+
+        public void AddToHand(ICard card)
+        {
+            Hand.AddCard(card);
         }
     }
 }

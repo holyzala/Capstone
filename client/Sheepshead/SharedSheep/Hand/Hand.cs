@@ -8,7 +8,10 @@ namespace SharedSheep.Hand
     {
         public List<ICard> Cards { get; set; }
 
-        public Hand() { }
+        public Hand()
+        {
+            Cards = new List<ICard>();
+        }
         
         public int GetNumOfRemainingCards()
         {
@@ -43,5 +46,9 @@ namespace SharedSheep.Hand
             return numOfCards;
         }
 
+        public void AddCard(ICard card)
+        {
+            Cards.Add(card);
+        }
     }
 }
