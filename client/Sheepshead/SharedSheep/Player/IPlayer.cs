@@ -1,6 +1,7 @@
 ﻿using System;
 using SharedSheep.Card;
 using SharedSheep.Hand;
+using SharedSheep.Blind;
 
 namespace SharedSheep.Player
 {
@@ -12,7 +13,7 @@ namespace SharedSheep.Player
         Boolean IsPartner();
         ICard PlayCard();
         Boolean WantPick();
-        // IBlind Pick(IBlind blind);
-
+        IBlind Pick(IBlind blind);
+        void AddToHand(ICard card);
     }
 }

@@ -4,7 +4,7 @@ using SharedSheep.Card;
 
 namespace SharedSheep.Blind
 {
-    class Blind : IBlind
+    public class Blind : IBlind
     {
         public List<ICard> BlindCards { get; set ; }
 

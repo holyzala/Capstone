@@ -51,6 +51,8 @@
   <ItemGroup>
     <Compile Include="Card\CardTests.cs" />
     <Compile Include="Deck\PiquetTests.cs" />
+    <Compile Include="Player\LocalPlayerTests.cs" />
+    <Compile Include="Player\SimpleBotTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Trick\TrickTests.cs" />
   </ItemGroup>

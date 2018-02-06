@@ -27,6 +27,11 @@ namespace SharedSheep.Card
             return (ID == c.ID) && (Value == c.Value) && (Power == c.Power) && (CardSuit == c.CardSuit);
         }
 
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
+
         public bool IsHigher(ICard otherCard)
         {
             return this.Power > otherCard.Power;
