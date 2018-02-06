@@ -22,8 +22,12 @@ namespace SharedSheep.Trick
             TrickCards = cards;
         }
 
-
-
+        
+        public void AddCardAndPlayer(IPlayer player, ICard card)
+        {
+            if(TrickCards.Count < 5)
+            TrickCards.Add((player,card));
+        }
 
         public ICard LeadingCard()
         {

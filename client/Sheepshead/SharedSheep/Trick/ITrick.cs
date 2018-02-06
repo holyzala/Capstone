@@ -12,7 +12,7 @@ namespace SharedSheep.Trick
         IPlayer TheWinnerPlayer();
         ICard TheWinnerCard();
         ICard LeadingCard();
-
+        void AddCardAndPlayer(IPlayer player,ICard card);
 
     }
 }
