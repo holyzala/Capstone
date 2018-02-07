@@ -31,7 +31,8 @@ namespace SharedSheep.Player
 
         public bool WantPick()
         {
-            return false;
+            bool ans = false ;
+            return ans;
         }
 
         public IBlind Pick(IBlind blind)

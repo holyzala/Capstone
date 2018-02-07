@@ -6,7 +6,7 @@ using SharedSheep.Trick;
 
 namespace SharedSheep.Round
 {
-    class Round : IRound
+    public class Round : IRound
     {
         public ITrick Trick { get; set; }
         public int RoundNumber { get; set; }

@@ -20,9 +20,13 @@ namespace SharedSheepTest.Deck
         public void GetTopCardTest()
         {
             Card card = new Card(CardID.Eight, 3, CardPower.JackDiamond, Suit.Hearts);
+            Card card2 = new Card(CardID.Jack, 2, CardPower.JackClub, Suit.Clubs);
             deck.Cards.Insert(0, card);
+            deck.Cards.Insert(1,card2);
             Assert.AreEqual(card, deck.GetTopCard());
             Assert.AreNotEqual(card, deck.Cards[0]);
+            Assert.AreEqual(card2, deck.GetTopCard());
+
         }
 
         [TestMethod()]

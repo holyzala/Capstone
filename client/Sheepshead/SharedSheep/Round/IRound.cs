@@ -5,7 +5,7 @@ using SharedSheep.Player;
 using SharedSheep.Trick;
 namespace SharedSheep.Round
 {
-    interface IRound
+    public interface IRound
     {
         ITrick Trick { get; set; }
         int RoundNumber { get; set; }
