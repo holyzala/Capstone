@@ -3,17 +3,16 @@ using Microsoft.Xna.Framework;
 
 namespace AndroidSheep.Models
 {
-    class Camera : ICamera
+    class PlayerCamera : ICamera
     {
-        GraphicsDevice graphicsDevice;
 
-        public Camera(string name, Vector3 startPos)
+        public PlayerCamera(string name, Vector3 startPos, GraphicsDeviceManager graphics)
         {
-
             this.Position = startPos;
             this.Name = name;
+            this.Graphics = graphics.GraphicsDevice;
             this.FieldOfView = Microsoft.Xna.Framework.MathHelper.PiOver4;
-            this.AspectRatio = (float)graphicsDevice.Viewport.Width / (float)graphicsDevice.Viewport.Height;
+            this.AspectRatio = (float)Graphics.Viewport.Width / (float)Graphics.Viewport.Height;
             this.NearPlane = 1;
             this.FarPlane = 200;
         }
@@ -22,6 +21,7 @@ namespace AndroidSheep.Models
         public string Name { get; private set; }
         public Vector3 Position { get; private set; }
 
+        public GraphicsDevice Graphics { get; private set; }
         public float FieldOfView { get; private set; }
         public float NearPlane { get; private set; }
         public float FarPlane { get; private set; }
@@ -43,11 +43,6 @@ namespace AndroidSheep.Models
                 var upVector = Vector3.UnitZ;
                 return Matrix.CreateLookAt(Position, lookAtVector, upVector);
             }
-        }
-
-        public Camera(GraphicsDevice graphicsDevice)
-        {
-            this.graphicsDevice = graphicsDevice;
         }
 
         public void Update(GameTime gameTime)

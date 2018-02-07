@@ -8,6 +8,7 @@ namespace AndroidSheep.Models
         string Name { get; }
         Vector3 Position { get; }
 
+        GraphicsDevice Graphics  { get; }
         float FieldOfView { get; }
         float NearPlane { get; }
         float FarPlane { get; }
