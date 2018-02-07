@@ -9,7 +9,7 @@ using SharedSheep.Round;
 
 namespace SharedSheep.Game
 {
-    class Game : IGame
+    public class Game : IGame
     {
         public List<IRound> Ronds { get; set; }
         public IDeck Deck { get; set; }
@@ -20,6 +20,8 @@ namespace SharedSheep.Game
         public bool ForcedToPick { get; set; }
         public ICard PartnerCard { get; set; }
         public bool CallOutForJack { get; set; }
+
+        public Game(IDeck deck) { Deck = deck;  }
 
         public void DealCard(IPlayer player)
         {
@@ -38,13 +40,11 @@ namespace SharedSheep.Game
 
             foreach (IPlayer player in players)
             {
-
                 if (player.WantPick())
                 {
                     player.Pick(this.Blind);
                     break;
                 }
-
             }
         }
 
