@@ -10,7 +10,6 @@
     <Folder Include="Deck\" />
     <Folder Include="Hand\" />
     <Folder Include="Blind\" />
-    <Folder Include="Player\" />
   </ItemGroup>
 
 </Project>

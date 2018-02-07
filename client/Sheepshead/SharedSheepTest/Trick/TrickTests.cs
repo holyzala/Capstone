@@ -51,7 +51,7 @@ namespace SharedSheepTest.TrickTests
         }
 
         [TestMethod]
-        public void TheWinnerPlayer()
+        public void TheWinnerPlayerTest()
         {
             list.Add((p1, c1));
             list.Add((p2, c2));
