@@ -14,19 +14,14 @@ namespace SharedSheep.Trick
 
         public Trick()
         {
-
-        }
-        public Trick(List<(IPlayer, ICard)> cards)
-        {
             TrickCards = new List<(IPlayer, ICard)>(5);
-            TrickCards = cards;
         }
 
-        
+
         public void AddCardAndPlayer(IPlayer player, ICard card)
         {
-            if(TrickCards.Count < 5)
-            TrickCards.Add((player,card));
+            if (TrickCards.Count < 5)
+                TrickCards.Add((player, card));
         }
 
         public ICard LeadingCard()
@@ -37,37 +32,28 @@ namespace SharedSheep.Trick
 
         public IPlayer TheWinnerPlayer()
         {
-            ICard card ;
-            IPlayer winner = TrickCards[0].Item1;
-            for (int i=0; i<TrickCards.Count;i++)
-            {
-                card = TrickCards[i].Item2;
-                if (TheWinnerCard().Equals(card))
-                {
-                    winner = TrickCards[i].Item1;
-                    break;
-                }
-            } 
-            return winner;
+            return Winners().Item1;
         }
-
-
-
 
         public ICard TheWinnerCard()
         {
-            ICard winner = LeadingCard();
-            foreach((IPlayer, ICard) crd in TrickCards)
+            return Winners().Item2;
+        }
+
+
+        private (IPlayer, ICard) Winners()
+        {
+            (IPlayer, ICard) winner = TrickCards[0];
+            foreach ((IPlayer, ICard) crd in TrickCards)
             {
                 ICard card = crd.Item2;
-                if (winner.CardSuit == card.CardSuit && winner.Power < card.Power)
-                    winner = card;
-                else if (winner.CardSuit != Suit.Trump && card.CardSuit == Suit.Trump)
-                    winner = card;
+                if (winner.Item2.CardSuit == card.CardSuit && winner.Item2.Power < card.Power)
+                    winner = crd;
+                else if (winner.Item2.CardSuit != Suit.Trump && card.CardSuit == Suit.Trump)
+                    winner = crd;
             }
             return winner;
         }
-
 
 
     }

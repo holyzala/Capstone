@@ -4,7 +4,7 @@ using SharedSheep.Card;
 
 namespace SharedSheep.Hand
 {
-    class Hand: IHand
+    public class Hand: IHand
     {
         public List<ICard> Cards { get; set; }
 
