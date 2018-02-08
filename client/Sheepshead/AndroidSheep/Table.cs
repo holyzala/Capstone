@@ -2,6 +2,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Input.Touch;
+using iface = AndroidSheep.Models;
 namespace AndroidSheep
 {
     /// <summary>
@@ -13,7 +14,8 @@ namespace AndroidSheep
         BasicEffect effect;
         Texture2D checkerboard;
         VertexPositionNormalTexture[] floorVerts;
-        Vector3 cameraPosition = new Vector3(0, 10, 10);
+        Vector3 cameraPosition = new Vector3(15, 10, 10);
+        iface.PlayerCamera camera;
 
         public Table()
         {
@@ -50,6 +52,8 @@ namespace AndroidSheep
             floorVerts[4].TextureCoordinate = new Vector2(repetitions, repetitions);
             floorVerts[5].TextureCoordinate = floorVerts[2].TextureCoordinate;
             effect = new BasicEffect(graphics.GraphicsDevice);
+
+            camera = new iface.PlayerCamera("Camera1", cameraPosition, graphics);
 
             base.Initialize();
         }
@@ -97,20 +101,8 @@ namespace AndroidSheep
 
         void DrawGround()
         {
-            var cameraLookAtVector = Vector3.Zero;
-            var cameraUpVector = Vector3.UnitZ;
-
-            effect.View = Matrix.CreateLookAt(
-                cameraPosition, cameraLookAtVector, cameraUpVector);
-
-            float aspectRatio =
-                graphics.PreferredBackBufferWidth / (float)graphics.PreferredBackBufferHeight;
-            float fieldOfView = Microsoft.Xna.Framework.MathHelper.PiOver4;
-            float nearClipPlane = 1;
-            float farClipPlane = 200;
-
-            effect.Projection = Matrix.CreatePerspectiveFieldOfView(
-                fieldOfView, aspectRatio, nearClipPlane, farClipPlane);
+            effect.View = camera.ViewMatrix;
+            effect.Projection = camera.PerspectiveMatrix;
 
             effect.TextureEnabled = true;
             effect.Texture = checkerboard;

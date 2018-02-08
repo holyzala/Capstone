@@ -59,7 +59,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MainAcitivity.cs" />
-    <Compile Include="Models\Camera\Camera.cs" />
+    <Compile Include="Models\Camera\MainCamera.cs" />
+    <Compile Include="Models\Camera\PlayerCamera.cs" />
     <Compile Include="Models\Camera\ICamera.cs" />
     <Compile Include="Table.cs" />
     <Compile Include="Resources\Resource.Designer.cs" />
