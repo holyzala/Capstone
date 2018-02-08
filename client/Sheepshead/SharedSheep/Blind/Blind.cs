@@ -6,11 +6,16 @@ namespace SharedSheep.Blind
 {
     public class Blind : IBlind
     {
-        public List<ICard> BlindCards { get; set ; }
+        public List<ICard> BlindCards { get; private set; }
+
+        public Blind()
+        {
+            BlindCards = new List<ICard>();
+        }
 
         public void AddCard(ICard card)
         {
-            if (BlindCards.Count < 3) //what if not?
+            if (BlindCards.Count < 2) //what if not?
                 BlindCards.Add(card);
         }
 
