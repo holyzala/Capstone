@@ -8,15 +8,13 @@ namespace SharedSheep.Round
 {
     public class Round : IRound
     {
-        public ITrick Trick { get; set; }
-        public int RoundNumber { get; set; }
-        public IPlayer RoundStarter { get; set; }
+        public ITrick Trick { get; private set; }
+        public int RoundNumber { get; private set; }
+        public IPlayer RoundStarter { get; private set; }
 
-        public Round() { }
 
-        public Round(ITrick trick, int roundNum, IPlayer roundStarter)
+        public Round(int roundNum, IPlayer roundStarter)
         {
-            Trick = trick;
             RoundNumber = roundNum;
             RoundStarter = roundStarter;
         }

@@ -7,9 +7,9 @@ namespace SharedSheep.Round
 {
     public interface IRound
     {
-        ITrick Trick { get; set; }
-        int RoundNumber { get; set; }
-        IPlayer RoundStarter { get; set; }
+        ITrick Trick { get; }
+        int RoundNumber { get; }
+        IPlayer RoundStarter { get; }
 
         IPlayer TurnToPlay();
         

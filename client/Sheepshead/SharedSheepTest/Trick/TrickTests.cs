@@ -23,17 +23,17 @@ namespace SharedSheepTest.TrickTests
         LocalPlayer p4 = new LocalPlayer("p4");
         LocalPlayer p5 = new LocalPlayer("p5");
 
-        List<(IPlayer, ICard)> list = new List<(IPlayer, ICard)>(5);
-
         Trick trick;
 
 
         [TestMethod]
         public void LeadingCardTest()
         {
-            list.Add((p1, c1));
-            list.Add((p2, c2));
-            trick = new Trick(list);
+
+            trick = new Trick();
+            trick.AddCardAndPlayer(p1, c1);
+            trick.AddCardAndPlayer(p2, c2);
+
             Assert.AreEqual(c1, trick.LeadingCard());
             Assert.AreNotEqual(c2, trick.LeadingCard());
         }
@@ -41,24 +41,25 @@ namespace SharedSheepTest.TrickTests
         [TestMethod]
         public void TheWinnerCardTest()
         {
-            list.Add((p1, c1));
-            list.Add((p2, c2));
-            list.Add((p3, c3));
-            list.Add((p4, c4));
-            list.Add((p5, c5));
-            trick = new Trick(list);
+            trick = new Trick();
+            trick.AddCardAndPlayer(p1, c1);
+            trick.AddCardAndPlayer(p2, c2);
+            trick.AddCardAndPlayer(p3, c3);
+            trick.AddCardAndPlayer(p4, c4);
+            trick.AddCardAndPlayer(p5, c5);
             Assert.AreEqual(c4, trick.TheWinnerCard());
         }
 
         [TestMethod]
         public void TheWinnerPlayerTest()
         {
-            list.Add((p1, c1));
-            list.Add((p2, c2));
-            list.Add((p3, c3));
-            list.Add((p4, c4));
-            list.Add((p5, c5));
-            trick = new Trick(list);
+            trick = new Trick();
+            trick = new Trick();
+            trick.AddCardAndPlayer(p1, c1);
+            trick.AddCardAndPlayer(p2, c2);
+            trick.AddCardAndPlayer(p3, c3);
+            trick.AddCardAndPlayer(p4, c4);
+            trick.AddCardAndPlayer(p5, c5);
             Assert.AreEqual(p4.Name, trick.TheWinnerPlayer().Name);
 
         }
