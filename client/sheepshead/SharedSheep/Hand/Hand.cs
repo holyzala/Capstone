@@ -6,7 +6,7 @@ namespace SharedSheep.Hand
 {
     public class Hand: IHand
     {
-        public List<ICard> Cards { get; set; }
+        public List<ICard> Cards { get; private set; }
 
         public Hand()
         {
@@ -35,7 +35,7 @@ namespace SharedSheep.Hand
         }
 
 
-        public int NumOfThisSuit(Suit suit)
+        public int NumOfThisSuitInHand(Suit suit)
         {
             int numOfCards = 0;
             for(int i=0; i< Cards.Count; i++)
