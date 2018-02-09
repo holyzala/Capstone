@@ -19,7 +19,7 @@ namespace SharedSheepTest.GameTests
         [TestMethod]
         public void DealCardTest()
         {
-            Game game = new Game(deck);
+            Game game = new Game();
             game.DealCard(p);
             Assert.AreEqual(6, p.Hand.GetNumOfRemainingCards());
             Assert.AreNotEqual(1, p.Hand.GetNumOfRemainingCards());

@@ -11,17 +11,17 @@ namespace SharedSheep.Game
 {
     public class Game : IGame
     {
-        public List<IRound> Ronds { get; set; }
-        public IDeck Deck { get; set; }
-        public bool IsCracked { get; set; }
-        public IPlayer Picker { get; set; }
-        public IPlayer Partner { get; set; }
-        public IBlind Blind { get; set; }
-        public bool ForcedToPick { get; set; }
-        public ICard PartnerCard { get; set; }
-        public bool CallOutForJack { get; set; }
+        public List<IRound> Ronds { get; private set; }
+        public IDeck Deck { get; private set; }
+        public bool IsCracked { get; private set; }
+        public IPlayer Picker { get; private set; }
+        public IPlayer Partner { get; private set; }
+        public IBlind Blind { get; private set; }
+        public bool ForcedToPick { get; private set; }
+        public ICard PartnerCard { get; private set; }
+        public bool CallOutForJack { get; private set; }
 
-        public Game(IDeck deck) { Deck = deck;  }
+        public Game() { Deck = new Piquet();  }
 
         public void DealCard(IPlayer player)
         {
@@ -48,9 +48,5 @@ namespace SharedSheep.Game
             }
         }
 
-        public void SwapCard(ICard card)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

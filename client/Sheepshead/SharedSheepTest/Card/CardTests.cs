@@ -2,7 +2,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SharedSheep.Card;
 
-namespace SharedSheepTest
+namespace SharedSheepTest.CardTests
 {
     [TestClass]
     public class CardTests
