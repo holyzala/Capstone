@@ -8,9 +8,9 @@ namespace SharedSheepTest.BlindTests
     [TestClass]
     public class BlindTests
     {
-        ICard card1 = new Card(CardID.Eight, 0, CardPower.EightFail, Suit.Clubs);
-        ICard card2 = new Card(CardID.Jack, 2, CardPower.JackSpade, Suit.Trump);
-        ICard card3 = new Card(CardID.King, 4, CardPower.KingFail, Suit.Spades);
+        ICard card1 = new Card(CardID.Eight, CardPower.EightFail, Suit.Clubs);
+        ICard card2 = new Card(CardID.Jack, CardPower.JackSpade, Suit.Spades);
+        ICard card3 = new Card(CardID.King, CardPower.KingFail, Suit.Spades);
 
 
         [TestMethod]

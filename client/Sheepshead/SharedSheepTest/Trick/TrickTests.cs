@@ -11,11 +11,11 @@ namespace SharedSheepTest.TrickTests
     [TestClass]
     public class TrickTests
     {
-        Card c1 = new Card(CardID.Ace, 11, CardPower.AceFail, Suit.Clubs);
-        Card c2 = new Card(CardID.Eight, 0, CardPower.EightTrump, Suit.Trump);
-        Card c3 = new Card(CardID.King, 4, CardPower.KingFail, Suit.Clubs);
-        Card c4 = new Card(CardID.Jack, 2, CardPower.JackSpade, Suit.Trump);
-        Card c5 = new Card(CardID.Seven, 0, CardPower.SevenFail, Suit.Clubs);
+        Card c1 = new Card(CardID.Ace, CardPower.AceFail, Suit.Clubs);
+        Card c2 = new Card(CardID.Eight, CardPower.EightTrump, Suit.Diamond);
+        Card c3 = new Card(CardID.King, CardPower.KingFail, Suit.Clubs);
+        Card c4 = new Card(CardID.Jack, CardPower.JackSpade, Suit.Spades);
+        Card c5 = new Card(CardID.Seven, CardPower.SevenFail, Suit.Clubs);
 
         LocalPlayer p1 = new LocalPlayer("p1");
         LocalPlayer p2 = new LocalPlayer("p2");

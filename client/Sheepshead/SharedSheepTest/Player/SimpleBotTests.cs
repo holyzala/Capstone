@@ -12,7 +12,7 @@ namespace SharedSheepTest.Player
         public void AddToHandTest()
         {
             IPlayer player = new SimpleBot("Fred");
-            ICard card = new Card(CardID.Eight, 0, CardPower.EightFail, Suit.Clubs);
+            ICard card = new Card(CardID.Eight, CardPower.EightFail, Suit.Clubs);
             player.AddToHand(card);
             Assert.AreEqual(card, player.Hand.GetCard(0));
         }

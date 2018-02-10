@@ -8,13 +8,35 @@ namespace SharedSheep.Card
         public int Value { get; private set; }
         public CardPower Power { get; private set; }
         public Suit CardSuit { get; private set; }
-
-        public Card(CardID num, int value, CardPower power, Suit cardSuit)
+        private bool isTrump = false;
+        
+        public Card(CardID num, CardPower power, Suit cardSuit)
         {
             this.ID = num;
-            this.Value = value;
+            Value = GetValue();
             this.Power = power;
             this.CardSuit = cardSuit;
+            if (ID == CardID.Queen || ID == CardID.Jack || CardSuit == Suit.Diamond)
+                isTrump = true;
+        }
+
+        private int GetValue()
+        {
+            switch (ID)
+            {
+                case CardID.Ace:
+                    return 11;
+                case CardID.Ten:
+                    return 10;
+                case CardID.King:
+                    return 4;
+                case CardID.Queen:
+                    return 3;
+                case CardID.Jack:
+                    return 2;
+                default:
+                    return 0;
+            }
         }
 
         public override bool Equals(object obj)
@@ -39,7 +61,12 @@ namespace SharedSheep.Card
 
         public bool IsTrump()
         {
-            return this.CardSuit == Suit.Trump;
+            return isTrump;
+        }
+
+        public override string ToString()
+        {
+            return String.Format("ID: {0}, Value: {1}, Power: {2}, Suit: {3}", ID, Value, Power, CardSuit);
         }
     }
 }

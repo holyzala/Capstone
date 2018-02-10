@@ -65,88 +65,35 @@ namespace SharedSheep.Deck
 
         private void SetAllCards()
         {
+            CardPower pow = CardPower.SevenFail;
             foreach (CardID cID in Enum.GetValues(typeof(CardID)))
             {
-                switch (cID)
+                if (cID == CardID.Jack)
+                    pow = CardPower.JackDiamond;
+                if (cID == CardID.Queen)
+                    pow = CardPower.QueenDiamond;
+
+                foreach (Suit suit in Enum.GetValues(typeof(Suit)))
                 {
-                    case CardID.Seven:
-                        foreach (Suit suit in Enum.GetValues(typeof(Suit)))
-                        {
-                            if (suit == Suit.Trump)
-                                Cards.Add(new Card.Card(cID, 0, CardPower.SevenTrump, suit));
+                    switch (cID)
+                    {
+                        case CardID.Jack:
+                            Cards.Add(new Card.Card(cID, pow, suit));
+                            ++pow;
+                            break;
+                        case CardID.Queen:
+                            Cards.Add(new Card.Card(cID, pow, suit));
+                            ++pow;
+                            break;
+                        default:
+                            if (suit == Suit.Diamond)
+                                Cards.Add(new Card.Card(cID, pow + 6, suit));
                             else
-                                Cards.Add(new Card.Card(cID, 0, CardPower.SevenFail, suit));
-                        }
-                        break;
-
-                    case CardID.Eight:
-                        foreach (Suit suit in Enum.GetValues(typeof(Suit)))
-                        {
-                            if (suit == Suit.Trump)
-                                Cards.Add(new Card.Card(cID, 0, CardPower.EightTrump, suit));
-                            else
-                                Cards.Add(new Card.Card(cID, 0, CardPower.EightFail, suit));
-                        }
-                        break;
-
-                    case CardID.Nine:
-                        foreach (Suit suit in Enum.GetValues(typeof(Suit)))
-                        {
-                            if (suit == Suit.Trump)
-                                Cards.Add(new Card.Card(cID, 0, CardPower.NineTrump, suit));
-                            else
-                                Cards.Add(new Card.Card(cID, 0, CardPower.NineFail, suit));
-                        }
-                        break;
-
-                    case CardID.Ten:
-                        foreach (Suit suit in Enum.GetValues(typeof(Suit)))
-                        {
-                            if (suit == Suit.Trump)
-                                Cards.Add(new Card.Card(cID, 0, CardPower.TenTrump, suit));
-                            else
-                                Cards.Add(new Card.Card(cID, 0, CardPower.TenFail, suit));
-                        }
-                        break;
-
-                    case CardID.Jack:
-                        CardPower pow = CardPower.JackDiamond;
-                        foreach (Suit suit in Enum.GetValues(typeof(Suit)))
-                        {
-                            Cards.Add(new Card.Card(cID, 2, (CardPower)pow, Suit.Trump));
-                            pow++;
-                        }
-                        break;
-
-                    case CardID.Queen:
-                        pow = CardPower.QueenDiamond;
-                        foreach (Suit suit in Enum.GetValues(typeof(Suit)))
-                        {
-                            Cards.Add(new Card.Card(cID, 3, (CardPower)pow, Suit.Trump));
-                            pow++;
-                        }
-                        break;
-
-                    case CardID.King:
-                        foreach (Suit suit in Enum.GetValues(typeof(Suit)))
-                        {
-                            if (suit == Suit.Trump)
-                                Cards.Add(new Card.Card(cID, 0, CardPower.KingTrump, suit));
-                            else
-                                Cards.Add(new Card.Card(cID, 0, CardPower.KingFail, suit));
-                        }
-                        break;
-
-                    case CardID.Ace:
-                        foreach (Suit suit in Enum.GetValues(typeof(Suit)))
-                        {
-                            if (suit == Suit.Trump)
-                                Cards.Add(new Card.Card(cID, 0, CardPower.AceTrump, suit));
-                            else
-                                Cards.Add(new Card.Card(cID, 0, CardPower.AceFail, suit));
-                        }
-                        break;
+                                Cards.Add(new Card.Card(cID, pow, suit));
+                            break;
+                    }
                 }
+                ++pow;
             }
         }
     }

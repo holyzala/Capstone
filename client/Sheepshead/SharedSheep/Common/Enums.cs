@@ -1,11 +1,13 @@
-﻿public enum Suit
+﻿// In order of power
+public enum Suit
 {
-    Trump, Hearts, Clubs, Spades
+    Diamond, Hearts, Spades, Clubs
 };
 
+// In order of power
 public enum CardID
 {
-    Seven, Eight, Nine, Ten, King, Ace, Jack , Queen
+    Seven, Eight, Nine, King, Ten, Ace, Jack , Queen
 };
 
 public enum CardPower
