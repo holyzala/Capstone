@@ -47,9 +47,9 @@ namespace SharedSheep.Trick
             foreach ((IPlayer, ICard) crd in TrickCards)
             {
                 ICard card = crd.Item2;
-                if (winner.Item2.CardSuit == card.CardSuit && winner.Item2.Power < card.Power)
+                if (card.IsTrump() && card.Power > winner.Item2.Power)
                     winner = crd;
-                else if (winner.Item2.CardSuit != Suit.Trump && card.CardSuit == Suit.Trump)
+                else if (card.CardSuit == winner.Item2.CardSuit && card.Power > winner.Item2.Power)
                     winner = crd;
             }
             return winner;

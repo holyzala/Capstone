@@ -10,7 +10,7 @@ namespace SharedSheepTest.CardTests
         [TestMethod]
         public void IsTrump()
         {
-            ICard card1 = new Card(CardID.Eight, 0, CardPower.EightFail, Suit.Clubs);
+            ICard card1 = new Card(CardID.Eight, CardPower.EightFail, Suit.Clubs);
             Assert.IsFalse(card1.IsTrump());
         }
     }
