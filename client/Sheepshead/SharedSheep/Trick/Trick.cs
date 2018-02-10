@@ -55,7 +55,15 @@ namespace SharedSheep.Trick
             return winner;
         }
 
-
+        public int TrickValue()
+        {
+            int total=0;
+            foreach((IPlayer,ICard) crd in TrickCards)
+            {
+                total = total + crd.Item2.Value;
+            }
+            return total;
+        }
     }
 }
 
