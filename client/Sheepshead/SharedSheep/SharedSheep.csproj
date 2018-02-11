@@ -6,7 +6,6 @@
 
   <ItemGroup>
     <Folder Include="Card\" />
-    <Folder Include="Common\" />
     <Folder Include="Deck\" />
     <Folder Include="Hand\" />
     <Folder Include="Blind\" />
