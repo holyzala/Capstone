@@ -6,13 +6,14 @@ using SharedSheep.Deck;
 using SharedSheep.Player;
 using SharedSheep.Blind;
 using SharedSheep.Card;
+using SharedSheep.ScoreSheet;
 
 
 namespace SharedSheep.Game
 {
     public interface IGame
     {
-        List<IRound> Ronds { get; }
+        List<IRound> Rounds { get; }
         IDeck Deck { get; }
         bool IsCracked{get; }
         IPlayer Picker { get; }
@@ -23,7 +24,7 @@ namespace SharedSheep.Game
         bool CallOutForJack { get; }
 
         void StartGame(List<IPlayer> players);
-        //ScoreSheet gameScore()
+        List<IScoreSheet> GameScore();
         void DealCard(IPlayer player);
         
     }

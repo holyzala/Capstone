@@ -6,12 +6,13 @@ using SharedSheep.Card;
 using SharedSheep.Deck;
 using SharedSheep.Player;
 using SharedSheep.Round;
+using SharedSheep.ScoreSheet;
 
 namespace SharedSheep.Game
 {
     public class Game : IGame
     {
-        public List<IRound> Ronds { get; private set; }
+        public List<IRound> Rounds { get; private set; }
         public IDeck Deck { get; private set; }
         public bool IsCracked { get; private set; }
         public IPlayer Picker { get; private set; }
@@ -48,5 +49,9 @@ namespace SharedSheep.Game
             }
         }
 
+        public List<IScoreSheet> GameScore()
+        {
+            throw new NotImplementedException();
+        }
     }
 }
