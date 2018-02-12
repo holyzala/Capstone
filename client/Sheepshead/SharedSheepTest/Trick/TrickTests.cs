@@ -54,7 +54,6 @@ namespace SharedSheepTest.TrickTests
         public void TheWinnerPlayerTest()
         {
             trick = new Trick();
-            trick = new Trick();
             trick.AddCardAndPlayer(p1, c1);
             trick.AddCardAndPlayer(p2, c2);
             trick.AddCardAndPlayer(p3, c3);
@@ -64,6 +63,17 @@ namespace SharedSheepTest.TrickTests
 
         }
 
+        [TestMethod]
+        public void TrickValueTest()
+        {
+            trick = new Trick();
+            trick.AddCardAndPlayer(p1, c1);
+            trick.AddCardAndPlayer(p2, c2);
+            trick.AddCardAndPlayer(p3, c3);
+            trick.AddCardAndPlayer(p4, c4);
+            trick.AddCardAndPlayer(p5, c5);
+            Assert.AreEqual(17, trick.TrickValue());
 
+        }
     }
 }
