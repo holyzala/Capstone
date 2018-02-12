@@ -6,16 +6,16 @@ using SharedSheep.Player;
 
 namespace SharedSheep.Table
 {
-    class Table : ITable
+    public class Table : ITable
     {
         public List<IPlayer> Players { get; private set; }
-
         public List<IGame> Games { get; private set; }
-
         public IPlayer Dealer { get; private set; }
 
+        public delegate string Prompt(string msg);
 
-        public Table()
+
+        public Table(Prompt prompt)
         {
             Players = new List<IPlayer>();
             Games = new List<IGame>();
