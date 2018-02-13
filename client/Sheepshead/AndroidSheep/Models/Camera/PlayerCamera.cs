@@ -1,9 +1,9 @@
-﻿using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace AndroidSheep.Models
 {
-    class PlayerCamera : ICamera
+    internal class PlayerCamera : ICamera
     {
 
         public PlayerCamera(string name, Vector3 startPos, GraphicsDeviceManager graphics)

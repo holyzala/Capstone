@@ -1,8 +1,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
-using Microsoft.Xna.Framework.Input.Touch;
-using iface = AndroidSheep.Models;
+using iface = AndroidSheep.Models.Camera;
+
 namespace AndroidSheep
 {
     /// <summary>
@@ -14,8 +13,8 @@ namespace AndroidSheep
         BasicEffect effect;
         Texture2D checkerboard;
         VertexPositionNormalTexture[] floorVerts;
-        Vector3 cameraPosition = new Vector3(15, 10, 10);
-        iface.PlayerCamera camera;
+        Vector3 cameraPosition = new Vector3(0, 20, 10);
+        iface.MainCamera camera;
 
         public Table()
         {
@@ -53,7 +52,7 @@ namespace AndroidSheep
             floorVerts[5].TextureCoordinate = floorVerts[2].TextureCoordinate;
             effect = new BasicEffect(graphics.GraphicsDevice);
 
-            camera = new iface.PlayerCamera("Camera1", cameraPosition, graphics);
+            camera = new iface.MainCamera("Camera1", cameraPosition, graphics);
 
             base.Initialize();
         }
@@ -83,6 +82,7 @@ namespace AndroidSheep
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
+            camera.Update(gameTime);
             base.Update(gameTime);
         }
 
