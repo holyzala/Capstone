@@ -2,9 +2,9 @@
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace AndroidSheep.Models.Card
+namespace AndroidSheep.Models
 {
-    public class Card
+    public abstract class Card
     {
         public Card(Vector3 startPosition, Model mesh)
         {
@@ -29,7 +29,7 @@ namespace AndroidSheep.Models.Card
             return translation * rotation;
         }
 
-        public override void Draw(GameTime gametime, PlayerCamera camera)
+       /*public override void Draw(GameTime gametime, PlayerCamera camera)
         {
             foreach (var mesh in MeshModel.Meshes)
             {
@@ -43,6 +43,6 @@ namespace AndroidSheep.Models.Card
                 }
                 mesh.Draw();
             }
-        }
+        }*/
     }
 }

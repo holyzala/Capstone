@@ -2,7 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input.Touch;
 
-namespace AndroidSheep.Models.Camera
+namespace AndroidSheep.Models
 {
     internal class MainCamera : ICamera
     {
