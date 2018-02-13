@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using SharedSheep.Blind;
+﻿using SharedSheep.Blind;
 using SharedSheep.Card;
 using SharedSheep.Deck;
 using SharedSheep.Player;
 using SharedSheep.Round;
+using System.Collections.Generic;
 
 namespace SharedSheep.Game
 {
@@ -21,7 +19,10 @@ namespace SharedSheep.Game
         public ICard PartnerCard { get; private set; }
         public bool CallOutForJack { get; private set; }
 
-        public Game() { Deck = new Piquet();  }
+        public Game()
+        {
+            Deck = new Piquet();
+        }
 
         public void DealCard(IPlayer player)
         {
@@ -47,6 +48,5 @@ namespace SharedSheep.Game
                 }
             }
         }
-
     }
 }
