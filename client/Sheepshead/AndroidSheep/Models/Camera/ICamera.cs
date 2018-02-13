@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace AndroidSheep.Models
 {
-    interface ICamera
+    internal interface ICamera
     {
         string Name { get; }
         Vector3 Position { get; }
