@@ -28,21 +28,5 @@ namespace AndroidSheep.Models
             Matrix rotation = Matrix.CreateRotationZ(RotatedAngle);
             return translation * rotation;
         }
-
-       /*public override void Draw(GameTime gametime, PlayerCamera camera)
-        {
-            foreach (var mesh in MeshModel.Meshes)
-            {
-                foreach (BasicEffect effect in mesh.Effects)
-                {
-                    effect.PreferPerPixelLighting = true;
-
-                    effect.World = GetWorldMatrix();
-                    effect.View = camera.ViewMatrix;
-                    effect.Projection = camera.PerspectiveMatrix;
-                }
-                mesh.Draw();
-            }
-        }*/
     }
 }

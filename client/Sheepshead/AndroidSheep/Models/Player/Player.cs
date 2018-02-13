@@ -18,11 +18,6 @@ namespace AndroidSheep.Models.Player
         PlayerCamera Camera { get; set; }
         Card[] Cards { get; }
 
-        public void ProcessTouches(TouchCollection touchstate)
-        {
-
-        }
-
         public void SetPlayerCards(Card[] cards)
         {
             for(int i = 0; i < cards.Length; i++)
