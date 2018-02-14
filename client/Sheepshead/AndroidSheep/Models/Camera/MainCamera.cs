@@ -1,20 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-using Android.App;
-using Android.Content;
-using Android.OS;
-using Android.Runtime;
-using Android.Views;
-using Android.Widget;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input.Touch;
 
-namespace AndroidSheep.Models.Camera
+namespace AndroidSheep.Models
 {
-    class MainCamera : ICamera
+    internal class MainCamera : ICamera
     {
         public MainCamera(string name, Vector3 startpos, GraphicsDeviceManager graphics)
         {
@@ -49,30 +39,48 @@ namespace AndroidSheep.Models.Camera
         {
             get
             {
-                var lookAtVector = Vector3.Zero;
+                var lookAtVector = new Vector3(0, -1, -5);
+                var rotationMatrix = Matrix.CreateRotationZ(angle);
+                lookAtVector = Vector3.Transform(lookAtVector, rotationMatrix);
+
+                lookAtVector += Position;
                 var upVector = Vector3.UnitZ;
                 return Matrix.CreateLookAt(Position, lookAtVector, upVector);
             }
         }
 
+        float angle;
         public void Update(GameTime gameTime)
         {
-            // We'll be doing some input-based movement here
-        }
+            TouchCollection touchCollection = TouchPanel.GetState();
+            bool isTouchingScreen = touchCollection.Count > 0;
+            if (isTouchingScreen)
+            {
+                var xPosition = touchCollection[0].Position.X;
 
-        public void Rotate(float angle, Vector3 Axis)
-        {
+                float xRatio = xPosition / (float)Graphics.Viewport.Width;
 
-        }
+                if (xRatio < 1 / 3.0f)
+                {
+                    angle += (float)gameTime.ElapsedGameTime.TotalSeconds;
+                }
+                else if (xRatio < 2 / 3.0f)
+                {
+                    var forwardVector = new Vector3(0, -1, 0);
 
-        public void Translate(Vector3 position)
-        {
+                    var rotationMatrix = Matrix.CreateRotationZ(angle);
+                    forwardVector = Vector3.Transform(forwardVector, rotationMatrix);
 
-        }
+                    const float unitsPerSecond = 3;
 
-        public void Scale(float scaleValue)
-        {
-
+                    this.Position += forwardVector * unitsPerSecond *
+                        (float)gameTime.ElapsedGameTime.TotalSeconds;
+                }
+                else
+                {
+                    angle -= (float)gameTime.ElapsedGameTime.TotalSeconds;
+                }
+            }
         }
     }
 }

@@ -62,6 +62,8 @@
     <Compile Include="Models\Camera\MainCamera.cs" />
     <Compile Include="Models\Camera\PlayerCamera.cs" />
     <Compile Include="Models\Camera\ICamera.cs" />
+    <Compile Include="Models\Card\Card.cs" />
+    <Compile Include="Models\Player\Player.cs" />
     <Compile Include="Table.cs" />
     <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
