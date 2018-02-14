@@ -10,12 +10,18 @@ namespace SharedSheep.Table
     {
         List<IPlayer> Players { get; }
         List<IGame> Games { get; }
+
         //ScoreSheet ScrSheet {get; }
         IPlayer Dealer { get; }
 
         IPlayer GetNextPlayer(int CurrentPlayerIndexNumber);
+
         void ResetGame();
+
         void AddPlayer(IPlayer player);
+
         void StartNewGame();
+
+        void Start();
     }
 }
