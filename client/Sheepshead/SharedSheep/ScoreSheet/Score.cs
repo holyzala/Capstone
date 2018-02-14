@@ -89,7 +89,7 @@ namespace SharedSheep.ScoreSheet
                     else if (values <= 60) score = -2;
                     else if (values <= 90) score = 2;
                     else if (values < 120) score = 4;
-                    else return 6;
+                    else score = 6;
                     break;
                 case false:
                     if (noTricks) score = -12;
@@ -100,8 +100,7 @@ namespace SharedSheep.ScoreSheet
                     else score = 12;
                     break;
             }
-            if (cracked)
-                score = 2 * score;
+            if (cracked) { score = 2 * score; }
             return score;
         }
     }
