@@ -4,7 +4,6 @@ using System.Text;
 using SharedSheep.Player;
 using System.Linq;
 
-
 namespace SharedSheep.ScoreSheet
 {
     public class Score : IScoreSheet
@@ -12,22 +11,16 @@ namespace SharedSheep.ScoreSheet
         public IPlayer WinningPlayer { get; private set; }
         public Dictionary<IPlayer, List<int>> Scores { get; }
 
-
-
         public Score(List<IPlayer> players)
         {
             Scores = new Dictionary<IPlayer, List<int>>();
             players.ForEach(player => Scores.Add(player, new List<int>()));
         }
 
-
-
         public int PlayerScore(IPlayer player)
         {
-            return Total()[player];
+            return Scores[player].Sum();
         }
-
-
 
         public void AddGameScore(IPlayer picker, IPlayer partner, bool noTricks, bool cracked, int pickerCardsValue)
         {
@@ -37,8 +30,8 @@ namespace SharedSheep.ScoreSheet
                 Scores[picker].Add(pickerScore);
                 foreach (KeyValuePair<IPlayer, List<int>> list in Scores)
                 {
-                    if (list.Key.Name != picker.Name)
-                        Scores[list.Key].Add((pickerScore * -1) / 4);
+                    if (list.Key != picker)
+                        Scores[list.Key].Add(pickerScore / -4);
                 }
             }
             else
@@ -48,23 +41,15 @@ namespace SharedSheep.ScoreSheet
                 Scores[partner].Add(pickerScore / 2);
                 foreach (KeyValuePair<IPlayer, List<int>> list in Scores)
                 {
-                    if (list.Key.Name != picker.Name && list.Key.Name != partner.Name)
-                        Scores[list.Key].Add((pickerScore * -1) / 2);
+                    if (list.Key != picker && list.Key != partner)
+                        Scores[list.Key].Add(pickerScore / -2);
                 }
             }
             //set the new winning player
-            int max = 0;
-            foreach (KeyValuePair<IPlayer, int> list in Total())
-            {
-                if (list.Value > max)
-                {
-                    WinningPlayer = list.Key;
-                    max = list.Value;
-                }
-            }
+            Dictionary<IPlayer, int> total = Total();
+            int max = total.Values.Max();
+            WinningPlayer = total.First(x => x.Value == max).Key;
         }
-
-
 
         public Dictionary<IPlayer, int> Total()
         {
@@ -76,30 +61,16 @@ namespace SharedSheep.ScoreSheet
             return total;
         }
 
-
-
         private int RangeValue(int values, bool partner, bool cracked, bool noTricks)
         {
             int score = 0;
-            switch (partner)
-            {
-                case true:
-                    if (noTricks) score = -6;
-                    else if (values <= 30) score = -4;
-                    else if (values <= 60) score = -2;
-                    else if (values <= 90) score = 2;
-                    else if (values < 120) score = 4;
-                    else score = 6;
-                    break;
-                case false:
-                    if (noTricks) score = -12;
-                    else if (values <= 30) score = -8;
-                    else if (values <= 60) score = -4;
-                    else if (values <= 90) score = 4;
-                    else if (values < 120) score = 8;
-                    else score = 12;
-                    break;
-            }
+            if (noTricks) score = -6;
+            else if (values <= 30) score = -4;
+            else if (values <= 60) score = -2;
+            else if (values <= 90) score = 2;
+            else if (values < 120) score = 4;
+            else score = 6;
+            if (!partner) { score = 2 * score; }
             if (cracked) { score = 2 * score; }
             return score;
         }
