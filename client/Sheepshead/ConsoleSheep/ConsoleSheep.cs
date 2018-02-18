@@ -14,6 +14,8 @@ namespace ConsoleSheep
             table.AddPlayer(new SimpleBot("Bot3"));
             table.AddPlayer(new SimpleBot("Bot4"));
             table.Start();
+
+            Console.ReadLine();
         }
 
         private static string Prompt(string msg)

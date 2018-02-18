@@ -4,6 +4,7 @@ using SharedSheep.Deck;
 using SharedSheep.Player;
 using SharedSheep.Round;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace SharedSheep.Game
 {
@@ -32,20 +33,28 @@ namespace SharedSheep.Game
             }
         }
 
-        public void StartGame(List<IPlayer> players)
+        public void StartGame(List<IPlayer> players, Prompt prompt)
         {
             foreach (IPlayer player in players)
             {
                 DealCard(player);
             }
 
-            foreach (IPlayer player in players)
+            bool picked = false;
+            // The dealer is the first, so skip them until last
+            foreach (IPlayer player in players.Skip(1))
             {
-                if (player.WantPick())
+                if (player.WantPick(prompt))
                 {
                     player.Pick(this.Blind);
+                    picked = true;
                     break;
                 }
+            }
+            // If nobody else picked, then dealer is forced
+            if (!picked)
+            {
+                players[0].Pick(this.Blind);
             }
         }
     }

@@ -2,13 +2,12 @@
 using SharedSheep.Player;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace SharedSheep.Table
 {
     public class Table : ITable
     {
-        public delegate string Prompt(string msg);
-
         public List<IPlayer> Players { get; private set; }
         public List<IGame> Games { get; private set; }
         public IPlayer Dealer { get; private set; }
@@ -44,7 +43,8 @@ namespace SharedSheep.Table
         {
             Game.Game game = new Game.Game();
             Games.Add(game);
-            game.StartGame(Players);
+            // This is somewhat complicated code to move the dealer in each game. Probably refactor later to use the dealer property.
+            game.StartGame(Players.Skip(GameIndex).Concat(Players.Take(GameIndex)).ToList(), prompt);
         }
 
         public void Start()
