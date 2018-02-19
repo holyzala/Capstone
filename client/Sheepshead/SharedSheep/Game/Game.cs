@@ -10,7 +10,7 @@ namespace SharedSheep.Game
 {
     public class Game : IGame
     {
-        public List<IRound> Ronds { get; private set; }
+        public List<IRound> Rounds { get; private set; }
         public IDeck Deck { get; private set; }
         public bool IsCracked { get; private set; }
         public IPlayer Picker { get; private set; }
@@ -23,6 +23,10 @@ namespace SharedSheep.Game
         public Game()
         {
             Deck = new Piquet();
+            Rounds = new List<IRound>();
+            IsCracked = false;
+            Blind = new Blind.Blind();
+            PartnerCard = new Card.Card(CardID.Jack, CardPower.JackDiamond, Suit.Diamond);
         }
 
         public void DealCard(IPlayer player)
@@ -35,10 +39,17 @@ namespace SharedSheep.Game
 
         public void StartGame(List<IPlayer> players, Prompt prompt)
         {
-            foreach (IPlayer player in players)
+            int timesAround = Deck.Cards.Count / players.Count;
+            for (int i = 0; i < timesAround; ++i)
             {
-                DealCard(player);
+                foreach (IPlayer player in players)
+                {
+                    player.AddToHand(Deck.GetTopCard());
+                }
             }
+
+            Blind.AddCard(Deck.GetTopCard());
+            Blind.AddCard(Deck.GetTopCard());
 
             // The dealer is the first, so skip them until last
             foreach (IPlayer player in players.Skip(1))
@@ -56,7 +67,15 @@ namespace SharedSheep.Game
                 ForcedToPick = true;
                 Picker = players[0];
             }
-            Picker.Pick(this.Blind);
+            this.Blind = Picker.Pick(this.Blind);
+            IPlayer roundStarter = players[1];
+            while (Rounds.Count < 6)
+            {
+                IRound newRound = new Round.Round(Rounds.Count, roundStarter);
+                Rounds.Add(newRound);
+                int i = players.IndexOf(roundStarter);
+                roundStarter = newRound.Start(players.Skip(i).Concat(players.Take(i)).ToList());
+            }
         }
     }
 }

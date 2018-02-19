@@ -11,7 +11,7 @@ namespace SharedSheep.Game
 {
     public interface IGame
     {
-        List<IRound> Ronds { get; }
+        List<IRound> Rounds { get; }
         IDeck Deck { get; }
         bool IsCracked { get; }
         IPlayer Picker { get; }

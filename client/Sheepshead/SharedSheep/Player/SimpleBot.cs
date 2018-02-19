@@ -30,7 +30,7 @@ namespace SharedSheep.Player
 
         public ICard PlayCard()
         {
-            return Hand.Cards[0];
+            return Hand.GetCard(0);
         }
 
         public IBlind Pick(IBlind blind)

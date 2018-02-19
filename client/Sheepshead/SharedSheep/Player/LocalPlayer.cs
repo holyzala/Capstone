@@ -25,7 +25,7 @@ namespace SharedSheep.Player
 
         public ICard PlayCard()
         {
-            return this.Hand.Cards[0];
+            return Hand.GetCard(0);
         }
 
         public bool WantPick(Prompt prompt)

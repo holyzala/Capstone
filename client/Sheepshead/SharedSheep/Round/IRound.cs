@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using SharedSheep.Player;
 using SharedSheep.Trick;
+
 namespace SharedSheep.Round
 {
     public interface IRound
@@ -12,6 +13,7 @@ namespace SharedSheep.Round
         IPlayer RoundStarter { get; }
 
         IPlayer TurnToPlay();
-        
+
+        IPlayer Start(List<IPlayer> players);
     }
 }
