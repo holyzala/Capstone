@@ -45,6 +45,7 @@ namespace SharedSheep.Game
             {
                 if (player.WantPick(prompt))
                 {
+                    ForcedToPick = false;
                     Picker = player;
                     break;
                 }
@@ -52,6 +53,7 @@ namespace SharedSheep.Game
             // If nobody else picked, then dealer is forced
             if (Picker == null)
             {
+                ForcedToPick = true;
                 Picker = players[0];
             }
             Picker.Pick(this.Blind);
