@@ -40,22 +40,21 @@ namespace SharedSheep.Game
                 DealCard(player);
             }
 
-            bool picked = false;
             // The dealer is the first, so skip them until last
             foreach (IPlayer player in players.Skip(1))
             {
                 if (player.WantPick(prompt))
                 {
-                    player.Pick(this.Blind);
-                    picked = true;
+                    Picker = player;
                     break;
                 }
             }
             // If nobody else picked, then dealer is forced
-            if (!picked)
+            if (Picker == null)
             {
-                players[0].Pick(this.Blind);
+                Picker = players[0];
             }
+            Picker.Pick(this.Blind);
         }
     }
 }

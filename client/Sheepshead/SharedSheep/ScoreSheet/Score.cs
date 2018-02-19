@@ -47,8 +47,7 @@ namespace SharedSheep.ScoreSheet
             }
             //set the new winning player
             Dictionary<IPlayer, int> total = Total();
-            int max = total.Values.Max();
-            WinningPlayer = total.First(x => x.Value == max).Key;
+            WinningPlayer = total.Aggregate((result, next) => next.Value > result.Value ? next : result).Key;
         }
 
         public Dictionary<IPlayer, int> Total()
