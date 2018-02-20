@@ -12,16 +12,25 @@ namespace SharedSheep.Round
         public int RoundNumber { get; private set; }
         public IPlayer RoundStarter { get; private set; }
 
-
         public Round(int roundNum, IPlayer roundStarter)
         {
             RoundNumber = roundNum;
             RoundStarter = roundStarter;
+            Trick = new Trick.Trick();
         }
 
         public IPlayer TurnToPlay()
         {
             throw new NotImplementedException();
+        }
+
+        public IPlayer Start(List<IPlayer> players)
+        {
+            foreach (IPlayer player in players)
+            {
+                Trick.AddCardAndPlayer(player, player.PlayCard());
+            }
+            return Trick.TheWinnerPlayer();
         }
     }
 }

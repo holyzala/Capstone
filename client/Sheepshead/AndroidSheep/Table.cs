@@ -1,6 +1,6 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using iface = AndroidSheep.Models.Camera;
+using iface = AndroidSheep.Models;
 
 namespace AndroidSheep
 {
@@ -9,12 +9,12 @@ namespace AndroidSheep
     /// </summary>
     public class Table : Game
     {
-        GraphicsDeviceManager graphics;
-        BasicEffect effect;
-        Texture2D checkerboard;
-        VertexPositionNormalTexture[] floorVerts;
-        Vector3 cameraPosition = new Vector3(0, 20, 10);
-        iface.MainCamera camera;
+        private GraphicsDeviceManager graphics;
+        private BasicEffect effect;
+        private Texture2D checkerboard;
+        private VertexPositionNormalTexture[] floorVerts;
+        private Vector3 cameraPosition = new Vector3(0, 20, 10);
+        private iface.MainCamera camera;
 
         public Table()
         {
@@ -99,7 +99,7 @@ namespace AndroidSheep
             base.Draw(gameTime);
         }
 
-        void DrawGround()
+        private void DrawGround()
         {
             effect.View = camera.ViewMatrix;
             effect.Projection = camera.PerspectiveMatrix;
@@ -118,6 +118,5 @@ namespace AndroidSheep
                     2);
             }
         }
-
     }
 }

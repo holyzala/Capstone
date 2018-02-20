@@ -25,13 +25,17 @@ namespace SharedSheep.Player
 
         public ICard PlayCard()
         {
-            return this.Hand.Cards[0];
+            return Hand.GetCard(0);
         }
 
-        public bool WantPick()
+        public bool WantPick(Prompt prompt)
         {
-            bool ans = false;
-            return ans;
+            string answer = prompt("Do you want to pick? (yes/no)");
+            if (answer.ToLower() == "yes" || answer.ToLower() == "y")
+            {
+                return true;
+            }
+            return false;
         }
 
         public IBlind Pick(IBlind blind)
