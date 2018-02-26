@@ -18,10 +18,17 @@ namespace ConsoleSheep
             Console.ReadLine();
         }
 
-        private static string Prompt(string msg)
+        private static string Prompt(PromptType prompt_type)
         {
-            Console.WriteLine(msg);
-            return Console.ReadLine();
+            switch (prompt_type)
+            {
+                case PromptType.Pick:
+                    Console.WriteLine("Do you want to pick? (yes/no)");
+                    return Console.ReadLine();
+
+                default:
+                    return "";
+            }
         }
     }
 }
