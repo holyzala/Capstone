@@ -11,9 +11,13 @@ namespace SharedSheep.Player
         String Name { get; }
 
         Boolean IsPartner();
+
         ICard PlayCard();
-        Boolean WantPick();
+
+        Boolean WantPick(Prompt prompt);
+
         IBlind Pick(IBlind blind);
+
         void AddToHand(ICard card);
     }
 }

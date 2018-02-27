@@ -5,7 +5,7 @@ using SharedSheep.Blind;
 
 namespace SharedSheep.Player
 {
-    public class SimpleBot: IPlayer
+    public class SimpleBot : IPlayer
     {
         public IHand Hand { get; set; }
         public String Name { get; private set; }
@@ -23,14 +23,14 @@ namespace SharedSheep.Player
             return Partner;
         }
 
-        public Boolean WantPick()
+        public Boolean WantPick(Prompt prompt)
         {
             return false;
         }
 
         public ICard PlayCard()
         {
-            return Hand.Cards[0];
+            return Hand.GetCard(0);
         }
 
         public IBlind Pick(IBlind blind)

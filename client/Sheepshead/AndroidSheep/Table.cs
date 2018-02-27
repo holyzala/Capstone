@@ -92,8 +92,6 @@ namespace AndroidSheep
             cardverts[4].TextureCoordinate = new Vector2(1, 1);
 
             cardverts[5].TextureCoordinate = new Vector2(1, 0);
-
-
         }
 
         public void DrawCard(Texture2D texture)
@@ -107,6 +105,7 @@ namespace AndroidSheep
                 this.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, cardverts, 0, 2);
             }
         }
+
         /// <summary>
         /// This is called when the game should draw itself.
         /// </summary>

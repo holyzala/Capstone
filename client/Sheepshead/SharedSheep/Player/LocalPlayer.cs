@@ -11,7 +11,6 @@ namespace SharedSheep.Player
         public string Name { get; private set; }
         private Boolean Partner;
 
-
         public LocalPlayer(string name)
         {
             Hand = new Hand.Hand();
@@ -21,18 +20,22 @@ namespace SharedSheep.Player
 
         public bool IsPartner()
         {
-            return Partner;   
+            return Partner;
         }
 
         public ICard PlayCard()
         {
-            return this.Hand.Cards[0];
+            return Hand.GetCard(0);
         }
 
-        public bool WantPick()
+        public bool WantPick(Prompt prompt)
         {
-            bool ans = false ;
-            return ans;
+            string answer = prompt(PromptType.Pick);
+            if (answer.ToLower() == "yes" || answer.ToLower() == "y")
+            {
+                return true;
+            }
+            return false;
         }
 
         public IBlind Pick(IBlind blind)
