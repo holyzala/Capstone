@@ -7,7 +7,7 @@ public enum Suit
 // In order of power
 public enum CardID
 {
-    Seven, Eight, Nine, King, Ten, Ace, Jack , Queen
+    Seven, Eight, Nine, King, Ten, Ace, Jack, Queen
 };
 
 public enum CardPower
@@ -17,3 +17,9 @@ public enum CardPower
     JackHeart, JackSpade, JackClub, QueenDiamond, QueenHeart, QueenSpade,
     QueenClub
 };
+
+// This enum will contain the different prompt types that can be called
+public enum PromptType
+{
+    Pick
+}

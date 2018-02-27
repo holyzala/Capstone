@@ -30,7 +30,7 @@ namespace SharedSheep.Player
 
         public bool WantPick(Prompt prompt)
         {
-            string answer = prompt("Do you want to pick? (yes/no)");
+            string answer = prompt(PromptType.Pick);
             if (answer.ToLower() == "yes" || answer.ToLower() == "y")
             {
                 return true;

@@ -2,4 +2,4 @@
 using System.Collections.Generic;
 using System.Text;
 
-public delegate string Prompt(string msg);
+public delegate string Prompt(PromptType prompt_type);
