@@ -34,6 +34,9 @@
     <WarningLevel>4</WarningLevel>
     <AndroidUseSharedRuntime>True</AndroidUseSharedRuntime>
     <AndroidLinkMode>None</AndroidLinkMode>
+    <AotAssemblies>false</AotAssemblies>
+    <EnableLLVM>false</EnableLLVM>
+    <BundleAssemblies>false</BundleAssemblies>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -59,11 +62,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MainAcitivity.cs" />
-    <Compile Include="Models\Camera\MainCamera.cs" />
-    <Compile Include="Models\Camera\PlayerCamera.cs" />
+    <Compile Include="Models\Camera\DebugCamera.cs" />
     <Compile Include="Models\Camera\ICamera.cs" />
-    <Compile Include="Models\Card\Card.cs" />
-    <Compile Include="Models\Player\Player.cs" />
+    <Compile Include="Models\Camera\PlayerCamera.cs" />
+    <Compile Include="Models\Player\IPlayer.cs" />
+    <Compile Include="Models\TableTop\TableTop.cs" />
     <Compile Include="Table.cs" />
     <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -79,6 +82,8 @@
     <AndroidResource Include="Resources\Drawable\Icon.png" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Models\Buttons\" />
+    <Folder Include="Models\Card\" />
     <Folder Include="Resources\Layout\" />
   </ItemGroup>
   <ItemGroup>
@@ -94,7 +99,57 @@
     <None Include="Properties\AndroidManifest.xml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\checkerboard.png" />
+    <Content Include="Content\Clubs\10_of_clubs.png" />
+    <Content Include="Content\Clubs\6_of_clubs.png" />
+    <Content Include="Content\Clubs\7_of_clubs.png" />
+    <Content Include="Content\Clubs\8_of_clubs.png" />
+    <Content Include="Content\Clubs\9_of_clubs.png" />
+    <Content Include="Content\Clubs\ace_of_clubs.png" />
+    <Content Include="Content\Clubs\jack_of_clubs.png" />
+    <Content Include="Content\Clubs\jack_of_clubs2.png" />
+    <Content Include="Content\Clubs\king_of_clubs.png" />
+    <Content Include="Content\Clubs\king_of_clubs2.png" />
+    <Content Include="Content\Clubs\queen_of_clubs.png" />
+    <Content Include="Content\Clubs\queen_of_clubs2.png" />
+    <Content Include="Content\Hearts\10_of_hearts.png" />
+    <Content Include="Content\Hearts\6_of_hearts.png" />
+    <Content Include="Content\Hearts\7_of_hearts.png" />
+    <Content Include="Content\Hearts\8_of_hearts.png" />
+    <Content Include="Content\Hearts\9_of_hearts.png" />
+    <Content Include="Content\Hearts\ace_of_hearts.png" />
+    <Content Include="Content\Hearts\jack_of_hearts.png" />
+    <Content Include="Content\Hearts\jack_of_hearts2.png" />
+    <Content Include="Content\Hearts\king_of_hearts.png" />
+    <Content Include="Content\Hearts\king_of_hearts2.png" />
+    <Content Include="Content\Hearts\queen_of_hearts.png" />
+    <Content Include="Content\Hearts\queen_of_hearts2.png" />
+    <Content Include="Content\Spades\10_of_spades.png" />
+    <Content Include="Content\Spades\6_of_spades.png" />
+    <Content Include="Content\Spades\7_of_spades.png" />
+    <Content Include="Content\Spades\8_of_spades.png" />
+    <Content Include="Content\Spades\9_of_spades.png" />
+    <Content Include="Content\Spades\ace_of_spades.png" />
+    <Content Include="Content\Spades\ace_of_spades2.png" />
+    <Content Include="Content\Spades\jack_of_spades.png" />
+    <Content Include="Content\Spades\jack_of_spades2.png" />
+    <Content Include="Content\Spades\king_of_spades.png" />
+    <Content Include="Content\Spades\king_of_spades2.png" />
+    <Content Include="Content\Spades\queen_of_spades.png" />
+    <Content Include="Content\Spades\queen_of_spades2.png" />
+    <Content Include="Content\Table\checkerboard.png" />
+    <Content Include="Content\Table\darktexture.jpg" />
+    <Content Include="Content\Trumps\10_of_diamonds.png" />
+    <Content Include="Content\Trumps\6_of_diamonds.png" />
+    <Content Include="Content\Trumps\7_of_diamonds.png" />
+    <Content Include="Content\Trumps\8_of_diamonds.png" />
+    <Content Include="Content\Trumps\9_of_diamonds.png" />
+    <Content Include="Content\Trumps\ace_of_diamonds.png" />
+    <Content Include="Content\Trumps\jack_of_diamonds.png" />
+    <Content Include="Content\Trumps\jack_of_diamonds2.png" />
+    <Content Include="Content\Trumps\king_of_diamonds.png" />
+    <Content Include="Content\Trumps\king_of_diamonds2.png" />
+    <Content Include="Content\Trumps\queen_of_diamonds.png" />
+    <Content Include="Content\Trumps\queen_of_diamonds2.png" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Novell\Novell.MonoDroid.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\MonoGame\v3.0\MonoGame.Content.Builder.targets" />
