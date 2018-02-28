@@ -9,7 +9,7 @@ namespace AndroidSheep
         , MainLauncher = true
         , AlwaysRetainTaskState = true
         , LaunchMode = Android.Content.PM.LaunchMode.SingleInstance
-        , ScreenOrientation = ScreenOrientation.FullUser
+        , ScreenOrientation = ScreenOrientation.Landscape
         , ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.Keyboard | ConfigChanges.KeyboardHidden | ConfigChanges.ScreenSize)]
 
     public class MainActivity : Microsoft.Xna.Framework.AndroidGameActivity
@@ -21,6 +21,8 @@ namespace AndroidSheep
             SetContentView((View)g.Services.GetService(typeof(View)));
             g.Run();
         }
+        
     }
+
 }
 
