@@ -12,7 +12,7 @@ namespace SharedSheep.Player
 
         Boolean IsPartner();
 
-        ICard PlayCard();
+        ICard PlayCard(Prompt prompt, ICard lead);
 
         Boolean WantPick(Prompt prompt);
 

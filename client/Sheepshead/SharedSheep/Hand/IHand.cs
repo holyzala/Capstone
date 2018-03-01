@@ -10,7 +10,9 @@ namespace SharedSheep.Hand
 
         int GetNumOfRemainingCards();
         ICard GetCard(int index);
+        List<ICard> GetPlayableCards(ICard lead);
         int NumOfThisSuitInHand(Suit suit);
         void AddCard(ICard card);
+        void RemoveCard(ICard card);
     }
 }

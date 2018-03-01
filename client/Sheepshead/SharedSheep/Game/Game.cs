@@ -29,6 +29,11 @@ namespace SharedSheep.Game
             PartnerCard = new Card.Card(CardID.Jack, CardPower.JackDiamond, Suit.Diamond);
         }
 
+        public IPlayer GetCurrentPlayer()
+        {
+            return Rounds.Last().CurrentPlayer;
+        }
+
         public void DealCard(IPlayer player)
         {
             for (int i = 0; i < 6; ++i)
@@ -74,7 +79,7 @@ namespace SharedSheep.Game
                 IRound newRound = new Round.Round(Rounds.Count, roundStarter);
                 Rounds.Add(newRound);
                 int i = players.IndexOf(roundStarter);
-                roundStarter = newRound.Start(players.Skip(i).Concat(players.Take(i)).ToList());
+                roundStarter = newRound.Start(prompt, players.Skip(i).Concat(players.Take(i)).ToList());
             }
         }
     }

@@ -27,14 +27,42 @@ namespace SharedSheep.Hand
         {
             if (index >= Cards.Count || index < 0)
                 throw new IndexOutOfRangeException();
-            else if (Cards[index] == null)
+            if (Cards[index] == null)
                 throw new NullReferenceException("Card doesn't exist");
-            else
+            ICard card = Cards[index];
+            Cards.Remove(card);
+            return card;
+
+        }
+
+        public List<ICard> GetPlayableCards(ICard lead)
+        {
+            if (lead == null)
+                return new List<ICard>(Cards);
+            List<ICard> cards = new List<ICard>();
+            if (lead.IsTrump())
             {
-                ICard card = Cards[index];
-                Cards.Remove(card);
-                return card;
+                foreach(ICard c in Cards)
+                {
+                    if (c.IsTrump())
+                    {
+                        cards.Add(c);
+                    }
+                }
+                if (cards.Count == 0)
+                    cards.AddRange(Cards);
+                return cards;
             }
+            foreach(ICard c in Cards)
+            {
+                if (c.CardSuit == lead.CardSuit && !c.IsTrump())
+                {
+                    cards.Add(c);
+                }
+            }
+            if (cards.Count == 0)
+                cards.AddRange(Cards);
+            return cards;
         }
 
         public int NumOfThisSuitInHand(Suit suit)
@@ -51,6 +79,11 @@ namespace SharedSheep.Hand
         public void AddCard(ICard card)
         {
             Cards.Add(card);
+        }
+
+        public void RemoveCard(ICard card)
+        {
+            Cards.Remove(card);
         }
     }
 }
