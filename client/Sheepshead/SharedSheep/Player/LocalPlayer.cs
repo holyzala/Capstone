@@ -2,6 +2,7 @@
 using SharedSheep.Hand;
 using SharedSheep.Card;
 using SharedSheep.Blind;
+using System.Collections.Generic;
 
 namespace SharedSheep.Player
 {
@@ -23,9 +24,12 @@ namespace SharedSheep.Player
             return Partner;
         }
 
-        public ICard PlayCard()
+        public ICard PlayCard(Prompt prompt, ICard lead)
         {
-            return Hand.GetCard(0);
+            string answer = prompt(PromptType.PlayCard);
+            ICard card = Hand.GetPlayableCards(lead)[Int32.Parse(answer)];
+            Hand.RemoveCard(card);
+            return card;
         }
 
         public bool WantPick(Prompt prompt)

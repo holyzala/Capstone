@@ -26,6 +26,10 @@ namespace SharedSheep.Trick
 
         public ICard LeadingCard()
         {
+            if (TrickCards.Count == 0)
+            {
+                return null;
+            }
             return TrickCards[0].Item2;
         }
 

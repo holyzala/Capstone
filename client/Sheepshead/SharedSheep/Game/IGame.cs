@@ -25,5 +25,7 @@ namespace SharedSheep.Game
 
         //ScoreSheet gameScore()
         void DealCard(IPlayer player);
+
+        IPlayer GetCurrentPlayer();
     }
 }

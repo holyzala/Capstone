@@ -2,6 +2,7 @@
 using SharedSheep.Card;
 using SharedSheep.Hand;
 using SharedSheep.Blind;
+using System.Collections.Generic;
 
 namespace SharedSheep.Player
 {
@@ -28,9 +29,11 @@ namespace SharedSheep.Player
             return false;
         }
 
-        public ICard PlayCard()
+        public ICard PlayCard(Prompt prompt, ICard lead)
         {
-            return Hand.GetCard(0);
+            List<ICard> cards = Hand.GetPlayableCards(lead);
+            Hand.RemoveCard(cards[0]);
+            return cards[0];
         }
 
         public IBlind Pick(IBlind blind)

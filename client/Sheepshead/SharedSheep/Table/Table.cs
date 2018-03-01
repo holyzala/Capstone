@@ -29,6 +29,11 @@ namespace SharedSheep.Table
             Players.Add(player);
         }
 
+        public IPlayer GetCurrentPlayer()
+        {
+            return Games.Last().GetCurrentPlayer();
+        }
+
         public IPlayer GetNextPlayer(int CurrentPlayerIndexNumber)
         {
             return Players[(CurrentPlayerIndexNumber + 1) % 5];

@@ -23,5 +23,7 @@ namespace SharedSheep.Table
         void StartNewGame();
 
         void Start();
+
+        IPlayer GetCurrentPlayer();
     }
 }

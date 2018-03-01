@@ -11,6 +11,7 @@ namespace SharedSheep.Round
         public ITrick Trick { get; private set; }
         public int RoundNumber { get; private set; }
         public IPlayer RoundStarter { get; private set; }
+        public IPlayer CurrentPlayer { get; private set; }
 
         public Round(int roundNum, IPlayer roundStarter)
         {
@@ -19,16 +20,12 @@ namespace SharedSheep.Round
             Trick = new Trick.Trick();
         }
 
-        public IPlayer TurnToPlay()
-        {
-            throw new NotImplementedException();
-        }
-
-        public IPlayer Start(List<IPlayer> players)
+        public IPlayer Start(Prompt prompt, List<IPlayer> players)
         {
             foreach (IPlayer player in players)
             {
-                Trick.AddCardAndPlayer(player, player.PlayCard());
+                CurrentPlayer = player;
+                Trick.AddCardAndPlayer(player, player.PlayCard(prompt, Trick.LeadingCard()));
             }
             return Trick.TheWinnerPlayer();
         }

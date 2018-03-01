@@ -11,9 +11,8 @@ namespace SharedSheep.Round
         ITrick Trick { get; }
         int RoundNumber { get; }
         IPlayer RoundStarter { get; }
+        IPlayer CurrentPlayer { get; }
 
-        IPlayer TurnToPlay();
-
-        IPlayer Start(List<IPlayer> players);
+        IPlayer Start(Prompt prompt, List<IPlayer> players);
     }
 }
