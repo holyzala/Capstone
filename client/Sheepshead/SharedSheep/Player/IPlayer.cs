@@ -16,7 +16,7 @@ namespace SharedSheep.Player
 
         Boolean WantPick(Prompt prompt);
 
-        IBlind Pick(IBlind blind);
+        IBlind Pick(Prompt prompt, IBlind blind);
 
         void AddToHand(ICard card);
     }

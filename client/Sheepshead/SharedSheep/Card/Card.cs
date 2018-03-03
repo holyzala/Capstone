@@ -9,7 +9,7 @@ namespace SharedSheep.Card
         public CardPower Power { get; private set; }
         public Suit CardSuit { get; private set; }
         private bool isTrump = false;
-        
+
         public Card(CardID num, CardPower power, Suit cardSuit)
         {
             this.ID = num;
@@ -26,14 +26,19 @@ namespace SharedSheep.Card
             {
                 case CardID.Ace:
                     return 11;
+
                 case CardID.Ten:
                     return 10;
+
                 case CardID.King:
                     return 4;
+
                 case CardID.Queen:
                     return 3;
+
                 case CardID.Jack:
                     return 2;
+
                 default:
                     return 0;
             }
@@ -66,7 +71,7 @@ namespace SharedSheep.Card
 
         public override string ToString()
         {
-            return String.Format("ID: {0}, Value: {1}, Power: {2}, Suit: {3}", ID, Value, Power, CardSuit);
+            return String.Format("ID: {0}, Value: {1}, Power: {2}, Suit: {3}", ID, Value, (int)Power, CardSuit);
         }
     }
 }
