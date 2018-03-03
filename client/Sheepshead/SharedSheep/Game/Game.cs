@@ -72,7 +72,7 @@ namespace SharedSheep.Game
                 ForcedToPick = true;
                 Picker = players[0];
             }
-            this.Blind = Picker.Pick(this.Blind);
+            this.Blind = Picker.Pick(prompt, this.Blind);
             IPlayer roundStarter = players[1];
             while (Rounds.Count < 6)
             {

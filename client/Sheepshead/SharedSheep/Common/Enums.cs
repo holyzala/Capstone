@@ -21,5 +21,5 @@ public enum CardPower
 // This enum will contain the different prompt types that can be called
 public enum PromptType
 {
-    Pick, PlayCard
+    Pick, PlayCard, PickBlind
 }

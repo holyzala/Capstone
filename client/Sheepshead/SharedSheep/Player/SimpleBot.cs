@@ -36,7 +36,7 @@ namespace SharedSheep.Player
             return cards[0];
         }
 
-        public IBlind Pick(IBlind blind)
+        public IBlind Pick(Prompt prompt, IBlind blind)
         {
             return blind;
         }
@@ -44,6 +44,11 @@ namespace SharedSheep.Player
         public void AddToHand(ICard card)
         {
             Hand.AddCard(card);
+        }
+
+        public override string ToString()
+        {
+            return Name;
         }
     }
 }

@@ -3,6 +3,8 @@ using SharedSheep.Table;
 using System;
 using System.Collections.Generic;
 using SharedSheep.Card;
+using SharedSheep.Game;
+using SharedSheep.Trick;
 using System.Linq;
 
 namespace ConsoleSheep
@@ -26,16 +28,39 @@ namespace ConsoleSheep
 
         private string Prompt(PromptType prompt_type)
         {
+            string prompt = "";
+            int index;
+            Console.Clear();
             switch (prompt_type)
             {
                 case PromptType.Pick:
-                    Console.WriteLine("Do you want to pick? (yes/no)");
+                    prompt = "Your cards:\n";
+                    prompt += table.Players[0].Hand.Cards.Aggregate("", (finished, next) => string.Format("{0}{1}\n", finished, next));
+                    prompt += "\nDo you want to pick? (yes/no)";
+                    Console.WriteLine(prompt);
                     return Console.ReadLine();
 
                 case PromptType.PlayCard:
-                    List<ICard> cards = table.GetCurrentPlayer().Hand.GetPlayableCards(table.Games.Last().Rounds.Last().Trick.LeadingCard());
-                    string stuff = cards.Aggregate("", (finished, next) => finished + "\n" + next.ToString());
-                    Console.WriteLine(stuff);
+                    prompt = "Picker: " + table.Games.Last().Picker + "\n";
+                    prompt += "Cards Played\n";
+                    ITrick trick = table.Games.Last().Rounds.Last().Trick;
+                    prompt += trick.TrickCards.Aggregate("", (finished, next) => string.Format("{0}{1}\n", finished, next));
+                    prompt += "\nYour playable cards:\n";
+                    List<ICard> cards = table.GetCurrentPlayer().Hand.GetPlayableCards(trick.LeadingCard());
+                    index = 0;
+                    prompt += cards.Aggregate("", (finished, next) => string.Format("{0}{1}) {2}\n", finished, index++, next));
+                    Console.WriteLine(prompt);
+                    return Console.ReadLine();
+
+                case PromptType.PickBlind:
+                    prompt = "Blind cards:\n";
+                    IGame game = table.Games.Last();
+                    index = 0;
+                    prompt += game.Blind.BlindCards.Aggregate("", (finished, next) => string.Format("{0}{1}) {2}\n", finished, index++, next));
+                    prompt += "\nYour Cards:\n";
+                    index = 0;
+                    prompt += table.Players[0].Hand.Cards.Aggregate("", (finished, next) => string.Format("{0}{1}) {2}\n", finished, index++, next));
+                    Console.WriteLine(prompt);
                     return Console.ReadLine();
 
                 default:
