@@ -73,5 +73,10 @@ namespace SharedSheep.Card
         {
             return String.Format("ID: {0}, Value: {1}, Power: {2}, Suit: {3}", ID, Value, (int)Power, CardSuit);
         }
+
+        public int CompareTo(ICard other)
+        {
+            return Power.CompareTo(other.Power);
+        }
     }
 }
