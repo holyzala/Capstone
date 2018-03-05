@@ -22,11 +22,11 @@ namespace SharedSheep.ScoreSheet
             return Scores[player].Sum();
         }
 
-        public void AddGameScore(IPlayer picker, IPlayer partner, bool noTricks, bool cracked, int pickerCardsValue)
+        public void AddGameScore(IPlayer picker, IPlayer partner, int numTricks, bool cracked, int pickerCardsValue )
         {
             if (partner == null)
             {
-                int pickerScore = RangeValue(pickerCardsValue, false, cracked, noTricks);
+                int pickerScore = RangeValue(pickerCardsValue, false, cracked, numTricks);
                 Scores[picker].Add(pickerScore);
                 foreach (KeyValuePair<IPlayer, List<int>> list in Scores)
                 {
@@ -36,7 +36,7 @@ namespace SharedSheep.ScoreSheet
             }
             else
             {
-                int pickerScore = RangeValue(pickerCardsValue, true, cracked, noTricks);
+                int pickerScore = RangeValue(pickerCardsValue, true, cracked, numTricks);
                 Scores[picker].Add(pickerScore);
                 Scores[partner].Add(pickerScore / 2);
                 foreach (KeyValuePair<IPlayer, List<int>> list in Scores)
@@ -60,14 +60,14 @@ namespace SharedSheep.ScoreSheet
             return total;
         }
 
-        private int RangeValue(int values, bool partner, bool cracked, bool noTricks)
+        private int RangeValue(int values, bool partner, bool cracked, int numTricks)
         {
             int score = 0;
-            if (noTricks) score = -6;
+            if (numTricks == 0) score = -6;
             else if (values <= 30) score = -4;
             else if (values <= 60) score = -2;
             else if (values <= 90) score = 2;
-            else if (values < 120) score = 4;
+            else if (values <= 120 && numTricks != 6) score = 4;
             else score = 6;
             if (!partner) { score = 2 * score; }
             if (cracked) { score = 2 * score; }
