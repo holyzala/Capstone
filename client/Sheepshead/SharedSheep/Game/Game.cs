@@ -80,7 +80,15 @@ namespace SharedSheep.Game
                 Rounds.Add(newRound);
                 int i = players.IndexOf(roundStarter);
                 roundStarter = newRound.Start(prompt, players.Skip(i).Concat(players.Take(i)).ToList());
+                prompt(PromptType.RoundOver);
             }
+        }
+
+        public int GetPickerScore()
+        {
+            int total = Rounds.Aggregate(0, (agg, next) => next.Trick.TheWinnerPlayer() == Picker ? agg + next.Trick.TrickValue() : agg);
+            total += Blind.BlindCards.Aggregate(0, (agg, next) => next.Value + agg);
+            return total;
         }
     }
 }
