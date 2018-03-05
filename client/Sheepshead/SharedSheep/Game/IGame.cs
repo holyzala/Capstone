@@ -27,5 +27,7 @@ namespace SharedSheep.Game
         void DealCard(IPlayer player);
 
         IPlayer GetCurrentPlayer();
+
+        int GetPickerScore();
     }
 }

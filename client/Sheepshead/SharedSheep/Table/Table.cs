@@ -50,6 +50,7 @@ namespace SharedSheep.Table
             Games.Add(game);
             // This is somewhat complicated code to move the dealer in each game. Probably refactor later to use the dealer property.
             game.StartGame(Players.Skip(GameIndex).Concat(Players.Take(GameIndex)).ToList(), prompt);
+            prompt(PromptType.GameOver);
         }
 
         public void Start()
