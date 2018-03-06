@@ -73,6 +73,7 @@ namespace SharedSheep.Game
                 Picker = players[0];
             }
             this.Blind = Picker.Pick(prompt, this.Blind);
+            Partner = players.Aggregate((IPlayer)null, (agg, player) => player.Hand.Cards.Contains(PartnerCard) && Picker != player ? player : agg);
             IPlayer roundStarter = players[1];
             while (Rounds.Count < 6)
             {
@@ -84,10 +85,32 @@ namespace SharedSheep.Game
             }
         }
 
+        public int GetPickerTrickCount()
+        {
+            int count = 0;
+            Rounds.ForEach(round =>
+            {
+                IPlayer winner = round.Trick.TheWinnerPlayer();
+                if (winner == Picker || winner == Partner)
+                    ++count;
+            });
+            return count;
+        }
+
         public int GetPickerScore()
         {
-            int total = Rounds.Aggregate(0, (agg, next) => next.Trick.TheWinnerPlayer() == Picker ? agg + next.Trick.TrickValue() : agg);
-            total += Blind.BlindCards.Aggregate(0, (agg, next) => next.Value + agg);
+            int total = 0;
+            int pickTricks = 0;
+            Rounds.ForEach(round =>
+            {
+                IPlayer winner = round.Trick.TheWinnerPlayer();
+                if (winner == Picker)
+                    ++pickTricks;
+                if (winner == Picker || winner == Partner)
+                    total += round.Trick.TrickValue();
+            });
+            if (pickTricks > 0)
+                total += Blind.BlindPoints();
             return total;
         }
     }

@@ -10,18 +10,11 @@ namespace SharedSheep.Player
     {
         public IHand Hand { get; set; }
         public string Name { get; private set; }
-        private Boolean Partner;
 
         public LocalPlayer(string name)
         {
             Hand = new Hand.Hand();
-            Partner = false;
             Name = name;
-        }
-
-        public bool IsPartner()
-        {
-            return Partner;
         }
 
         public ICard PlayCard(Prompt prompt, ICard lead)

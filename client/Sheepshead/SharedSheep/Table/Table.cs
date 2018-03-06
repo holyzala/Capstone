@@ -3,6 +3,7 @@ using SharedSheep.Player;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using SharedSheep.ScoreSheet;
 
 namespace SharedSheep.Table
 {
@@ -11,6 +12,8 @@ namespace SharedSheep.Table
         public List<IPlayer> Players { get; private set; }
         public List<IGame> Games { get; private set; }
         public IPlayer Dealer { get; private set; }
+        public IScoreSheet ScrSheet { get; private set; }
+
         private Prompt prompt;
         private int GameIndex;
 
@@ -19,7 +22,7 @@ namespace SharedSheep.Table
             Players = new List<IPlayer> { host };
             Dealer = host;
             Games = new List<IGame>();
-            //Dealer = new IPlayer(); this is going to be the host
+            ScrSheet = new Score(Players);
             this.prompt = prompt;
             GameIndex = 0;
         }
@@ -27,6 +30,7 @@ namespace SharedSheep.Table
         public void AddPlayer(IPlayer player)
         {
             Players.Add(player);
+            ScrSheet.Scores.Add(player, new List<int>());
         }
 
         public IPlayer GetCurrentPlayer()
@@ -50,6 +54,7 @@ namespace SharedSheep.Table
             Games.Add(game);
             // This is somewhat complicated code to move the dealer in each game. Probably refactor later to use the dealer property.
             game.StartGame(Players.Skip(GameIndex).Concat(Players.Take(GameIndex)).ToList(), prompt);
+            ScrSheet.AddGameScore(game.Picker, game.Partner, game.GetPickerTrickCount(), game.IsCracked, game.GetPickerScore());
             prompt(PromptType.GameOver);
         }
 
@@ -63,6 +68,7 @@ namespace SharedSheep.Table
                 StartNewGame();
                 ++GameIndex;
             }
+            prompt(PromptType.TableOver);
         }
     }
 }

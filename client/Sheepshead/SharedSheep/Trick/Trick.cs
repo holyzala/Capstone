@@ -7,16 +7,12 @@ namespace SharedSheep.Trick
 {
     public class Trick : ITrick
     {
-
         public List<(IPlayer, ICard)> TrickCards { get; private set; }
-
-
 
         public Trick()
         {
             TrickCards = new List<(IPlayer, ICard)>(5);
         }
-
 
         public void AddCardAndPlayer(IPlayer player, ICard card)
         {
@@ -33,7 +29,6 @@ namespace SharedSheep.Trick
             return TrickCards[0].Item2;
         }
 
-
         public IPlayer TheWinnerPlayer()
         {
             return Winners().Item1;
@@ -43,7 +38,6 @@ namespace SharedSheep.Trick
         {
             return Winners().Item2;
         }
-
 
         private (IPlayer, ICard) Winners()
         {
@@ -70,5 +64,3 @@ namespace SharedSheep.Trick
         }
     }
 }
-
-
