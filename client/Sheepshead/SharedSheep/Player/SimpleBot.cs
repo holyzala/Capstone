@@ -11,18 +11,11 @@ namespace SharedSheep.Player
     {
         public IHand Hand { get; set; }
         public String Name { get; private set; }
-        private Boolean Partner;
 
         public SimpleBot(String name)
         {
-            Partner = false;
             Name = name;
             Hand = new Hand.Hand();
-        }
-
-        public Boolean IsPartner()
-        {
-            return Partner;
         }
 
         public Boolean WantPick(Prompt prompt)
