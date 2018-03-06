@@ -12,7 +12,6 @@ namespace SharedSheep.Game
     public interface IGame
     {
         List<IRound> Rounds { get; }
-        IDeck Deck { get; }
         bool IsCracked { get; }
         IPlayer Picker { get; }
         IPlayer Partner { get; }
@@ -24,7 +23,6 @@ namespace SharedSheep.Game
         void StartGame(List<IPlayer> players, Prompt prompt);
 
         //ScoreSheet gameScore()
-        void DealCard(IPlayer player);
 
         IPlayer GetCurrentPlayer();
 

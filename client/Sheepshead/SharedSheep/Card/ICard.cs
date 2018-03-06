@@ -10,7 +10,5 @@ namespace SharedSheep.Card
         Suit CardSuit { get; }
 
         Boolean IsTrump();
-
-        Boolean IsHigher(ICard otherCard); //compare powers
     }
 }

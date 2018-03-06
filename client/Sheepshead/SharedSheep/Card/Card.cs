@@ -59,11 +59,6 @@ namespace SharedSheep.Card
             return base.GetHashCode();
         }
 
-        public bool IsHigher(ICard otherCard)
-        {
-            return this.Power > otherCard.Power;
-        }
-
         public bool IsTrump()
         {
             return isTrump;

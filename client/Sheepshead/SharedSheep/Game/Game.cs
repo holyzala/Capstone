@@ -11,7 +11,6 @@ namespace SharedSheep.Game
     public class Game : IGame
     {
         public List<IRound> Rounds { get; private set; }
-        public IDeck Deck { get; private set; }
         public bool IsCracked { get; private set; }
         public IPlayer Picker { get; private set; }
         public IPlayer Partner { get; private set; }
@@ -22,7 +21,6 @@ namespace SharedSheep.Game
 
         public Game()
         {
-            Deck = new Piquet();
             Rounds = new List<IRound>();
             IsCracked = false;
             Blind = new Blind.Blind();
@@ -34,28 +32,43 @@ namespace SharedSheep.Game
             return Rounds.Last().CurrentPlayer;
         }
 
-        public void DealCard(IPlayer player)
+        public void DealCards(List<IPlayer> players)
         {
-            for (int i = 0; i < 6; ++i)
+            bool missingTrump = true;
+            while (missingTrump)
             {
-                player.AddToHand(Deck.GetTopCard());
+                IDeck Deck = new Piquet();
+                int timesAround = Deck.Cards.Count / players.Count;
+
+                for (int i = 0; i < timesAround; ++i)
+                {
+                    foreach (IPlayer player in players)
+                    {
+                        player.AddToHand(Deck.GetTopCard());
+                    }
+                }
+                Blind.AddCard(Deck.GetTopCard());
+                Blind.AddCard(Deck.GetTopCard());
+
+                players.ForEach(player =>
+                {
+                    missingTrump &= !player.Hand.Cards.Aggregate(false, (agg, card) => agg || card.IsTrump());
+                });
+                // If nobody got trump, wipe the hands and blind and start again
+                if (missingTrump)
+                {
+                    players.ForEach(player =>
+                    {
+                        player.Hand = new Hand.Hand();
+                    });
+                    Blind = new Blind.Blind();
+                }
             }
         }
 
         public void StartGame(List<IPlayer> players, Prompt prompt)
         {
-            int timesAround = Deck.Cards.Count / players.Count;
-            for (int i = 0; i < timesAround; ++i)
-            {
-                foreach (IPlayer player in players)
-                {
-                    player.AddToHand(Deck.GetTopCard());
-                }
-            }
-
-            Blind.AddCard(Deck.GetTopCard());
-            Blind.AddCard(Deck.GetTopCard());
-
+            DealCards(players);
             // The dealer is the first, so skip them until last
             foreach (IPlayer player in players.Skip(1))
             {

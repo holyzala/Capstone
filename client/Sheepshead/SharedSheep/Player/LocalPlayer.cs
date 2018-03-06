@@ -53,7 +53,7 @@ namespace SharedSheep.Player
             while (true)
             {
                 string answer = prompt(PromptType.PickBlind);
-                if (answer == "done")
+                if (answer == "done" || answer == "")
                     break;
                 string[] split = answer.Split(' ');
                 int blindCard = Int32.Parse(split[0]);
