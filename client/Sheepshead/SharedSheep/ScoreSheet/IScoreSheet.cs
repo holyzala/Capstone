@@ -11,7 +11,7 @@ namespace SharedSheep.ScoreSheet
         Dictionary<IPlayer, List<int>> Scores { get; }
 
         int PlayerScore(IPlayer player);
-        void AddGameScore(IPlayer picker, IPlayer partner,bool noTricks, bool cracked, int pickerCardsValue);
+        void AddGameScore(IPlayer picker, IPlayer partner,int numTricks, bool cracked, int pickerCardsValue);
         Dictionary<IPlayer, int> Total();
 
 

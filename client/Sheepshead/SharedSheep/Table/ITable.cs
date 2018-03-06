@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using SharedSheep.Player;
 using SharedSheep.Game;
+using SharedSheep.ScoreSheet;
 
 namespace SharedSheep.Table
 {
@@ -11,7 +12,7 @@ namespace SharedSheep.Table
         List<IPlayer> Players { get; }
         List<IGame> Games { get; }
 
-        //ScoreSheet ScrSheet {get; }
+        IScoreSheet ScrSheet {get; }
         IPlayer Dealer { get; }
 
         IPlayer GetNextPlayer(int CurrentPlayerIndexNumber);
