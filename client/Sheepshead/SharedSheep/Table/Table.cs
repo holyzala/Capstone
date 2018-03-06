@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.Linq;
 using SharedSheep.ScoreSheet;
 
-
 namespace SharedSheep.Table
 {
     public class Table : ITable
@@ -55,9 +54,8 @@ namespace SharedSheep.Table
             Games.Add(game);
             // This is somewhat complicated code to move the dealer in each game. Probably refactor later to use the dealer property.
             game.StartGame(Players.Skip(GameIndex).Concat(Players.Take(GameIndex)).ToList(), prompt);
+            ScrSheet.AddGameScore(game.Picker, game.Partner, game.GetPickerTrickCount(), game.IsCracked, game.GetPickerScore());
             prompt(PromptType.GameOver);
-            //we need to count num of tricks for the picker and pass it here
-            ScrSheet.AddGameScore(game.Picker, null, 3, game.IsCracked, game.GetPickerScore());
         }
 
         public void Start()
@@ -70,6 +68,7 @@ namespace SharedSheep.Table
                 StartNewGame();
                 ++GameIndex;
             }
+            prompt(PromptType.TableOver);
         }
     }
 }

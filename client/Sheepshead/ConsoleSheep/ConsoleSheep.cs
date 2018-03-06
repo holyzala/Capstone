@@ -74,6 +74,20 @@ namespace ConsoleSheep
                 case PromptType.GameOver:
                     game = table.Games.Last();
                     prompt = string.Format("Picker {0} got {1} points\n", game.Picker, game.GetPickerScore());
+                    prompt += "Scoresheet:\n";
+                    foreach (IPlayer player in table.Players)
+                    {
+                        prompt += string.Format("{0}: {1}  ", player, table.ScrSheet.Scores[player][table.Games.Count - 1]);
+                    }
+                    prompt += "\n";
+                    break;
+
+                case PromptType.TableOver:
+                    prompt = "Totals:\n";
+                    foreach (IPlayer player in table.Players)
+                    {
+                        prompt += string.Format("{0}: {1}  ", player, table.ScrSheet.Total()[player]);
+                    }
                     break;
 
                 default:

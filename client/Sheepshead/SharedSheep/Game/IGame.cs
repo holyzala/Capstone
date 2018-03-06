@@ -29,5 +29,7 @@ namespace SharedSheep.Game
         IPlayer GetCurrentPlayer();
 
         int GetPickerScore();
+
+        int GetPickerTrickCount();
     }
 }
