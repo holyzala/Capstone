@@ -1,0 +1,199 @@
+
+/* Drop Tables before re-adding them */
+/* Drop in reverse order of being made */
+
+DROP TABLE  ;
+DROP TABLE  ;
+DROP TABLE  ;
+DROP TABLE  ;
+DROP TABLE  ;
+DROP TABLE  ;
+DROP TABLE  ;
+DROP TABLE  ;
+DROP TABLE  ;
+DROP TABLE  ;
+DROP TABLE  ;
+
+
+
+
+
+
+/* Create Tables */
+/* May have to create all tables and then alter them to have foregin keys*/
+/* Name constraints!!!!!!!!!!!*/
+
+
+CREATE TABLE Card (
+	Card_ID	TINYINT IDENTITY(1,1) PRIMARY KEY,
+	Face NVARCHAR(2) NOT NULL,
+	Suit NVARCHAR(10) NOT NULL,
+	is_Trump BIT NOT NULL,
+	Trump_Power	INT NOT NULL,
+	Card_Value	INT NOT NULL
+);
+
+
+INSERT INTO Card (Face, Suit, is_Trump, Trump_Power, Value) 
+values ('7', 'Hearts', '0', '1', '0');
+INSERT INTO Card (Face, Suit, is_Trump, Trump_Power, Value) 
+values ('7', 'Clubs', '0', '1', '0');
+INSERT INTO Card (Face, Suit, is_Trump, Trump_Power, Value) 
+values ('7', 'Spades', '0', '1', '0');
+
+
+INSERT INTO Card (Face, Suit, is_Trump, Trump_Power, Value) 
+values ('8', 'Hearts', '0', '2', '0');
+INSERT INTO Card (Face, Suit, is_Trump, Trump_Power, Value) 
+values ('8', 'Clubs', '0', '2', '0');
+INSERT INTO Card (Face, Suit, is_Trump, Trump_Power, Value) 
+values ('8', 'Spades', '0', '2', '0');
+
+
+INSERT INTO Card (Face, Suit, is_Trump, Trump_Power, Value) 
+values ('9', 'Hearts', '0', '3', '0');
+INSERT INTO Card (Face, Suit, is_Trump, Trump_Power, Value) 
+values ('9', 'Clubs', '0', '3', '0');
+INSERT INTO Card (Face, Suit, is_Trump, Trump_Power, Value) 
+values ('9', 'Spades', '0', '3', '0');
+
+
+INSERT INTO Card (Face, Suit, is_Trump, Trump_Power, Value) 
+values ('K', 'Hearts', '0', '4', '4');
+INSERT INTO Card (Face, Suit, is_Trump, Trump_Power, Value) 
+values ('K', 'Clubs', '0', '4', '4');
+INSERT INTO Card (Face, Suit, is_Trump, Trump_Power, Value) 
+values ('K', 'Spades', '0', '4', '4');
+
+
+INSERT INTO Card (Face, Suit, is_Trump, Trump_Power, Value) 
+values ('10', 'Hearts', '0', '5', '10');
+INSERT INTO Card (Face, Suit, is_Trump, Trump_Power, Value) 
+values ('10', 'Clubs', '0', '5', '10');
+INSERT INTO Card (Face, Suit, is_Trump, Trump_Power, Value) 
+values ('10', 'Spades', '0', '5', '10');
+
+
+INSERT INTO Card (Face, Suit, is_Trump, Trump_Power, Value) 
+values ('A', 'Hearts', '0', '6', '11');
+INSERT INTO Card (Face, Suit, is_Trump, Trump_Power, Value) 
+values ('A', 'Clubs', '0', '6', '11');
+INSERT INTO Card (Face, Suit, is_Trump, Trump_Power, Value) 
+values ('A', 'Spades', '0', '6', '11');
+
+
+INSERT INTO Card (Face, Suit, is_Trump, Trump_Power, Value) 
+values ('7', 'Diamonds', '1', '7', '0');
+INSERT INTO Card (Face, Suit, is_Trump, Trump_Power, Value) 
+values ('8', 'Diamonds', '1', '8', '0');
+INSERT INTO Card (Face, Suit, is_Trump, Trump_Power, Value) 
+values ('9', 'Diamonds', '1', '9', '0');
+INSERT INTO Card (Face, Suit, is_Trump, Trump_Power, Value) 
+values ('K', 'Diamonds', '1', '10', '4');
+INSERT INTO Card (Face, Suit, is_Trump, Trump_Power, Value) 
+values ('10', 'Diamonds', '1', '11', '10');
+INSERT INTO Card (Face, Suit, is_Trump, Trump_Power, Value) 
+values ('A', 'Diamonds', '1', '12', '11');
+
+
+INSERT INTO Card (Face, Suit, is_Trump, Trump_Power, Value) 
+values ('J', 'Diamonds', '1', '13', '2');
+INSERT INTO Card (Face, Suit, is_Trump, Trump_Power, Value) 
+values ('J', 'Hearts', '1', '14', '2');
+INSERT INTO Card (Face, Suit, is_Trump, Trump_Power, Value) 
+values ('J', 'Spades', '1', '15', '2');
+INSERT INTO Card (Face, Suit, is_Trump, Trump_Power, Value) 
+values ('J', 'Clubs', '1', '16', '2');
+INSERT INTO Card (Face, Suit, is_Trump, Trump_Power, Value) 
+values ('Q', 'Diamonds', '1', '17', '3');
+INSERT INTO Card (Face, Suit, is_Trump, Trump_Power, Value) 
+values ('Q', 'Hearts', '1', '18', '3');
+INSERT INTO Card (Face, Suit, is_Trump, Trump_Power, Value) 
+values ('Q', 'Spades', '1', '19', '3');
+INSERT INTO Card (Face, Suit, is_Trump, Trump_Power, Value) 
+values ('Q', 'Clubs', '1', '20', '3');
+
+
+/* Player Table */
+/* Player_ID type might change with authentication */
+CREATE TABLE Player (
+	Player_ID INT IDENTITY(1,1) PRIMARY KEY,
+	Name VARCHAR(15)
+);
+
+
+/* Player Table */
+/* Player_ID type might change with authentication */
+CREATE TABLE Human (
+	Player_ID INT PRIMARY KEY,
+	Name VARCHAR(15),
+	FOREIGN KEY (Player_ID) REFERENCES Player(Player_ID)
+	/* Add more information*/
+);
+
+
+/* Bot Table */
+/* Player_ID type might change with authentication */
+CREATE TABLE Bot (
+	Player_ID  INT PRIMARY KEY,
+	Name VARCHAR(15),
+	FOREIGN KEY (Player_ID) REFERENCES Player(Player_ID)
+	/* Add more information*/
+);
+
+
+/* Match/Table Table */
+/* Player_ID type might change with authentication */
+CREATE TABLE Table_Match (
+	Table_ID INT IDENTITY(1,1) PRIMARY KEY,
+	Dealer INT NOT NULL,
+	Host_Player INT NOT NULL,
+	Game_Number INT
+	FOREIGN KEY (Dealer) REFERENCES Player(Player_ID),
+	FOREIGN KEY (Host_Player) REFERENCES Player(Player_ID),
+);
+
+
+/* Table Players */
+/* Player_ID type might change with authentication */
+CREATE TABLE Table_Players (
+	TP_Player_Id INT NOT NULL,
+	TP_Table_ID INT NOT NULL,	
+	FOREIGN KEY (TP_Player_Id) REFERENCES Player(Player_ID),
+	FOREIGN KEY (TP_Table_Id) REFERENCES Table_Match(Table_ID),
+	PRIMARY KEY (TP_Player_ID, TP_Table_ID)
+);
+
+/* Table Game */
+/* Player_ID type might change with authentication */
+CREATE TABLE Game (
+	Game_ID INT IDENTITY(1,1) PRIMARY KEY,
+	Table_ID INT NOT NULL,
+	Picker INT NOT NULL,
+	Partner INT NOT NULL,
+	FOREIGN KEY (Picker) REFERENCES Player(Player_ID),
+	FOREIGN KEY (Partner) REFERENCES Player(Player_ID),
+);
+
+
+/* Table Hand */
+/* Player_ID type might change with authentication */
+/* Composite primary key between game, player, and cards*/
+CREATE TABLE Hand (
+	Hand_Player INT NOT NULL,
+	Hand_Game INT NOT NULL,	
+	Hand_Card TINYINT NOT NULL,
+	FOREIGN KEY (Hand_Player) REFERENCES Player(Player_ID),
+	FOREIGN KEY (Hand_Game) REFERENCES Game(Game_ID),
+	FOREIGN KEY (Hand_Card) REFERENCES Card(Card_ID),
+	PRIMARY KEY (Hand_Player, Hand_Game, Hand_Player)
+);
+
+
+/* Table Blind */
+/* Composite primary key between game and cards*/
+CREATE TABLE Blind (
+	
+);
+
+
