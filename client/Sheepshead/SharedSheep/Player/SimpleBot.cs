@@ -1,24 +1,20 @@
 ﻿using System;
 using SharedSheep.Card;
-using SharedSheep.Hand;
 using SharedSheep.Blind;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace SharedSheep.Player
 {
-    public class SimpleBot : IPlayer
+    public class SimpleBot : AbstractPlayer
     {
-        public IHand Hand { get; set; }
-        public String Name { get; private set; }
-
         public SimpleBot(String name)
         {
             Name = name;
             Hand = new Hand.Hand();
         }
 
-        public Boolean WantPick(Prompt prompt)
+        public override Boolean WantPick(Prompt prompt)
         {
             ICard JD = new Card.Card(CardID.Jack, CardPower.JackDiamond, Suit.Diamond);
             if (Hand.Cards.Contains(JD)) return false;
@@ -28,7 +24,7 @@ namespace SharedSheep.Player
             return false;
         }
 
-        public ICard PlayCard(Prompt prompt, ICard lead)
+        public override ICard PlayCard(Prompt prompt, ICard lead)
         {
             Hand.Cards.Sort();
             Hand.Cards.Reverse();
@@ -37,7 +33,7 @@ namespace SharedSheep.Player
             return cards[0];
         }
 
-        public IBlind Pick(Prompt prompt, IBlind blind)
+        public override ICard Pick(Prompt prompt, IBlind blind, bool forced, ICard partnerCard)
         {
             Hand.AddCard(blind.BlindCards[0]);
             Hand.AddCard(blind.BlindCards[1]);
@@ -70,17 +66,12 @@ namespace SharedSheep.Player
                 while (added < 2)
                     blind.BlindCards[added++] = Hand.Cards[0];
             }
-            return blind;
-        }
+            if (forced && Hand.Cards.Contains(partnerCard) || blind.BlindCards.Contains(partnerCard))
+            {
+                return CallUp();
+            }
 
-        public void AddToHand(ICard card)
-        {
-            Hand.AddCard(card);
-        }
-
-        public override string ToString()
-        {
-            return Name;
+            return partnerCard;
         }
     }
 }

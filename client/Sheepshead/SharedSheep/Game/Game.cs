@@ -32,7 +32,7 @@ namespace SharedSheep.Game
             return Rounds.Last().CurrentPlayer;
         }
 
-        public void DealCards(List<IPlayer> players)
+        private void DealCards(List<IPlayer> players)
         {
             bool missingTrump = true;
             while (missingTrump)
@@ -85,7 +85,7 @@ namespace SharedSheep.Game
                 ForcedToPick = true;
                 Picker = players[0];
             }
-            this.Blind = Picker.Pick(prompt, this.Blind);
+            PartnerCard = Picker.Pick(prompt, this.Blind, ForcedToPick, PartnerCard);
             Partner = players.Aggregate((IPlayer)null, (agg, player) => player.Hand.Cards.Contains(PartnerCard) && Picker != player ? player : agg);
             IPlayer roundStarter = players[1];
             while (Rounds.Count < 6)

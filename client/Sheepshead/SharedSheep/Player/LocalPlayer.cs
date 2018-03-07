@@ -1,23 +1,18 @@
 ﻿using System;
-using SharedSheep.Hand;
 using SharedSheep.Card;
 using SharedSheep.Blind;
-using System.Collections.Generic;
 
 namespace SharedSheep.Player
 {
-    public class LocalPlayer : IPlayer
+    public class LocalPlayer : AbstractPlayer
     {
-        public IHand Hand { get; set; }
-        public string Name { get; private set; }
-
         public LocalPlayer(string name)
         {
             Hand = new Hand.Hand();
             Name = name;
         }
 
-        public ICard PlayCard(Prompt prompt, ICard lead)
+        public override ICard PlayCard(Prompt prompt, ICard lead)
         {
             ICard card = null;
             bool done = false;
@@ -38,7 +33,7 @@ namespace SharedSheep.Player
             return card;
         }
 
-        public bool WantPick(Prompt prompt)
+        public override bool WantPick(Prompt prompt)
         {
             string answer = prompt(PromptType.Pick);
             if (answer.ToLower() == "yes" || answer.ToLower() == "y")
@@ -48,7 +43,7 @@ namespace SharedSheep.Player
             return false;
         }
 
-        public IBlind Pick(Prompt prompt, IBlind blind)
+        public override ICard Pick(Prompt prompt, IBlind blind, bool forced, ICard partnerCard)
         {
             while (true)
             {
@@ -60,17 +55,15 @@ namespace SharedSheep.Player
                 int handCard = Int32.Parse(split[1]);
                 Hand.Cards[handCard] = blind.SwapCard(blindCard, Hand.Cards[handCard]);
             }
-            return blind;
-        }
-
-        public void AddToHand(ICard card)
-        {
-            Hand.AddCard(card);
-        }
-
-        public override string ToString()
-        {
-            return Name;
+            if (forced && Hand.Cards.Contains(partnerCard) || blind.BlindCards.Contains(partnerCard))
+            {
+                string answer = prompt(PromptType.CallUp);
+                if (answer.ToLower() == "yes" || answer.ToLower() == "y")
+                {
+                    return CallUp();
+                }
+            }
+            return partnerCard;
         }
     }
 }
