@@ -55,13 +55,11 @@ namespace SharedSheep.Player
                 int handCard = Int32.Parse(split[1]);
                 Hand.Cards[handCard] = blind.SwapCard(blindCard, Hand.Cards[handCard]);
             }
-            if (forced && Hand.Cards.Contains(partnerCard) || blind.BlindCards.Contains(partnerCard))
+            if (forced && (Hand.Cards.Contains(partnerCard) || blind.BlindCards.Contains(partnerCard)))
             {
                 string answer = prompt(PromptType.CallUp);
                 if (answer.ToLower() == "yes" || answer.ToLower() == "y")
-                {
                     return CallUp();
-                }
             }
             return partnerCard;
         }

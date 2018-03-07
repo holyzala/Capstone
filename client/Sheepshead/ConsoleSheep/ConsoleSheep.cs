@@ -47,7 +47,6 @@ namespace ConsoleSheep
                 case PromptType.PlayCard:
                     Console.Clear();
                     prompt = string.Format("Picker: {0}\n", table.Games.Last().Picker);
-                    prompt += string.Format("Partner card: {0}\n", table.Games.Last().PartnerCard);
                     prompt += "Cards Played\n";
                     trick = table.Games.Last().Rounds.Last().Trick;
                     trick.TrickCards.ForEach(card =>
@@ -111,6 +110,10 @@ namespace ConsoleSheep
 
                 case PromptType.CallUp:
                     prompt = "Would you like to call up? (yes/no): ";
+                    break;
+
+                case PromptType.CalledUp:
+                    prompt = string.Format("\nPicker called up to {0}\n", table.Games.Last().PartnerCard);
                     break;
 
                 default:

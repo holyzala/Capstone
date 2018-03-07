@@ -66,10 +66,8 @@ namespace SharedSheep.Player
                 while (added < 2)
                     blind.BlindCards[added++] = Hand.Cards[0];
             }
-            if (forced && Hand.Cards.Contains(partnerCard) || blind.BlindCards.Contains(partnerCard))
-            {
+            if (forced && (Hand.Cards.Contains(partnerCard) || blind.BlindCards.Contains(partnerCard)))
                 return CallUp();
-            }
 
             return partnerCard;
         }
