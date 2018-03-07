@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using SharedSheep.Card;
 
 namespace SharedSheep.Blind
@@ -30,7 +29,6 @@ namespace SharedSheep.Blind
             BlindCards[index] = card;
 
             return outCard;
-          
         }
     }
 }

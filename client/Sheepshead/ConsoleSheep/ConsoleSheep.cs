@@ -37,20 +37,29 @@ namespace ConsoleSheep
                 case PromptType.Pick:
                     Console.Clear();
                     prompt = "Your cards:\n";
-                    prompt += table.Players[0].Hand.Cards.Aggregate("", (finished, next) => string.Format("{0}{1}\n", finished, next));
+                    table.Players[0].Hand.Cards.ForEach(card =>
+                    {
+                        prompt += string.Format("{0}\n", card);
+                    });
                     prompt += "\nDo you want to pick? (yes/no)\n";
                     break;
 
                 case PromptType.PlayCard:
                     Console.Clear();
-                    prompt = "Picker: " + table.Games.Last().Picker + "\n";
+                    prompt = string.Format("Picker: {0}\n", table.Games.Last().Picker);
                     prompt += "Cards Played\n";
                     trick = table.Games.Last().Rounds.Last().Trick;
-                    prompt += trick.TrickCards.Aggregate("", (finished, next) => string.Format("{0}{1}\n", finished, next));
+                    trick.TrickCards.ForEach(card =>
+                    {
+                        prompt += string.Format("{0}\n", card);
+                    });
                     prompt += "\nYour playable cards:\n";
                     List<ICard> cards = table.GetCurrentPlayer().Hand.GetPlayableCards(trick.LeadingCard());
                     index = 0;
-                    prompt += cards.Aggregate("", (finished, next) => string.Format("{0}{1}) {2}\n", finished, index++, next));
+                    cards.ForEach(card =>
+                    {
+                        prompt += string.Format("{0}) {1}\n", index++, card);
+                    });
                     break;
 
                 case PromptType.PickBlind:
@@ -58,36 +67,53 @@ namespace ConsoleSheep
                     prompt = "Blind cards:\n";
                     game = table.Games.Last();
                     index = 0;
-                    prompt += game.Blind.BlindCards.Aggregate("", (finished, next) => string.Format("{0}{1}) {2}\n", finished, index++, next));
+                    game.Blind.BlindCards.ForEach(card =>
+                    {
+                        prompt += string.Format("{0}) {1}\n", index++, card);
+                    });
                     prompt += "\nYour Cards:\n";
                     index = 0;
-                    prompt += table.Players[0].Hand.Cards.Aggregate("", (finished, next) => string.Format("{0}{1}) {2}\n", finished, index++, next));
+                    table.Players[0].Hand.Cards.ForEach(card =>
+                    {
+                        prompt += string.Format("{0}) {1}\n", index++, card);
+                    });
                     break;
 
                 case PromptType.RoundOver:
                     trick = table.Games.Last().Rounds.Last().Trick;
                     prompt = string.Format("{0} won the trick for {1} points\n", trick.TheWinnerPlayer(), trick.TrickValue());
                     prompt += "All cards played:\n";
-                    prompt += trick.TrickCards.Aggregate("", (finished, next) => string.Format("{0}{1}\n", finished, next));
+                    trick.TrickCards.ForEach(card =>
+                    {
+                        prompt += string.Format("{0}\n", card);
+                    });
                     break;
 
                 case PromptType.GameOver:
                     game = table.Games.Last();
                     prompt = string.Format("Picker {0} got {1} points\n", game.Picker, game.GetPickerScore());
                     prompt += "Scoresheet:\n";
-                    foreach (IPlayer player in table.Players)
+                    table.Players.ForEach(player =>
                     {
                         prompt += string.Format("{0}: {1}  ", player, table.ScrSheet.Scores[player][table.Games.Count - 1]);
-                    }
+                    });
                     prompt += "\n";
                     break;
 
                 case PromptType.TableOver:
                     prompt = "Totals:\n";
-                    foreach (IPlayer player in table.Players)
+                    table.Players.ForEach(player =>
                     {
                         prompt += string.Format("{0}: {1}  ", player, table.ScrSheet.Total()[player]);
-                    }
+                    });
+                    break;
+
+                case PromptType.CallUp:
+                    prompt = "Would you like to call up? (yes/no): ";
+                    break;
+
+                case PromptType.CalledUp:
+                    prompt = string.Format("\nPicker called up to {0}\n", table.Games.Last().PartnerCard);
                     break;
 
                 default:
