@@ -15,9 +15,9 @@ var config =
             {
                 database: 'Sheepshead', //update me
                 encrypt: true,
-                rowCollectionOnDone: true 
+                rowCollectionOnDone: true
             }
-    }
+    };
 
 
 /* GET cards. */

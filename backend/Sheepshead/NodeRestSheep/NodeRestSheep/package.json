@@ -1,11 +1,11 @@
 {
-  "name": "rest-sheep",
+  "name": "node-rest-sheep",
   "version": "0.0.0",
   "private": true,
   "scripts": {
     "start": "node app"
   },
-  "description": "RestSheep",
+  "description": "NodeRestSheep",
   "author": {
     "name": "Joseph"
   },
@@ -19,5 +19,8 @@
     "pug": "^2.0.0-beta6",
     "serve-favicon": "^2.3.0",
     "sqlite3": "^3.1.13"
+  },
+  "engines": {
+    "node": "~6.10.x"
   }
 }
