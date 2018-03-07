@@ -1,8 +1,9 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
+using AndroidSheep.Models;
 using System.Diagnostics;
-using iface = AndroidSheep.Models;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace AndroidSheep
 {
@@ -10,14 +11,21 @@ namespace AndroidSheep
     {
         GraphicsDeviceManager graphics;
         BasicEffect effect;
+
         Texture2D checkerboard;
         Texture2D queenofspades;
-        iface.TableTop table;
-        VertexPositionNormalTexture[] cardverts;
+        SpriteBatch spriteBatch;
 
-        Vector3 cameraPosition = new Vector3(0, 24.5f, 7);
-        iface.DebugCamera camera;
-        int numPlayers = 5;
+        TableTop table;
+
+        Card[] deck;
+
+        DebugCamera camera;
+        Vector3 debugCameraPosition = new Vector3(0, 10, 8);
+        Vector3 cardPosition = new Vector3(.33f, 10, 8);
+
+        List<PlayerCamera> playerCameraLocations;
+        List<Player> players;
 
         public Table()
         {
@@ -36,12 +44,56 @@ namespace AndroidSheep
         protected override void Initialize()
         {
             effect = new BasicEffect(graphics.GraphicsDevice);
-            camera = new iface.DebugCamera(cameraPosition, graphics);
-            table = new iface.TableTop(graphics, effect);
+            camera = new DebugCamera(debugCameraPosition, graphics);
+            table = new TableTop(graphics, effect);
+
+            
+
+            playerCameraLocations = new List<PlayerCamera>();
+            players = new List<Player>();
+
             table.InitializeTable();
-            initializeCards();
+            //InitializePlayerCameras();
+            InitializeDeck();
+            //InitializePlayers();
             base.Initialize();
         }
+
+       
+        private void InitializeDeck()
+        {
+           
+
+        }
+
+        /*private void InitializePlayerCameras()
+        {
+            Vector3 playerVectorOne;
+            Vector3 playerVectorTwo;
+            for(int i = 3; i < (numPlayers * 3) + 1; i = i + 3)
+            {
+                playerVectorOne = table.GetFloorVertex(i - 3);
+                playerVectorTwo = table.GetFloorVertex(i - 1);
+                var playerYValue = (playerVectorOne.X + playerVectorTwo.X) / 2;
+                var playerXValue = (- playerVectorOne.Y - playerVectorTwo.Y) / 2;
+
+                Vector3 playerStartVector = new Vector3(playerXValue, playerYValue, 0);
+                PlayerCamera playerCamera = new PlayerCamera(playerStartVector, graphics);
+                playerCameraLocations.Add(playerCamera);
+
+                Debug.WriteLine(string.Format("PlayerVector X, Y: {0}, {1}", playerStartVector.X, playerStartVector.Y));
+            }           
+        }*/
+
+        /*private void InitializePlayers()
+        {
+            for (int i = 0; i < numPlayers; i++)
+            {
+                Player player = new Player(playerCameraLocations.ElementAt(i), effect, graphics);
+                
+                players.Add(player);
+            }
+        }*/
 
         /// <summary>
         /// LoadContent will be called once per game and is the place to load
@@ -49,8 +101,11 @@ namespace AndroidSheep
         /// </summary>
         protected override void LoadContent()
         {
+            spriteBatch = new SpriteBatch(GraphicsDevice);
+
             checkerboard = Content.Load<Texture2D>("Table/darktexture");
-            queenofspades = Content.Load<Texture2D>("Spades/queen_of_spades");
+            queenofspades = Content.Load<Texture2D>("Clubs/10_of_clubs");
+
 
         }
 
@@ -74,39 +129,6 @@ namespace AndroidSheep
             base.Update(gameTime);
         }
 
-        public void initializeCards()
-        {
-            cardverts = new VertexPositionNormalTexture[6];
-            
-            cardverts[0].Position = new Vector3(-.5f, 13, .1f);
-            cardverts[1].Position = new Vector3(-.5f, 15, .1f);
-            cardverts[2].Position = new Vector3(.5f, 13, .1f);
-            cardverts[3].Position = cardverts[1].Position;
-            cardverts[4].Position = new Vector3(.5f, 15, .1f);
-            cardverts[5].Position = cardverts[2].Position;
-
-            cardverts[0].TextureCoordinate = new Vector2(0, 0);
-            cardverts[1].TextureCoordinate = new Vector2(0, 1);
-            cardverts[2].TextureCoordinate = new Vector2(1, 0);
-            cardverts[3].TextureCoordinate = new Vector2(0, 1);
-            cardverts[4].TextureCoordinate = new Vector2(1, 1);
-
-            cardverts[5].TextureCoordinate = new Vector2(1, 0);
-
-
-        }
-
-        public void DrawCard(Texture2D texture)
-        {
-            this.effect.TextureEnabled = true;
-            this.effect.Texture = texture;
-            foreach (var pass in this.effect.CurrentTechnique.Passes)
-            {
-                pass.Apply();
-
-                this.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, cardverts, 0, 2);
-            }
-        }
         /// <summary>
         /// This is called when the game should draw itself.
         /// </summary>
@@ -114,11 +136,22 @@ namespace AndroidSheep
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
+
             effect.View = camera.ViewMatrix;
             effect.Projection = camera.ProjectionMatrix;
-
+            effect.World = Matrix.Identity;
+            Vector2 position = new Vector2(150,500);
+            Vector2 addVector = new Vector2(100, 0);
             table.DrawGround(checkerboard);
-            DrawCard(queenofspades);
+            for (int i = 0; i < 6; i++)
+            {
+                spriteBatch.Begin();
+                spriteBatch.Draw(queenofspades, position + addVector, null, Color.White, 0f,
+                Vector2.Zero, 0.5f, SpriteEffects.None, 0f);
+                spriteBatch.End();
+                addVector.X += 100;
+            }
+           
             base.Draw(gameTime);
         }
     }

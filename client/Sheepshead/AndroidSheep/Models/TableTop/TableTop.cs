@@ -1,5 +1,8 @@
 ﻿using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
+using System;
+using System.Collections.Generic;
+
 namespace AndroidSheep.Models
 {
     class TableTop
@@ -7,6 +10,7 @@ namespace AndroidSheep.Models
         VertexPositionNormalTexture[] floorVerts;
         GraphicsDeviceManager graphics;
         BasicEffect effect;
+        int tablePoints = 5;
 
         public TableTop(GraphicsDeviceManager graphics, BasicEffect effect)
         {
@@ -22,28 +26,34 @@ namespace AndroidSheep.Models
 
         private void InitializeVertices()
         {
-            float s = 10;
+            float radius = 11;
             floorVerts = new VertexPositionNormalTexture[15];
-
-            floorVerts[0].Position = new Vector3(s, s, 0);
+            var tuplePoints = new List<Tuple<float, float>>();
+            for(int i = 0; i < tablePoints; i++)
+            {
+                var tuple = Tuple.Create((float)-(radius * Math.Cos(2 * MathHelper.Pi * i / tablePoints)), (float)-(radius * Math.Sin(2 * MathHelper.Pi * i / tablePoints)));
+                tuplePoints.Add(tuple);
+            }
+     
+            floorVerts[0].Position = new Vector3(-tuplePoints[0].Item2 , tuplePoints[0].Item1, 0);
             floorVerts[1].Position = new Vector3(0, 0, 0);
-            floorVerts[2].Position = new Vector3(0, s, 0);
+            floorVerts[2].Position = new Vector3(-tuplePoints[1].Item2, tuplePoints[1].Item1, 0);
 
-            floorVerts[3].Position = new Vector3((s * .5f), 2 * s, 0);
-            floorVerts[4].Position = new Vector3(s, s, 0);
-            floorVerts[5].Position = floorVerts[2].Position;
+            floorVerts[3].Position = new Vector3(-tuplePoints[1].Item2, tuplePoints[1].Item1, 0);
+            floorVerts[4].Position = floorVerts[1].Position;
+            floorVerts[5].Position = new Vector3(-tuplePoints[2].Item2, tuplePoints[2].Item1, 0);
 
-            floorVerts[6].Position = new Vector3(-(s * .5f), 2 * s, 0);
-            floorVerts[7].Position = new Vector3(s * .5f, 2 * s, 0);
-            floorVerts[8].Position = floorVerts[2].Position;
+            floorVerts[6].Position = new Vector3(-tuplePoints[2].Item2, tuplePoints[2].Item1, 0);
+            floorVerts[7].Position = floorVerts[1].Position;
+            floorVerts[8].Position = new Vector3(-tuplePoints[3].Item2, tuplePoints[3].Item1, 0);
 
-            floorVerts[9].Position = new Vector3(-s, s, 0);
-            floorVerts[10].Position = new Vector3(-(s * .5f), 2 * s, 0);
-            floorVerts[11].Position = floorVerts[2].Position;
+            floorVerts[9].Position = new Vector3(-tuplePoints[3].Item2, tuplePoints[3].Item1, 0);
+            floorVerts[10].Position = floorVerts[1].Position;
+            floorVerts[11].Position = new Vector3(-tuplePoints[4].Item2, tuplePoints[4].Item1, 0);
 
-            floorVerts[12].Position = new Vector3(0, 0, 0);
-            floorVerts[13].Position = new Vector3(-s, s, 0);
-            floorVerts[14].Position = floorVerts[2].Position;
+            floorVerts[12].Position = new Vector3(-tuplePoints[4].Item2, tuplePoints[4].Item1, 0);
+            floorVerts[13].Position = floorVerts[1].Position;
+            floorVerts[14].Position = new Vector3(-tuplePoints[0].Item2, tuplePoints[0].Item1, 0);
 
             int reps = 1;
             floorVerts[0].TextureCoordinate = new Vector2(0, 0);
@@ -80,5 +90,9 @@ namespace AndroidSheep.Models
             }
         }
 
+        public Vector3 GetFloorVertex(int index)
+        {
+            return floorVerts[index].Position;
+        }
     }
 }

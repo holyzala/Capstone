@@ -1,28 +1,46 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Input.Touch;
+using System;
 using System.Diagnostics;
 
 namespace AndroidSheep.Models
 {
-    class DebugCamera : ICamera
+    public class DebugCamera : ICamera
     {
         public DebugCamera(Vector3 startpos, GraphicsDeviceManager graphics)
         {
-            this.Position = startpos;
-            this.Graphics = graphics.GraphicsDevice;
-            this.FieldOfView = Microsoft.Xna.Framework.MathHelper.PiOver4;
-            this.AspectRatio = (float)Graphics.Viewport.Width / (float)Graphics.Viewport.Height;
-            this.NearPlane = 1;
-            this.FarPlane = 200;
-            this.LookAt = new Vector3(0, -1, -5f);
-            this.UpVector = new Vector3(0, 0, 1f);
+            Position = startpos;
+            Graphics = graphics.GraphicsDevice;
+            this.Initialize();
+        }
+
+        private void Initialize()
+        {
+            FieldOfView = Microsoft.Xna.Framework.MathHelper.PiOver4;
+            AspectRatio = (float)Graphics.Viewport.Width / (float)Graphics.Viewport.Height;
+            NearPlane = 1;
+            FarPlane = 200;
+            LookAt = new Vector3(0, -1, -5f);
+            UpVector = new Vector3(0, 0, 1f);
+            CameraDirection = LookAt - Position;
+            CameraDirection.Normalize();
         }
 
         public float FieldOfView { get; private set; }
         public float NearPlane { get; private set; }
         public float FarPlane { get; private set; }
         public float AspectRatio { get; private set; }
+
+        public Vector3 Position { get; private set; }
+        public Vector3 UpVector { get; private set; }
+        public Vector3 LookAt { get; private set; }
+        public GraphicsDevice Graphics { get; private set; }
+
+        private float CameraSpeed = 0.5f;
+        private Vector3 CameraDirection;
+        private TouchCollection previousTouch;
         public Matrix ProjectionMatrix
         {
             get
@@ -30,207 +48,70 @@ namespace AndroidSheep.Models
                 return Matrix.CreatePerspectiveFieldOfView(FieldOfView, AspectRatio, NearPlane, FarPlane);
             }
         }
-       
-        public Vector3 Position { get; private set; }
-        public Vector3 UpVector { get; private set; }
-        public Vector3 LookAt { get; private set; }
-        public GraphicsDevice Graphics { get; private set; }
 
         public Matrix ViewMatrix
         {
             get
             {
-                var lookAtVector = new Vector3(0, -10.0f, -0.5f);
-                // We'll create a rotation matrix using our angle
-                var rotationMatrix = Matrix.CreateRotationX(0.66f);
-                // Then we'll modify the vector using this matrix:
-                lookAtVector = Vector3.Transform(lookAtVector, rotationMatrix);
-                lookAtVector += this.Position;
-
-                var upVector = Vector3.UnitZ;
-
-                return Matrix.CreateLookAt(
-                    Position, lookAtVector, upVector);
+                return Matrix.CreateLookAt(Position, Position + CameraDirection, UpVector);
             }
         }
 
         public void Update(GameTime gameTime)
         {
             TouchCollection touchCollection = TouchPanel.GetState();
-            bool oneFingerTouching = touchCollection.Count == 1;
-            bool twoFIngerTouchihng = touchCollection.Count == 2;
-            if (oneFingerTouching)
+            bool playerDebug = false;
+
+            bool touched = touchCollection.Count == 1;
+
+            if (touched)
             {
+                if(previousTouch.Count == 0)
+                {
+                    previousTouch = touchCollection;
+                }
                 var xPosition = touchCollection[0].Position.X;
                 var yPosition = touchCollection[0].Position.Y;
-
-
                 float xRatio = xPosition / (float)Graphics.Viewport.Width;
-                Debug.WriteLine(string.Format("X: {0}, Y: {1} Camera Position: {2}, {3}", 
-                                touchCollection[0].Position.X, touchCollection[0].Position.Y,
-                                this.Position.X, this.Position.Y));
+                CameraDirection = Vector3.Transform(CameraDirection,
+                                Matrix.CreateFromAxisAngle(UpVector,
+                                (-MathHelper.PiOver4 / 20) * (xPosition - previousTouch[0].Position.X) / (float)Graphics.Viewport.Width));
 
 
+                CameraDirection = Vector3.Transform(CameraDirection,
+                                Matrix.CreateFromAxisAngle(Vector3.Cross(UpVector, CameraDirection),
+                                (MathHelper.PiOver4 / 20) * (yPosition - previousTouch[0].Position.Y) / (float)Graphics.Viewport.Height));
 
-                if (xRatio < 1.0f)
+                UpVector = Vector3.Transform(UpVector,
+                            Matrix.CreateFromAxisAngle(Vector3.Cross(UpVector, CameraDirection),
+                            (MathHelper.PiOver4 / 20) * (yPosition - previousTouch[0].Position.Y) / (float)Graphics.Viewport.Height));
+
+            }
+
+            if (Keyboard.GetState().IsKeyDown(Keys.W))
+                Position += CameraDirection * CameraSpeed;
+
+            if (Keyboard.GetState().IsKeyDown(Keys.S))
+                Position -= CameraDirection * CameraSpeed;
+
+            if (Keyboard.GetState().IsKeyDown(Keys.A))
+                Position += Vector3.Cross(UpVector, CameraDirection) * CameraSpeed;
+            if (Keyboard.GetState().IsKeyDown(Keys.D))
+                Position -= Vector3.Cross(UpVector, CameraDirection) * CameraSpeed;
+
+            if (Keyboard.GetState().IsKeyDown(Keys.P))
+            {
+                playerDebug = true;
+            }
+
+            if (playerDebug)
+            {
+
+                if (Keyboard.GetState().IsKeyDown(Keys.P))
                 {
-                    var forwardVector = new Vector3(xPosition, yPosition, 0);
-                    forwardVector = findQuadrant(forwardVector);
 
-                    const float unitsPerSecond = 5;
-
-                    this.Position += forwardVector * unitsPerSecond *
-                        (float)gameTime.ElapsedGameTime.TotalSeconds;
                 }
             }
-
-            if (twoFIngerTouchihng)
-            {
-                var xOnePosition = touchCollection[0].Position.X;
-                var yOnePosition = touchCollection[0].Position.Y;
-                var xTwoPosition = touchCollection[1].Position.X;
-                var yTwoPosition = touchCollection[1].Position.Y;
-
-
-                var vectorOne = new Vector3(xOnePosition, yOnePosition, 0);
-                var vectorTwo = new Vector3(xTwoPosition, yTwoPosition, 0);
-
-                vectorOne = findQuadrant(vectorOne);
-                vectorTwo = findQuadrant(vectorTwo);
-
-                if (vectorOne.X == 1 && vectorTwo.Y == -1)
-                {
-                }
-
-
-
-
-
-            }
-        }
-
-        private Vector3 findQuadrant(Vector3 point)
-        {
-            Vector3 addValue = new Vector3(0, 0, 0);
-            float height = (float)Graphics.Viewport.Height;
-            float width = (float)Graphics.Viewport.Width;
-
-            int quadrant = SubdivideQuadrant(width, height, point);
-            int subquadrant = 0;
-            //Quadrant I
-            switch (quadrant)
-            {
-                case 1:
-                    subquadrant = SubdivideQuadrant(width * 3 / 4, height * 1 / 4, point);
-                    switch (subquadrant)
-                    {
-                        case 1:
-                            addValue.X = -1;
-                            addValue.Y = -1;
-                            break;
-                        case 2:
-                            addValue.Y = -1;
-                            break;
-                        case 3:
-                            addValue.X = -1;
-                            addValue.Y = -1;
-                            break;
-                        case 4:
-                            addValue.X = -1;
-                            break;
-                        default:
-                            break;
-                    }
-                    break;
-
-                case 2:
-                    subquadrant = SubdivideQuadrant(width * 1 / 4, height * 1 / 4, point);
-
-                    switch (subquadrant)
-                    {
-                        case 1:
-                            addValue.Y = -1;
-                            break;
-                        case 2:
-                            addValue.X = 1;
-                            addValue.Y = -1;
-                            break;
-                        case 3:
-                            addValue.X = 1;
-                            break;
-                        case 4:
-                            addValue.X = 1;
-                            addValue.Y = -1;
-                            break;
-                        default:
-                            break;
-                    }
-                    break;
-
-                case 3:
-                    subquadrant = SubdivideQuadrant(width * 1 / 4, height * 3 / 4, point);
-                    switch (subquadrant)
-                    {
-                        case 1:
-                            break;
-                        case 2:
-                            addValue.X = 1;
-                            break;
-                        case 3:
-                            addValue.Y = 1;
-                            addValue.X = 1;
-                            break;
-                        case 4:
-                            addValue.Y = 1;
-                            break;
-                        default:
-                            addValue.Y = 1;
-                            addValue.X = 1;
-                            break;
-                    }
-                    break;
-
-                case 4:
-                    subquadrant = SubdivideQuadrant(width * 3 / 4, height * 3 / 4, point);
-                    switch (subquadrant)
-                    {
-                        case 1:
-                            addValue.X = -1;
-                            break;
-                        case 2:
-                            break;
-                        case 3:
-                            addValue.Y = 1;
-                            break;
-                        case 4:
-                            addValue.X = -1;
-                            addValue.Y = 1;
-                            break;
-                        default:
-                            addValue.X = -1;
-                            addValue.Y = 1;
-                            break;
-                    }
-                    break;
-
-                default:
-                    break;
-            }
-            return addValue;
-        }
-
-        private int SubdivideQuadrant(float maxWidth, float maxHeight, Vector3 point)
-        {
-            int quadrant = 0;
-            float xValue = point.X;
-            float yValue = point.Y;
-
-            quadrant += xValue >= maxWidth / 2 && yValue <= maxHeight / 2 ? 1 : 0;
-            quadrant += xValue < maxWidth / 2 && yValue <= maxHeight / 2 ? 2 : 0;
-            quadrant += xValue < maxWidth / 2 && yValue > maxHeight / 2 ? 3 : 0;
-            quadrant += xValue >= maxWidth / 2 && yValue > maxHeight / 2 ? 4 : 0;
-
-            return quadrant;
         }
     }
 }

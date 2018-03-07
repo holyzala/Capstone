@@ -1,32 +1,55 @@
 ﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input.Touch;
+using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace AndroidSheep.Models
 {
-    public abstract class Card
+    public class Card
     {
-        public Card(Vector3 startPosition, Model mesh)
+        Vector2 position;
+        Texture2D texture;
+        SpriteBatch sprite;
+        GraphicsDeviceManager graphics;
+
+        public Card(Vector2 position, GraphicsDeviceManager graphics, SpriteBatch sprite)
         {
-            this.MeshModel = mesh;
-            this.Position = startPosition;
+            this.position = position;
+            this.graphics = graphics;
+            this.sprite = sprite;
         }
 
-        Model MeshModel;
-        Vector3 Position;   
-        float RotatedAngle;
-
-        public void Initialize(ContentManager contentManager)
+        public void SetCardTexture(Texture2D texture)
         {
-            string ModelName = MeshModel.ToString();
-            MeshModel = contentManager.Load<Model>(ModelName);
+            this.texture = texture;
         }
 
-        private Matrix GetWorldMatrix()
+        public Texture2D GetCardTexture()
         {
-            Matrix translation = Matrix.CreateTranslation(Position);
-            Matrix rotation = Matrix.CreateRotationZ(RotatedAngle);
-            return translation * rotation;
+            return this.texture;
+        }
+
+        public void InitializeCard()
+        {
+
+        }
+
+        public void DrawCard()
+        {
+            sprite.Begin();
+            sprite.Draw(texture, position, null, Color.White, 0f, Vector2.Zero, 0.5f, SpriteEffects.None, 0f);
+            sprite.End();
+        }
+
+        public void UpdateCard(GameTime gameTime, DebugCamera camera)
+        {
+            TouchCollection touches = TouchPanel.GetState();
+            bool touched = touches.Count == 1;
+            if (touched)
+            {
+
+            }
         }
     }
 }

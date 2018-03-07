@@ -1,32 +1,51 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input.Touch;
 
-namespace AndroidSheep.Models.Player
+namespace AndroidSheep.Models
 {
     public class Player
     {
-        public Player(string playername, int orderintable, Vector3 position)
-        {
-            this.PlayerName = playername;
-            this.OrderInTable = orderintable;
-            this.Position = position;
-        }
-        
-        string PlayerName { get; set; }
-        Vector3 Position { get; }
-        int OrderInTable { get; }
-        PlayerCamera Camera { get; set; }
-        Card[] Cards { get; }
+        PlayerCamera camera;
+        BasicEffect effect;
+        GraphicsDeviceManager graphics;
+        Card[] hand;
+        int handcount = 0;
 
-        public void SetPlayerCards(Card[] cards)
+        public Player(PlayerCamera camera, BasicEffect effect, GraphicsDeviceManager graphics)
         {
-            for(int i = 0; i < cards.Length; i++)
-            {
-                if (cards[i] != null)
-                {
-                    this.Cards[i] = cards[i];
-                }
-            }
+            this.camera = camera;
+            this.effect = effect;
+            this.graphics = graphics;
+            hand = new Card[6];
+        }
+
+        public void SetHand(Card hand)
+        {
+            this.hand[handcount] = hand;
+            handcount++;
+        }
+
+        public Card GetCard(int index)
+        {
+            return this.hand[index];
+        }
+
+        private PlayerCamera SetCamera(Vector3 cameraposition, GraphicsDeviceManager graphics)
+        {
+            PlayerCamera playercamera = new PlayerCamera(cameraposition, graphics);
+            return playercamera;
+        }
+
+        public PlayerCamera GetCamera()
+        {
+            return this.camera;
+        }
+
+        
+        public void Update(GameTime gameTime)
+        {
+            TouchCollection touchCollection = TouchPanel.GetState();
         }
     }
 }

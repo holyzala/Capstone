@@ -65,7 +65,9 @@
     <Compile Include="Models\Camera\DebugCamera.cs" />
     <Compile Include="Models\Camera\ICamera.cs" />
     <Compile Include="Models\Camera\PlayerCamera.cs" />
+    <Compile Include="Models\Card\Card.cs" />
     <Compile Include="Models\Player\IPlayer.cs" />
+    <Compile Include="Models\Player\Player.cs" />
     <Compile Include="Models\TableTop\TableTop.cs" />
     <Compile Include="Table.cs" />
     <Compile Include="Resources\Resource.Designer.cs" />
@@ -83,7 +85,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Models\Buttons\" />
-    <Folder Include="Models\Card\" />
     <Folder Include="Resources\Layout\" />
   </ItemGroup>
   <ItemGroup>
