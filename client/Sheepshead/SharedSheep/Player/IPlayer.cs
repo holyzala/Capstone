@@ -10,10 +10,12 @@ namespace SharedSheep.Player
         IHand Hand { get; set; }
         String Name { get; }
 
-        Boolean IsPartner();
-        ICard PlayCard();
-        Boolean WantPick();
-        IBlind Pick(IBlind blind);
+        ICard PlayCard(Prompt prompt, ICard lead);
+
+        Boolean WantPick(Prompt prompt);
+
+        IBlind Pick(Prompt prompt, IBlind blind);
+
         void AddToHand(ICard card);
     }
 }

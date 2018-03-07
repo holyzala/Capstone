@@ -7,24 +7,29 @@ using SharedSheep.Player;
 using SharedSheep.Blind;
 using SharedSheep.Card;
 
-
 namespace SharedSheep.Game
 {
     public interface IGame
     {
-        List<IRound> Ronds { get; }
+        List<IRound> Rounds { get; }
         IDeck Deck { get; }
-        bool IsCracked{get; }
+        bool IsCracked { get; }
         IPlayer Picker { get; }
         IPlayer Partner { get; }
-        IBlind Blind { get;  }
+        IBlind Blind { get; }
         bool ForcedToPick { get; }
         ICard PartnerCard { get; }
         bool CallOutForJack { get; }
 
-        void StartGame(List<IPlayer> players);
+        void StartGame(List<IPlayer> players, Prompt prompt);
+
         //ScoreSheet gameScore()
         void DealCard(IPlayer player);
-        
+
+        IPlayer GetCurrentPlayer();
+
+        int GetPickerScore();
+
+        int GetPickerTrickCount();
     }
 }

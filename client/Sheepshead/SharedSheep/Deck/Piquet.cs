@@ -7,8 +7,7 @@ namespace SharedSheep.Deck
 {
     public class Piquet : IDeck
     {
-        public List<ICard> Cards { get ; set ; }
-
+        public List<ICard> Cards { get; set; }
 
         public Piquet()
         {
@@ -24,7 +23,6 @@ namespace SharedSheep.Deck
             return topCard;
         }
 
-
         public bool RemoveCardByIndex(int index)
         {
             if (Cards[index] == null)
@@ -39,21 +37,23 @@ namespace SharedSheep.Deck
             SetAllCards();
         }
 
-
         public void Shuffle()
         {
             RNGCryptoServiceProvider provider = new RNGCryptoServiceProvider();
-            int n = Cards.Count;
-            while (n > 1)
+            for (int i = 0; i < 7; ++i)
             {
-                byte[] box = new byte[1];
-                do provider.GetBytes(box);
-                while (!(box[0] < n * (Byte.MaxValue / n)));
-                int k = (box[0] % n);
-                n--;
-                ICard value = Cards[k];
-                Cards[k] = Cards[n];
-                Cards[n] = value;
+                int n = Cards.Count;
+                while (n > 1)
+                {
+                    byte[] box = new byte[1];
+                    do provider.GetBytes(box);
+                    while (!(box[0] < n * (Byte.MaxValue / n)));
+                    int k = (box[0] % n);
+                    n--;
+                    ICard value = Cards[k];
+                    Cards[k] = Cards[n];
+                    Cards[n] = value;
+                }
             }
         }
 
@@ -61,7 +61,6 @@ namespace SharedSheep.Deck
         {
             return Cards.Count;
         }
-
 
         private void SetAllCards()
         {
@@ -81,10 +80,12 @@ namespace SharedSheep.Deck
                             Cards.Add(new Card.Card(cID, pow, suit));
                             ++pow;
                             break;
+
                         case CardID.Queen:
                             Cards.Add(new Card.Card(cID, pow, suit));
                             ++pow;
                             break;
+
                         default:
                             if (suit == Suit.Diamond)
                                 Cards.Add(new Card.Card(cID, pow + 6, suit));

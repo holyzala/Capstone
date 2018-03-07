@@ -1,17 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using SharedSheep.Blind;
+﻿using SharedSheep.Blind;
 using SharedSheep.Card;
 using SharedSheep.Deck;
 using SharedSheep.Player;
 using SharedSheep.Round;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace SharedSheep.Game
 {
     public class Game : IGame
     {
-        public List<IRound> Ronds { get; private set; }
+        public List<IRound> Rounds { get; private set; }
         public IDeck Deck { get; private set; }
         public bool IsCracked { get; private set; }
         public IPlayer Picker { get; private set; }
@@ -21,7 +20,19 @@ namespace SharedSheep.Game
         public ICard PartnerCard { get; private set; }
         public bool CallOutForJack { get; private set; }
 
-        public Game() { Deck = new Piquet();  }
+        public Game()
+        {
+            Deck = new Piquet();
+            Rounds = new List<IRound>();
+            IsCracked = false;
+            Blind = new Blind.Blind();
+            PartnerCard = new Card.Card(CardID.Jack, CardPower.JackDiamond, Suit.Diamond);
+        }
+
+        public IPlayer GetCurrentPlayer()
+        {
+            return Rounds.Last().CurrentPlayer;
+        }
 
         public void DealCard(IPlayer player)
         {
@@ -31,22 +42,76 @@ namespace SharedSheep.Game
             }
         }
 
-        public void StartGame(List<IPlayer> players)
+        public void StartGame(List<IPlayer> players, Prompt prompt)
         {
-            foreach (IPlayer player in players)
+            int timesAround = Deck.Cards.Count / players.Count;
+            for (int i = 0; i < timesAround; ++i)
             {
-                DealCard(player);
+                foreach (IPlayer player in players)
+                {
+                    player.AddToHand(Deck.GetTopCard());
+                }
             }
 
-            foreach (IPlayer player in players)
+            Blind.AddCard(Deck.GetTopCard());
+            Blind.AddCard(Deck.GetTopCard());
+
+            // The dealer is the first, so skip them until last
+            foreach (IPlayer player in players.Skip(1))
             {
-                if (player.WantPick())
+                if (player.WantPick(prompt))
                 {
-                    player.Pick(this.Blind);
+                    ForcedToPick = false;
+                    Picker = player;
                     break;
                 }
             }
+            // If nobody else picked, then dealer is forced
+            if (Picker == null)
+            {
+                ForcedToPick = true;
+                Picker = players[0];
+            }
+            this.Blind = Picker.Pick(prompt, this.Blind);
+            Partner = players.Aggregate((IPlayer)null, (agg, player) => player.Hand.Cards.Contains(PartnerCard) && Picker != player ? player : agg);
+            IPlayer roundStarter = players[1];
+            while (Rounds.Count < 6)
+            {
+                IRound newRound = new Round.Round(Rounds.Count, roundStarter);
+                Rounds.Add(newRound);
+                int i = players.IndexOf(roundStarter);
+                roundStarter = newRound.Start(prompt, players.Skip(i).Concat(players.Take(i)).ToList());
+                prompt(PromptType.RoundOver);
+            }
         }
 
+        public int GetPickerTrickCount()
+        {
+            int count = 0;
+            Rounds.ForEach(round =>
+            {
+                IPlayer winner = round.Trick.TheWinnerPlayer();
+                if (winner == Picker || winner == Partner)
+                    ++count;
+            });
+            return count;
+        }
+
+        public int GetPickerScore()
+        {
+            int total = 0;
+            int pickTricks = 0;
+            Rounds.ForEach(round =>
+            {
+                IPlayer winner = round.Trick.TheWinnerPlayer();
+                if (winner == Picker)
+                    ++pickTricks;
+                if (winner == Picker || winner == Partner)
+                    total += round.Trick.TrickValue();
+            });
+            if (pickTricks > 0)
+                total += Blind.BlindPoints();
+            return total;
+        }
     }
 }

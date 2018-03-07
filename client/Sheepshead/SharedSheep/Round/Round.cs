@@ -11,17 +11,23 @@ namespace SharedSheep.Round
         public ITrick Trick { get; private set; }
         public int RoundNumber { get; private set; }
         public IPlayer RoundStarter { get; private set; }
-
+        public IPlayer CurrentPlayer { get; private set; }
 
         public Round(int roundNum, IPlayer roundStarter)
         {
             RoundNumber = roundNum;
             RoundStarter = roundStarter;
+            Trick = new Trick.Trick();
         }
 
-        public IPlayer TurnToPlay()
+        public IPlayer Start(Prompt prompt, List<IPlayer> players)
         {
-            throw new NotImplementedException();
+            foreach (IPlayer player in players)
+            {
+                CurrentPlayer = player;
+                Trick.AddCardAndPlayer(player, player.PlayCard(prompt, Trick.LeadingCard()));
+            }
+            return Trick.TheWinnerPlayer();
         }
     }
 }

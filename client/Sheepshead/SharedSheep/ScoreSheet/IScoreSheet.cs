@@ -8,9 +8,12 @@ namespace SharedSheep.ScoreSheet
     public interface IScoreSheet
     {
         IPlayer WinningPlayer { get; }
-        List<(IPlayer, int)> Scores { get; }
+        Dictionary<IPlayer, List<int>> Scores { get; }
 
         int PlayerScore(IPlayer player);
-        void AddScore((IPlayer, int) score);
+        void AddGameScore(IPlayer picker, IPlayer partner,int numTricks, bool cracked, int pickerCardsValue);
+        Dictionary<IPlayer, int> Total();
+
+
     }
 }
