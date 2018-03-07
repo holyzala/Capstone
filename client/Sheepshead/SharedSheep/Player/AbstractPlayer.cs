@@ -9,7 +9,7 @@ namespace SharedSheep.Player
     public abstract class AbstractPlayer : IPlayer
     {
         public IHand Hand { get; set; }
-        public string Name { get; set; }
+        public string Name { get; protected set; }
 
         public void AddToHand(ICard card)
         {
@@ -27,7 +27,7 @@ namespace SharedSheep.Player
             return Name;
         }
 
-        public ICard CallUp()
+        protected ICard CallUp()
         {
             List<ICard> callUp = new List<ICard> {
                     new Card.Card(CardID.Jack, CardPower.JackHeart, Suit.Hearts),
