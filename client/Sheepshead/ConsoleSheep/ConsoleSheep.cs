@@ -1,10 +1,10 @@
-﻿using SharedSheep.Player;
+﻿using SharedSheep.Card;
+using SharedSheep.Game;
+using SharedSheep.Player;
 using SharedSheep.Table;
+using SharedSheep.Trick;
 using System;
 using System.Collections.Generic;
-using SharedSheep.Card;
-using SharedSheep.Game;
-using SharedSheep.Trick;
 using System.Linq;
 
 namespace ConsoleSheep
@@ -26,7 +26,7 @@ namespace ConsoleSheep
             Console.ReadLine();
         }
 
-        private string Prompt(PromptType prompt_type)
+        private string Prompt(PromptType prompt_type, object data)
         {
             string prompt = "";
             int index;

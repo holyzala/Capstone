@@ -33,7 +33,7 @@ namespace SharedSheep.Player
             return Name;
         }
 
-        protected ICard CallUp()
+        protected ICard CallUp(Prompt prompt)
         {
             List<ICard> callUp = new List<ICard> {
                     new Card.Card(CardID.Jack, CardPower.JackHeart, Suit.Hearts),
@@ -47,7 +47,10 @@ namespace SharedSheep.Player
             foreach (ICard card in callUp)
             {
                 if (!Hand.Cards.Contains(card))
+                {
+                    prompt(PromptType.CalledUp, card);
                     return card;
+                }
             }
             return null;
         }

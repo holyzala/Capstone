@@ -20,7 +20,11 @@ namespace SharedSheep.Player
             {
                 try
                 {
-                    string answer = prompt(PromptType.PlayCard);
+                    string answer = prompt(PromptType.PlayCard, new Dictionary<string, object>
+                    {
+                        { "player", this},
+                        {"trick", rounds.Last().Trick }
+                    });
                     card = Hand.GetPlayableCards(rounds.Last().Trick.LeadingCard())[Int32.Parse(answer)];
                     done = true;
                 }
@@ -35,7 +39,7 @@ namespace SharedSheep.Player
 
         public override bool WantPick(Prompt prompt)
         {
-            string answer = prompt(PromptType.Pick);
+            string answer = prompt(PromptType.Pick, this);
             if (answer.ToLower() == "yes" || answer.ToLower() == "y")
             {
                 return true;
@@ -47,7 +51,11 @@ namespace SharedSheep.Player
         {
             while (true)
             {
-                string answer = prompt(PromptType.PickBlind);
+                string answer = prompt(PromptType.PickBlind, new Dictionary<string, object>
+                {
+                    {"player", this },
+                    {"blind", blind }
+                });
                 if (answer == "done" || answer == "")
                     break;
                 string[] split = answer.Split(' ');
@@ -57,9 +65,9 @@ namespace SharedSheep.Player
             }
             if (forced && (Hand.Cards.Contains(partnerCard) || blind.BlindCards.Contains(partnerCard)))
             {
-                string answer = prompt(PromptType.CallUp);
+                string answer = prompt(PromptType.CallUp, this);
                 if (answer.ToLower() == "yes" || answer.ToLower() == "y")
-                    return CallUp();
+                    return CallUp(prompt);
             }
             return partnerCard;
         }
