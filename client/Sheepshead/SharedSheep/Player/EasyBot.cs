@@ -1,35 +1,15 @@
 ﻿using SharedSheep.Blind;
 using SharedSheep.Card;
 using SharedSheep.Round;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace SharedSheep.Player
 {
-    public class SimpleBot : AbstractPlayer
+    public class EasyBot : AbstractPlayer
     {
-        public SimpleBot(String name) : base(name)
+        public EasyBot(string name) : base(name)
         { }
-
-        public override Boolean WantPick(Prompt prompt)
-        {
-            ICard JD = new Card.Card(CardID.Jack, CardPower.JackDiamond, Suit.Diamond);
-            if (Hand.Cards.Contains(JD)) return false;
-            int handPower = Hand.Cards.Aggregate(0, (total, card) => total + (int)card.Power);
-            if (handPower >= (int)CardPower.QueenHeart + (int)CardPower.QueenDiamond + (int)CardPower.JackClub + (int)CardPower.KingTrump)
-                return true;
-            return false;
-        }
-
-        public override ICard PlayCard(Prompt prompt, List<IRound> rounds, IPlayer picker, IBlind blind)
-        {
-            List<ICard> cards = Hand.GetPlayableCards(rounds.Last().Trick.LeadingCard());
-            cards.Sort();
-            cards.Reverse();
-            Hand.RemoveCard(cards[0]);
-            return cards[0];
-        }
 
         public override ICard Pick(Prompt prompt, IBlind blind, bool forced, ICard partnerCard)
         {
@@ -68,6 +48,25 @@ namespace SharedSheep.Player
                 return CallUp();
 
             return partnerCard;
+        }
+
+        public override ICard PlayCard(Prompt prompt, List<IRound> rounds, IPlayer picker, IBlind blind)
+        {
+            List<ICard> cards = Hand.GetPlayableCards(rounds.Last().Trick.LeadingCard());
+            cards.Sort();
+            cards.Reverse();
+            Hand.RemoveCard(cards[0]);
+            return cards[0];
+        }
+
+        public override bool WantPick(Prompt prompt)
+        {
+            ICard JD = new Card.Card(CardID.Jack, CardPower.JackDiamond, Suit.Diamond);
+            if (Hand.Cards.Contains(JD)) return false;
+            int handPower = Hand.Cards.Aggregate(0, (total, card) => total + (int)card.Power);
+            if (handPower >= (int)CardPower.QueenHeart + (int)CardPower.QueenDiamond + (int)CardPower.JackClub + (int)CardPower.KingTrump)
+                return true;
+            return false;
         }
     }
 }

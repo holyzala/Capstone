@@ -96,7 +96,7 @@ namespace SharedSheep.Game
                 IRound newRound = new Round.Round(Rounds.Count, roundStarter);
                 Rounds.Add(newRound);
                 int i = players.IndexOf(roundStarter);
-                roundStarter = newRound.Start(prompt, players.Skip(i).Concat(players.Take(i)).ToList());
+                roundStarter = newRound.Start(prompt, players.Skip(i).Concat(players.Take(i)).ToList(), Rounds, Picker, Blind);
                 prompt(PromptType.RoundOver);
             }
         }

@@ -1,18 +1,18 @@
-﻿using System;
+﻿using SharedSheep.Blind;
 using SharedSheep.Card;
-using SharedSheep.Blind;
+using SharedSheep.Round;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace SharedSheep.Player
 {
     public class LocalPlayer : AbstractPlayer
     {
-        public LocalPlayer(string name)
-        {
-            Hand = new Hand.Hand();
-            Name = name;
-        }
+        public LocalPlayer(string name) : base(name)
+        { }
 
-        public override ICard PlayCard(Prompt prompt, ICard lead)
+        public override ICard PlayCard(Prompt prompt, List<IRound> rounds, IPlayer picker, IBlind blind)
         {
             ICard card = null;
             bool done = false;
@@ -21,7 +21,7 @@ namespace SharedSheep.Player
                 try
                 {
                     string answer = prompt(PromptType.PlayCard);
-                    card = Hand.GetPlayableCards(lead)[Int32.Parse(answer)];
+                    card = Hand.GetPlayableCards(rounds.Last().Trick.LeadingCard())[Int32.Parse(answer)];
                     done = true;
                 }
                 catch (System.FormatException)

@@ -1,8 +1,8 @@
-﻿using System.Linq;
-using System.Collections.Generic;
-using SharedSheep.Blind;
+﻿using SharedSheep.Blind;
 using SharedSheep.Card;
 using SharedSheep.Hand;
+using SharedSheep.Round;
+using System.Collections.Generic;
 
 namespace SharedSheep.Player
 {
@@ -11,6 +11,12 @@ namespace SharedSheep.Player
         public IHand Hand { get; set; }
         public string Name { get; protected set; }
 
+        public AbstractPlayer(string name)
+        {
+            Name = name;
+            Hand = new Hand.Hand();
+        }
+
         public void AddToHand(ICard card)
         {
             Hand.AddCard(card);
@@ -18,7 +24,7 @@ namespace SharedSheep.Player
 
         public abstract ICard Pick(Prompt prompt, IBlind blind, bool forced, ICard partnerCard);
 
-        public abstract ICard PlayCard(Prompt prompt, ICard lead);
+        public abstract ICard PlayCard(Prompt prompt, List<IRound> rounds, IPlayer picker, IBlind blind);
 
         public abstract bool WantPick(Prompt prompt);
 

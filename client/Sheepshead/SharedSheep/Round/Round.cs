@@ -1,8 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using SharedSheep.Blind;
 using SharedSheep.Player;
 using SharedSheep.Trick;
+using System.Collections.Generic;
 
 namespace SharedSheep.Round
 {
@@ -20,12 +19,12 @@ namespace SharedSheep.Round
             Trick = new Trick.Trick();
         }
 
-        public IPlayer Start(Prompt prompt, List<IPlayer> players)
+        public IPlayer Start(Prompt prompt, List<IPlayer> players, List<IRound> rounds, IPlayer picker, IBlind blind)
         {
             foreach (IPlayer player in players)
             {
                 CurrentPlayer = player;
-                Trick.AddCardAndPlayer(player, player.PlayCard(prompt, Trick.LeadingCard()));
+                Trick.AddCardAndPlayer(player, player.PlayCard(prompt, rounds, picker, blind));
             }
             return Trick.TheWinnerPlayer();
         }
