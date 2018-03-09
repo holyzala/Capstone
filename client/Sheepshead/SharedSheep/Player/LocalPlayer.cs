@@ -1,6 +1,7 @@
 ﻿using SharedSheep.Blind;
 using SharedSheep.Card;
 using SharedSheep.Round;
+using SharedSheep.Trick;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,16 +17,20 @@ namespace SharedSheep.Player
         {
             ICard card = null;
             bool done = false;
+            ITrick currentTrick = rounds.Last().Trick;
             while (!done)
             {
                 try
                 {
-                    string answer = prompt(PromptType.PlayCard, new Dictionary<string, object>
+                    List<ICard> cards = Hand.GetPlayableCards(currentTrick.LeadingCard());
+                    string answer = prompt(PromptType.PlayCard, new Dictionary<PromptData, object>
                     {
-                        { "player", this},
-                        {"trick", rounds.Last().Trick }
+                        { PromptData.Player, this},
+                        { PromptData.Picker, picker },
+                        { PromptData.Trick, currentTrick },
+                        { PromptData.Cards, cards }
                     });
-                    card = Hand.GetPlayableCards(rounds.Last().Trick.LeadingCard())[Int32.Parse(answer)];
+                    card = cards[Int32.Parse(answer)];
                     done = true;
                 }
                 catch (System.FormatException)
@@ -39,7 +44,10 @@ namespace SharedSheep.Player
 
         public override bool WantPick(Prompt prompt)
         {
-            string answer = prompt(PromptType.Pick, this);
+            string answer = prompt(PromptType.Pick, new Dictionary<PromptData, object>
+            {
+                { PromptData.Player, this }
+            });
             if (answer.ToLower() == "yes" || answer.ToLower() == "y")
             {
                 return true;
@@ -51,10 +59,10 @@ namespace SharedSheep.Player
         {
             while (true)
             {
-                string answer = prompt(PromptType.PickBlind, new Dictionary<string, object>
+                string answer = prompt(PromptType.PickBlind, new Dictionary<PromptData, object>
                 {
-                    {"player", this },
-                    {"blind", blind }
+                    { PromptData.Player, this },
+                    { PromptData.Blind, blind }
                 });
                 if (answer == "done" || answer == "")
                     break;
@@ -65,7 +73,10 @@ namespace SharedSheep.Player
             }
             if (forced && (Hand.Cards.Contains(partnerCard) || blind.BlindCards.Contains(partnerCard)))
             {
-                string answer = prompt(PromptType.CallUp, this);
+                string answer = prompt(PromptType.CallUp, new Dictionary<PromptData, object>
+                {
+                    { PromptData.Player, this }
+                });
                 if (answer.ToLower() == "yes" || answer.ToLower() == "y")
                     return CallUp(prompt);
             }

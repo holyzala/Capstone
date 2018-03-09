@@ -23,3 +23,8 @@ public enum PromptType
 {
     Pick, PlayCard, PickBlind, RoundOver, GameOver, TableOver, CallUp, CalledUp
 }
+
+public enum PromptData
+{
+    Player, Picker, Blind, Trick, Scores, Round, Rounds, Game, Games, Card, Cards
+}

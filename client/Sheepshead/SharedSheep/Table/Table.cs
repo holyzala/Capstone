@@ -55,7 +55,10 @@ namespace SharedSheep.Table
             // This is somewhat complicated code to move the dealer in each game. Probably refactor later to use the dealer property.
             game.StartGame(Players.Skip(GameIndex).Concat(Players.Take(GameIndex)).ToList(), prompt);
             ScrSheet.AddGameScore(game.Picker, game.Partner, game.GetPickerTrickCount(), game.IsCracked, game.GetPickerScore());
-            prompt(PromptType.GameOver, game);
+            prompt(PromptType.GameOver, new Dictionary<PromptData, object>
+            {
+                { PromptData.Game, game }
+            });
         }
 
         public void Start()
@@ -68,7 +71,10 @@ namespace SharedSheep.Table
                 StartNewGame();
                 ++GameIndex;
             }
-            prompt(PromptType.TableOver, ScrSheet);
+            prompt(PromptType.TableOver, new Dictionary<PromptData, object>
+            {
+                { PromptData.Scores, ScrSheet }
+            });
         }
     }
 }

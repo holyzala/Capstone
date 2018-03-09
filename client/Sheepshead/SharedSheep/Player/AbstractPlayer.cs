@@ -48,7 +48,10 @@ namespace SharedSheep.Player
             {
                 if (!Hand.Cards.Contains(card))
                 {
-                    prompt(PromptType.CalledUp, card);
+                    prompt(PromptType.CalledUp, new Dictionary<PromptData, object>
+                    {
+                        { PromptData.Card, card }
+                    });
                     return card;
                 }
             }
