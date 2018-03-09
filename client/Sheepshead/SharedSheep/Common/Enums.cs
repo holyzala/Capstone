@@ -26,5 +26,15 @@ public enum PromptType
 
 public enum PromptData
 {
-    Player, Picker, Blind, Trick, Scores, Round, Rounds, Game, Games, Card, Cards
+    Player,  // IPlayer
+    Picker,  // IPlayer
+    Blind,  // IBlind
+    Trick,  // ITrick
+    Scores,  // IScoreSheet
+    Round,  // IRound
+    Rounds,  // List<IRound>
+    Game,  // IGame
+    Games,  // List<IGame>
+    Card,  // ICard
+    Cards  // List<ICard>
 }
