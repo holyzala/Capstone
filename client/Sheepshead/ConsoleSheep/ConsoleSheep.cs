@@ -101,9 +101,9 @@ namespace ConsoleSheep
                     game = (IGame)data[PromptData.Game];
                     prompt = string.Format("Picker {0} got {1} points\n", game.Picker, game.GetPickerScore());
                     prompt += "Scoresheet:\n";
-                    table.Players.ForEach(player2 =>
+                    table.Players.ForEach(playerIt =>
                     {
-                        prompt += string.Format("{0}: {1}  ", player2, table.ScrSheet.Scores[player2][table.Games.Count - 1]);
+                        prompt += string.Format("{0}: {1}  ", playerIt, table.ScrSheet.Scores[playerIt][table.Games.Count - 1]);
                     });
                     prompt += "\n";
                     break;
