@@ -23,3 +23,18 @@ public enum PromptType
 {
     Pick, PlayCard, PickBlind, RoundOver, GameOver, TableOver, CallUp, CalledUp
 }
+
+public enum PromptData
+{
+    Player,  // IPlayer
+    Picker,  // IPlayer
+    Blind,  // IBlind
+    Trick,  // ITrick
+    Scores,  // IScoreSheet
+    Round,  // IRound
+    Rounds,  // List<IRound>
+    Game,  // IGame
+    Games,  // List<IGame>
+    Card,  // ICard
+    Cards  // List<ICard>
+}

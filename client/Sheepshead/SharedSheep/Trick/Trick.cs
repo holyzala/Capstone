@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using SharedSheep.Player;
 using SharedSheep.Card;
+using System.Collections;
 
 namespace SharedSheep.Trick
 {
@@ -61,6 +62,16 @@ namespace SharedSheep.Trick
                 total = total + crd.Item2.Value;
             }
             return total;
+        }
+
+        public IEnumerator<(IPlayer, ICard)> GetEnumerator()
+        {
+            return TrickCards.GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return this.GetEnumerator();
         }
     }
 }

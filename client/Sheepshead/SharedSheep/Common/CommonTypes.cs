@@ -1,5 +1,3 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 
-public delegate string Prompt(PromptType prompt_type);
+public delegate string Prompt(PromptType prompt_type, Dictionary<PromptData, object> data);

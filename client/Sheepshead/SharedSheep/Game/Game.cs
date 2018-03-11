@@ -86,8 +86,6 @@ namespace SharedSheep.Game
                 Picker = players[0];
             }
             PartnerCard = Picker.Pick(prompt, this.Blind, ForcedToPick, PartnerCard);
-            if (!PartnerCard.Equals(new Card.Card(CardID.Jack, CardPower.JackDiamond, Suit.Diamond)))
-                prompt(PromptType.CalledUp);
 
             Partner = players.Aggregate((IPlayer)null, (agg, player) => player.Hand.Cards.Contains(PartnerCard) && Picker != player ? player : agg);
             IPlayer roundStarter = players[1];
@@ -96,8 +94,11 @@ namespace SharedSheep.Game
                 IRound newRound = new Round.Round(Rounds.Count, roundStarter);
                 Rounds.Add(newRound);
                 int i = players.IndexOf(roundStarter);
-                roundStarter = newRound.Start(prompt, players.Skip(i).Concat(players.Take(i)).ToList());
-                prompt(PromptType.RoundOver);
+                roundStarter = newRound.Start(prompt, players.Skip(i).Concat(players.Take(i)).ToList(), Rounds, Picker, Blind);
+                prompt(PromptType.RoundOver, new Dictionary<PromptData, object>
+                {
+                    { PromptData.Round, newRound }
+                });
             }
         }
 

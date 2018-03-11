@@ -1,27 +1,36 @@
-﻿using System;
+﻿using SharedSheep.Blind;
 using SharedSheep.Card;
-using SharedSheep.Blind;
+using SharedSheep.Round;
+using SharedSheep.Trick;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace SharedSheep.Player
 {
     public class LocalPlayer : AbstractPlayer
     {
-        public LocalPlayer(string name)
-        {
-            Hand = new Hand.Hand();
-            Name = name;
-        }
+        public LocalPlayer(string name) : base(name)
+        { }
 
-        public override ICard PlayCard(Prompt prompt, ICard lead)
+        public override ICard PlayCard(Prompt prompt, List<IRound> rounds, IPlayer picker, IBlind blind)
         {
             ICard card = null;
             bool done = false;
+            ITrick currentTrick = rounds.Last().Trick;
             while (!done)
             {
                 try
                 {
-                    string answer = prompt(PromptType.PlayCard);
-                    card = Hand.GetPlayableCards(lead)[Int32.Parse(answer)];
+                    List<ICard> cards = Hand.GetPlayableCards(currentTrick.LeadingCard());
+                    string answer = prompt(PromptType.PlayCard, new Dictionary<PromptData, object>
+                    {
+                        { PromptData.Player, this},
+                        { PromptData.Picker, picker },
+                        { PromptData.Trick, currentTrick },
+                        { PromptData.Cards, cards }
+                    });
+                    card = cards[Int32.Parse(answer)];
                     done = true;
                 }
                 catch (System.FormatException)
@@ -35,7 +44,10 @@ namespace SharedSheep.Player
 
         public override bool WantPick(Prompt prompt)
         {
-            string answer = prompt(PromptType.Pick);
+            string answer = prompt(PromptType.Pick, new Dictionary<PromptData, object>
+            {
+                { PromptData.Player, this }
+            });
             if (answer.ToLower() == "yes" || answer.ToLower() == "y")
             {
                 return true;
@@ -47,7 +59,11 @@ namespace SharedSheep.Player
         {
             while (true)
             {
-                string answer = prompt(PromptType.PickBlind);
+                string answer = prompt(PromptType.PickBlind, new Dictionary<PromptData, object>
+                {
+                    { PromptData.Player, this },
+                    { PromptData.Blind, blind }
+                });
                 if (answer == "done" || answer == "")
                     break;
                 string[] split = answer.Split(' ');
@@ -57,9 +73,12 @@ namespace SharedSheep.Player
             }
             if (forced && (Hand.Cards.Contains(partnerCard) || blind.BlindCards.Contains(partnerCard)))
             {
-                string answer = prompt(PromptType.CallUp);
+                string answer = prompt(PromptType.CallUp, new Dictionary<PromptData, object>
+                {
+                    { PromptData.Player, this }
+                });
                 if (answer.ToLower() == "yes" || answer.ToLower() == "y")
-                    return CallUp();
+                    return CallUp(prompt);
             }
             return partnerCard;
         }
