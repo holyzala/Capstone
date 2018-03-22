@@ -2,7 +2,7 @@
 
 namespace SharedSheep.Card
 {
-    public interface ICard : IComparable<ICard>
+    public interface ICard : IComparable<ICard>, IEquatable<ICard>
     {
         CardID ID { get; }
         int Value { get; } //score value
@@ -10,7 +10,5 @@ namespace SharedSheep.Card
         Suit CardSuit { get; }
 
         Boolean IsTrump();
-
-        Boolean IsHigher(ICard otherCard); //compare powers
     }
 }

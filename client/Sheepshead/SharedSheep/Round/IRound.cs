@@ -1,8 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using SharedSheep.Blind;
 using SharedSheep.Player;
 using SharedSheep.Trick;
+using System.Collections.Generic;
 
 namespace SharedSheep.Round
 {
@@ -13,6 +12,6 @@ namespace SharedSheep.Round
         IPlayer RoundStarter { get; }
         IPlayer CurrentPlayer { get; }
 
-        IPlayer Start(Prompt prompt, List<IPlayer> players);
+        IPlayer Start(Prompt prompt, List<IPlayer> players, List<IRound> rounds, IPlayer picker, IBlind blind);
     }
 }

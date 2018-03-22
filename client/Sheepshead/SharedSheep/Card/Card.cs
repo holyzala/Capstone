@@ -44,24 +44,9 @@ namespace SharedSheep.Card
             }
         }
 
-        public override bool Equals(object obj)
-        {
-            // Check for null values and compare run-time types.
-            if (obj == null || GetType() != obj.GetType())
-                return false;
-
-            Card c = (Card)obj;
-            return (ID == c.ID) && (Value == c.Value) && (Power == c.Power) && (CardSuit == c.CardSuit);
-        }
-
         public override int GetHashCode()
         {
             return base.GetHashCode();
-        }
-
-        public bool IsHigher(ICard otherCard)
-        {
-            return this.Power > otherCard.Power;
         }
 
         public bool IsTrump()
@@ -77,6 +62,11 @@ namespace SharedSheep.Card
         public int CompareTo(ICard other)
         {
             return Power.CompareTo(other.Power);
+        }
+
+        public bool Equals(ICard other)
+        {
+            return (ID == other.ID) && (Value == other.Value) && (Power == other.Power) && (CardSuit == other.CardSuit);
         }
     }
 }

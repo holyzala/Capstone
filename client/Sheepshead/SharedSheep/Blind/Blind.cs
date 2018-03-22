@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System.Collections;
 using System.Collections.Generic;
 using SharedSheep.Card;
 
@@ -30,7 +30,16 @@ namespace SharedSheep.Blind
             BlindCards[index] = card;
 
             return outCard;
-          
+        }
+
+        public IEnumerator<ICard> GetEnumerator()
+        {
+            return BlindCards.GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return this.GetEnumerator();
         }
     }
 }

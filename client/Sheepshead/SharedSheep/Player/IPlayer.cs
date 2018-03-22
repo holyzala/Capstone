@@ -1,7 +1,9 @@
-﻿using System;
+﻿using SharedSheep.Blind;
 using SharedSheep.Card;
 using SharedSheep.Hand;
-using SharedSheep.Blind;
+using SharedSheep.Round;
+using System;
+using System.Collections.Generic;
 
 namespace SharedSheep.Player
 {
@@ -10,11 +12,11 @@ namespace SharedSheep.Player
         IHand Hand { get; set; }
         String Name { get; }
 
-        ICard PlayCard(Prompt prompt, ICard lead);
+        ICard PlayCard(Prompt prompt, List<IRound> rounds, IPlayer picker, IBlind blind);
 
         Boolean WantPick(Prompt prompt);
 
-        IBlind Pick(Prompt prompt, IBlind blind);
+        ICard Pick(Prompt prompt, IBlind blind, bool forced, ICard partnerCard);
 
         void AddToHand(ICard card);
     }

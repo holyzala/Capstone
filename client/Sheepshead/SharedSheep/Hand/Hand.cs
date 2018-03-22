@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using SharedSheep.Card;
 
@@ -32,7 +33,6 @@ namespace SharedSheep.Hand
             ICard card = Cards[index];
             Cards.Remove(card);
             return card;
-
         }
 
         public List<ICard> GetPlayableCards(ICard lead)
@@ -42,7 +42,7 @@ namespace SharedSheep.Hand
             List<ICard> cards = new List<ICard>();
             if (lead.IsTrump())
             {
-                foreach(ICard c in Cards)
+                foreach (ICard c in Cards)
                 {
                     if (c.IsTrump())
                     {
@@ -53,7 +53,7 @@ namespace SharedSheep.Hand
                     cards.AddRange(Cards);
                 return cards;
             }
-            foreach(ICard c in Cards)
+            foreach (ICard c in Cards)
             {
                 if (c.CardSuit == lead.CardSuit && !c.IsTrump())
                 {
@@ -84,6 +84,16 @@ namespace SharedSheep.Hand
         public void RemoveCard(ICard card)
         {
             Cards.Remove(card);
+        }
+
+        public IEnumerator<ICard> GetEnumerator()
+        {
+            return Cards.GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return this.GetEnumerator();
         }
     }
 }
