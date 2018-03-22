@@ -1,51 +1,23 @@
-﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input.Touch;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 
-namespace AndroidSheep.Models
+using Android.App;
+using Android.Content;
+using Android.OS;
+using Android.Runtime;
+using Android.Views;
+using Android.Widget;
+using AndroidSheep.Models.Buttons;
+
+namespace AndroidSheep.Models.Player
 {
-    public class Player
+    public abstract class Player
     {
-        PlayerCamera camera;
-        BasicEffect effect;
-        GraphicsDeviceManager graphics;
-        Card[] hand;
-        int handcount = 0;
+        public Card[] playableCards;
+        public Card[] playedCards;
+        public Prompt playerPrompt;
 
-        public Player(PlayerCamera camera, BasicEffect effect, GraphicsDeviceManager graphics)
-        {
-            this.camera = camera;
-            this.effect = effect;
-            this.graphics = graphics;
-            hand = new Card[6];
-        }
-
-        public void SetHand(Card hand)
-        {
-            this.hand[handcount] = hand;
-            handcount++;
-        }
-
-        public Card GetCard(int index)
-        {
-            return this.hand[index];
-        }
-
-        private PlayerCamera SetCamera(Vector3 cameraposition, GraphicsDeviceManager graphics)
-        {
-            PlayerCamera playercamera = new PlayerCamera(cameraposition, graphics);
-            return playercamera;
-        }
-
-        public PlayerCamera GetCamera()
-        {
-            return this.camera;
-        }
-
-        
-        public void Update(GameTime gameTime)
-        {
-            TouchCollection touchCollection = TouchPanel.GetState();
-        }
     }
 }
