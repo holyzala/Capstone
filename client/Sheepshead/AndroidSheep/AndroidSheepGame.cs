@@ -1,20 +1,23 @@
 ﻿using AndroidSheep.Models;
+using AndroidSheep.Models.Buttons;
+using AndroidSheep.Models.Player;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using AndroidSheep.Models.Buttons;
-using System.Collections.Generic;
-using SharedSheep.Table;
 using SharedSheep.Player;
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace AndroidSheep
 {
     /// <summary>
     /// This is the main type for your game.
     /// </summary>
-    public class Table2D : Game
+    public class AndroidSheepGame : Game
     {
-        private GraphicsTable graphicsTable;
+        public List<Tuple<IPlayer, AndroidPlayer>> playerDataGraphicsPair;
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         GameContent gameContent;
@@ -22,11 +25,14 @@ namespace AndroidSheep
         public Vector2 spritePosition;
         public static int screenHeight;
         public static int screenWidth;
-        Background background;
-        PlayedArea playedArea;
-        private List<Component> _tableComponents;
-        private List<Component> _gameComponents;
-        public Table2D()
+        AndroidBackground background;
+        AndroidPlayedArea  playedArea;
+        AndroidTable _playTable;
+        private List<AndroidComponent> _tableComponents;
+        private List<AndroidComponent> _gameComponents;
+        public List<AndroidPlayer> _gamePlayers;
+
+        public AndroidSheepGame()
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
@@ -46,7 +52,9 @@ namespace AndroidSheep
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
-          
+            playerDataGraphicsPair = new List<Tuple<IPlayer, AndroidPlayer>>();
+
+            _playTable = new AndroidTable(playerDataGraphicsPair);
             screenHeight = graphics.PreferredBackBufferHeight;
             screenWidth = graphics.PreferredBackBufferWidth;
             base.Initialize();
@@ -58,38 +66,18 @@ namespace AndroidSheep
         /// </summary>
         protected override void LoadContent()
         {
+
             spriteBatch = new SpriteBatch(GraphicsDevice);
             gameContent = new GameContent(Content);
-            background = new Background(gameContent.TableTop, screenWidth, screenHeight);
-            playedArea = new PlayedArea(screenWidth, screenHeight);
+            background = new AndroidBackground(gameContent.TableTop, screenWidth, screenHeight);
+            _gameComponents = new List<AndroidComponent>();
 
-            graphicsTable = new GraphicsTable(gameContent);
-
-            var button = new Card(gameContent.EightOfClubs, Content.Load<SpriteFont>("Fonts/Font"), playedArea)
-            {
-                Position = new Vector2(GraphicsDevice.Viewport.Bounds.Width / 2 - 300, GraphicsDevice.Viewport.Bounds.Height / 2 + 100),
-            };
-           
-            _gameComponents = new List<Component>
-            {
-                button,
-                
-            };
-            button.Click += Button_Click;
-
-            _tableComponents = new List<Component>();
+            _playTable.Start();
             // Create a new SpriteBatch, which can be used to draw textures.
 
 
             // TODO: use this.Content to load your game content here
         }
-
-        private void Button_Click(object sender, System.EventArgs e)
-        {
-            GraphicsDevice.Clear(Color.Black);
-
-        }
-
         /// <summary>
         /// UnloadContent will be called once per game and is the place to unload
         /// game-specific content.
@@ -106,16 +94,7 @@ namespace AndroidSheep
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-            _tableComponents = graphicsTable._tableContent;
             
-            foreach(var component in _gameComponents)
-            {
-                component.Update(gameTime);
-            }
-            foreach(var component in _tableComponents)
-            {
-                component.Update(gameTime);
-            }
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
                 Exit();
 
@@ -130,27 +109,27 @@ namespace AndroidSheep
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
-            _tableComponents = graphicsTable._tableContent;
 
-            background.Draw(gameTime, spriteBatch, screenHeight, screenWidth);
+            background.Draw(gameTime, spriteBatch);
 
             spriteBatch.Begin();
-            foreach (var component in _gameComponents)
+            foreach(var player in playerDataGraphicsPair)
             {
-                component.Draw(gameTime, spriteBatch, screenWidth, screenHeight);
+                var playerCards = player.Item2.playableCards;
+                if (playerCards != null)
+                {
+                    foreach (var card in playerCards)
+                    {
+                        card.Draw(gameTime, spriteBatch);
+                    }
+                }
             }
-
-            playedArea.Draw(gameTime, spriteBatch, screenHeight, screenWidth);
-
-            foreach (var component in _tableComponents)
-            {
-                component.Draw(gameTime, spriteBatch, screenWidth, screenHeight);
-            }
+           
             spriteBatch.End();
             // TODO: Add your drawing code here
             base.Draw(gameTime);
         }
 
-         
+        
     }
 }

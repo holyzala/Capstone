@@ -9,15 +9,10 @@ using Android.OS;
 using Android.Runtime;
 using Android.Views;
 using Android.Widget;
-using AndroidSheep.Models.Buttons;
 
-namespace AndroidSheep.Models.Player
+namespace AndroidSheep.Models.Buttons
 {
-    public abstract class Player
+    class AndroidPromptButton
     {
-        public Card[] playableCards;
-        public Card[] playedCards;
-        public Prompt playerPrompt;
-
     }
 }

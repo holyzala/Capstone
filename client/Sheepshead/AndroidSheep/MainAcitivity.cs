@@ -17,7 +17,7 @@ namespace AndroidSheep
         protected override void OnCreate(Bundle bundle)
         {
             base.OnCreate(bundle);
-            var g = new Table2D();
+            var g = new AndroidSheepGame();
             SetContentView((View)g.Services.GetService(typeof(View)));
             g.Run();
         }

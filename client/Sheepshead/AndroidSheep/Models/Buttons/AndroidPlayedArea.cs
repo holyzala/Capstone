@@ -14,16 +14,17 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace AndroidSheep.Models.Buttons
 {
-    public class PlayedArea : Component
+    public class AndroidPlayedArea : AndroidComponent
     {
-        public Card[] playedCards;
+        public AndroidCard[] playedCards;
         private Vector2[] _playedVectors;
         private int _screenHeight;
         private int _screenWidth;
         public int numCards;
-        public PlayedArea(int screenWidth, int screenHeight)
+
+        public AndroidPlayedArea(int screenWidth, int screenHeight)
         {
-            playedCards = new Card[5];
+            playedCards = new AndroidCard[5];
             _playedVectors = new Vector2[5];
             _screenHeight = screenHeight;
             _screenWidth = screenWidth;
@@ -40,9 +41,9 @@ namespace AndroidSheep.Models.Buttons
             _playedVectors[4] = new Vector2(_screenWidth / 2 + 200, _screenHeight / 3);
         }
 
-        public Card[] AddCardToPlayArea(Card card)
+        public AndroidCard[] AddCardToPlayArea(AndroidCard card)
         {
-            if(numCards < 6)
+            if (numCards < 6)
             {
                 playedCards[numCards] = card;
                 numCards++;
@@ -50,19 +51,19 @@ namespace AndroidSheep.Models.Buttons
             return playedCards;
         }
 
-        public override void Draw(GameTime gameTime, SpriteBatch spriteBatch, int height, int width)
+        public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             if (numCards == 0)
                 return;
-            for(int i = 0; i < numCards; i++)
+            for (int i = 0; i < numCards; i++)
             {
-                Texture2D cardTexture = playedCards[i].texture;
+                Texture2D cardTexture = playedCards[i].Texture;
                 Vector2 position = _playedVectors[i];
-                Vector2 origin = new Vector2(playedCards[i].texture.Width / 2, playedCards[i].texture.Height / 2);
+                Vector2 origin = new Vector2(playedCards[i].Texture.Width / 2, playedCards[i].Texture.Height / 2);
                 float scale = 0.25f;
                 spriteBatch.Draw(cardTexture, position, null, Color.White, 0f, origin, scale, SpriteEffects.None, 1);
             }
-                        
+
         }
 
         public override void Update(GameTime gameTime)

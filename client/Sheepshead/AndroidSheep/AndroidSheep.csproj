@@ -61,20 +61,20 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AndroidSheepGame.cs" />
     <Compile Include="MainAcitivity.cs" />
-    <Compile Include="Models\Buttons\Background.cs" />
-    <Compile Include="Models\Buttons\Button.cs" />
-    <Compile Include="Models\Buttons\Component.cs" />
-    <Compile Include="Models\Buttons\Card.cs" />
-    <Compile Include="Models\Buttons\PlayedArea.cs" />
-    <Compile Include="Models\Buttons\PromptButton.cs" />
+    <Compile Include="Models\Buttons\AndroidBackground.cs" />
+    <Compile Include="Models\Buttons\AndroidButton.cs" />
+    <Compile Include="Models\Buttons\AndroidCard.cs" />
+    <Compile Include="Models\Buttons\AndroidComponent.cs" />
+    <Compile Include="Models\Buttons\AndroidPlayedArea.cs" />
+    <Compile Include="Models\Buttons\AndroidPromptButton.cs" />
     <Compile Include="Models\ContentManager\GameContent.cs" />
-    <Compile Include="Models\Player\Player.cs" />
-    <Compile Include="Models\States\State.cs" />
-    <Compile Include="Models\Table\GraphicsTable.cs" />
+    <Compile Include="Models\Player\AndroidPlayer.cs" />
+    <Compile Include="Models\States\AndroidState.cs" />
+    <Compile Include="Models\Table\AndroidTable.cs" />
     <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Table2D.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Content\Fonts\Font.spritefont" />
@@ -88,7 +88,6 @@
     <AndroidResource Include="Resources\Drawable\Icon.png" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Models\Card\" />
     <Folder Include="Resources\Layout\" />
   </ItemGroup>
   <ItemGroup>
