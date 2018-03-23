@@ -69,10 +69,14 @@ namespace SharedSheep.Game
         public void StartGame(List<IPlayer> players, Prompt prompt)
         {
             DealCards(players);
+            prompt(PromptType.CardsDealt, new Dictionary<PromptData, object> {
+                { PromptData.Players, players },
+                {PromptData.Blind, Blind }
+            });
             // The dealer is the first, so skip them until last
             foreach (IPlayer player in players.Skip(1))
             {
-                if (player.WantPick(prompt))
+                if (player.WantPick(prompt, players.Skip(1).Concat(players.Take(1)).ToList()))
                 {
                     ForcedToPick = false;
                     Picker = player;
@@ -94,7 +98,7 @@ namespace SharedSheep.Game
                 IRound newRound = new Round.Round(Rounds.Count, roundStarter);
                 Rounds.Add(newRound);
                 int i = players.IndexOf(roundStarter);
-                roundStarter = newRound.Start(prompt, players.Skip(i).Concat(players.Take(i)).ToList(), Rounds, Picker, Blind);
+                roundStarter = newRound.Start(prompt, players.Skip(i).Concat(players.Take(i)).ToList(), Rounds, Picker, Blind, PartnerCard);
                 prompt(PromptType.RoundOver, new Dictionary<PromptData, object>
                 {
                     { PromptData.Round, newRound }

@@ -21,8 +21,8 @@ namespace ConsoleSheep
             c.table = new Table(new LocalPlayer("Me"), c.Prompt);
             c.table.AddPlayer(new SimpleBot("Bot1"));
             c.table.AddPlayer(new SimpleBot("Bot2"));
-            c.table.AddPlayer(new SimpleBot("Bot3"));
-            c.table.AddPlayer(new SimpleBot("Bot4"));
+            c.table.AddPlayer(new EasyBot("Bot3"));
+            c.table.AddPlayer(new EasyBot("Bot4"));
             c.table.Start();
 
             Console.ReadLine();

@@ -24,16 +24,16 @@ namespace SharedSheep.Player
 
         public abstract ICard Pick(Prompt prompt, IBlind blind, bool forced, ICard partnerCard);
 
-        public abstract ICard PlayCard(Prompt prompt, List<IRound> rounds, IPlayer picker, IBlind blind);
+        public abstract ICard PlayCard(Prompt prompt, List<IRound> rounds, IPlayer picker, IBlind blind, ICard partnerCard);
 
-        public abstract bool WantPick(Prompt prompt);
+        public abstract bool WantPick(Prompt prompt, List<IPlayer> players);
 
         public override string ToString()
         {
             return Name;
         }
 
-        protected ICard CallUp(Prompt prompt)
+        protected ICard CallUp(Prompt prompt, IBlind blind)
         {
             List<ICard> callUp = new List<ICard> {
                     new Card.Card(CardID.Jack, CardPower.JackHeart, Suit.Hearts),
@@ -46,7 +46,7 @@ namespace SharedSheep.Player
                 };
             foreach (ICard card in callUp)
             {
-                if (!Hand.Cards.Contains(card))
+                if (!Hand.Cards.Contains(card) && !blind.BlindCards.Contains(card))
                 {
                     prompt(PromptType.CalledUp, new Dictionary<PromptData, object>
                     {

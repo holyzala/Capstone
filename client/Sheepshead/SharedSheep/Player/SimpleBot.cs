@@ -12,7 +12,7 @@ namespace SharedSheep.Player
         public SimpleBot(String name) : base(name)
         { }
 
-        public override Boolean WantPick(Prompt prompt)
+        public override Boolean WantPick(Prompt prompt, List<IPlayer> players)
         {
             ICard JD = new Card.Card(CardID.Jack, CardPower.JackDiamond, Suit.Diamond);
             if (Hand.Cards.Contains(JD)) return false;
@@ -22,7 +22,7 @@ namespace SharedSheep.Player
             return false;
         }
 
-        public override ICard PlayCard(Prompt prompt, List<IRound> rounds, IPlayer picker, IBlind blind)
+        public override ICard PlayCard(Prompt prompt, List<IRound> rounds, IPlayer picker, IBlind blind, ICard partnerCard)
         {
             List<ICard> cards = Hand.GetPlayableCards(rounds.Last().Trick.LeadingCard());
             cards.Sort();
@@ -65,7 +65,7 @@ namespace SharedSheep.Player
                     blind.BlindCards[added++] = Hand.Cards[0];
             }
             if (forced && (Hand.Cards.Contains(partnerCard) || blind.BlindCards.Contains(partnerCard)))
-                return CallUp(prompt);
+                return CallUp(prompt, blind);
 
             return partnerCard;
         }
