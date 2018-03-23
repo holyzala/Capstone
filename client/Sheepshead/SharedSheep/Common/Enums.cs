@@ -21,7 +21,7 @@ public enum CardPower
 // This enum will contain the different prompt types that can be called
 public enum PromptType
 {
-    Pick, PlayCard, PickBlind, RoundOver, GameOver, TableOver, CallUp, CalledUp
+    Pick, PlayCard, PickBlind, RoundOver, GameOver, TableOver, CallUp, CalledUp, CardsDealt
 }
 
 public enum PromptData
@@ -36,5 +36,6 @@ public enum PromptData
     Game,  // IGame
     Games,  // List<IGame>
     Card,  // ICard
-    Cards  // List<ICard>
+    Cards,  // List<ICard>
+    Players  // List<IPlayer>
 }
