@@ -12,9 +12,9 @@ namespace SharedSheep.Player
         IHand Hand { get; set; }
         String Name { get; }
 
-        ICard PlayCard(Prompt prompt, List<IRound> rounds, IPlayer picker, IBlind blind);
+        ICard PlayCard(Prompt prompt, List<IRound> rounds, IPlayer picker, IBlind blind, ICard partnerCard);
 
-        Boolean WantPick(Prompt prompt);
+        Boolean WantPick(Prompt prompt, List<IPlayer> players);
 
         ICard Pick(Prompt prompt, IBlind blind, bool forced, ICard partnerCard);
 

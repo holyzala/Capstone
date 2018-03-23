@@ -13,7 +13,7 @@ namespace SharedSheep.Player
         public LocalPlayer(string name) : base(name)
         { }
 
-        public override ICard PlayCard(Prompt prompt, List<IRound> rounds, IPlayer picker, IBlind blind)
+        public override ICard PlayCard(Prompt prompt, List<IRound> rounds, IPlayer picker, IBlind blind, ICard partnerCard)
         {
             ICard card = null;
             bool done = false;
@@ -42,7 +42,7 @@ namespace SharedSheep.Player
             return card;
         }
 
-        public override bool WantPick(Prompt prompt)
+        public override bool WantPick(Prompt prompt, List<IPlayer> players)
         {
             string answer = prompt(PromptType.Pick, new Dictionary<PromptData, object>
             {
@@ -78,7 +78,7 @@ namespace SharedSheep.Player
                     { PromptData.Player, this }
                 });
                 if (answer.ToLower() == "yes" || answer.ToLower() == "y")
-                    return CallUp(prompt);
+                    return CallUp(prompt, blind);
             }
             return partnerCard;
         }
