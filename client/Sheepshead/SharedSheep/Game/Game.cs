@@ -71,7 +71,7 @@ namespace SharedSheep.Game
             DealCards(players);
             prompt(PromptType.CardsDealt, new Dictionary<PromptData, object> {
                 { PromptData.Players, players },
-                {PromptData.Blind, Blind }
+                { PromptData.Blind, Blind }
             });
             // The dealer is the first, so skip them until last
             foreach (IPlayer player in players.Skip(1))
