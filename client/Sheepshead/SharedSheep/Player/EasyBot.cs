@@ -1,6 +1,7 @@
 ﻿using SharedSheep.Blind;
 using SharedSheep.Card;
 using SharedSheep.Round;
+using SharedSheep.Trick;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -8,6 +9,8 @@ namespace SharedSheep.Player
 {
     public class EasyBot : AbstractPlayer
     {
+        private bool IsPartner;
+
         public EasyBot(string name) : base(name)
         { }
 
@@ -45,27 +48,66 @@ namespace SharedSheep.Player
                     blind.BlindCards[added++] = Hand.Cards[0];
             }
             if (forced && (Hand.Cards.Contains(partnerCard) || blind.BlindCards.Contains(partnerCard)))
-                return CallUp(prompt);
+                return CallUp(prompt, blind);
 
             return partnerCard;
         }
 
-        public override ICard PlayCard(Prompt prompt, List<IRound> rounds, IPlayer picker, IBlind blind)
+        public override ICard PlayCard(Prompt prompt, List<IRound> rounds, IPlayer picker, IBlind blind, ICard partnerCard)
         {
-            List<ICard> cards = Hand.GetPlayableCards(rounds.Last().Trick.LeadingCard());
+            ITrick trick = rounds.Last().Trick;
+            List<ICard> cards = Hand.GetPlayableCards(trick.LeadingCard());
             cards.Sort();
             cards.Reverse();
-            Hand.RemoveCard(cards[0]);
-            return cards[0];
+            ICard playThis = null;
+            if (trick.Count() == 0)
+            {
+                if (picker == this)
+                {
+                    playThis = cards[0];
+                }
+                else if (IsPartner || Hand.Contains(partnerCard))
+                {
+                    IsPartner = true;
+                    playThis = cards[0];
+                }
+                else
+                {
+                    playThis = cards.Where(card => !card.IsTrump()).First();
+                }
+            }
+            else
+            {
+                playThis = cards[0];
+            }
+            Hand.RemoveCard(playThis);
+            return playThis;
         }
 
-        public override bool WantPick(Prompt prompt)
+        public override bool WantPick(Prompt prompt, List<IPlayer> players)
         {
             ICard JD = new Card.Card(CardID.Jack, CardPower.JackDiamond, Suit.Diamond);
-            if (Hand.Cards.Contains(JD)) return false;
-            int handPower = Hand.Cards.Aggregate(0, (total, card) => total + (int)card.Power);
-            if (handPower >= (int)CardPower.QueenHeart + (int)CardPower.QueenDiamond + (int)CardPower.JackClub + (int)CardPower.KingTrump)
+            Hand.Cards.Sort();
+            if (Hand.Cards[0].Power >= CardPower.JackDiamond)
                 return true;
+            ICard QC = new Card.Card(CardID.Queen, CardPower.QueenClub, Suit.Clubs);
+            ICard QS = new Card.Card(CardID.Queen, CardPower.QueenSpade, Suit.Spades);
+            int trumpCount = 0;
+            int queenCount = 0;
+            int pointCards = 0;
+            foreach (ICard card in Hand)
+            {
+                if (card.IsTrump()) ++trumpCount;
+                if (card.ID == CardID.Queen) ++queenCount;
+                if (card.Value >= 10) ++pointCards;
+            }
+            if (queenCount == 4) return true;
+            if (Hand.Cards.Contains(JD)) return false;
+            if ((players.First() == this || players.Last() == this) && Hand.Cards.Contains(QC) && Hand.Cards.Contains(QS))
+                return true;
+            if (queenCount >= 2 && trumpCount >= 3 && pointCards >= 1) return true;
+            if (queenCount >= 1 && trumpCount >= 4 && pointCards >= 1) return true;
+            if (trumpCount >= 5) return true;
             return false;
         }
     }
