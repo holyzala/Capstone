@@ -46,7 +46,15 @@ namespace SharedSheep.Card
 
         public override int GetHashCode()
         {
-            return base.GetHashCode();
+            unchecked // Overflow is fine, just wrap
+            {
+                int hash = 17;
+                hash = hash * 23 + ID.GetHashCode();
+                hash = hash * 23 + Value.GetHashCode();
+                hash = hash * 23 + Power.GetHashCode();
+                hash = hash * 23 + CardSuit.GetHashCode();
+                return hash;
+            }
         }
 
         public bool IsTrump()
