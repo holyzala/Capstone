@@ -19,10 +19,25 @@ namespace ConsoleSheep
         {
             ConsoleSheep c = new ConsoleSheep();
             c.table = new Table(new LocalPlayer("Me"), c.Prompt);
-            c.table.AddPlayer(new SimpleBot("Bot1"));
-            c.table.AddPlayer(new SimpleBot("Bot2"));
-            c.table.AddPlayer(new EasyBot("Bot3"));
-            c.table.AddPlayer(new EasyBot("Bot4"));
+            while (c.table.Players.Count() < 5) {
+                Console.Clear();
+                Console.WriteLine(String.Format("Add {0} more bots", 5 - c.table.Players.Count()));
+                Console.WriteLine("S for Simple");
+                Console.Write("E for Easy\n>");
+                string inp = Console.ReadLine();
+                string name = string.Format("bot{0}", c.table.Players.Count());
+                switch (inp.ToLower())
+                {
+                    case "s":
+                        c.table.AddPlayer(new SimpleBot(name));
+                        break;
+                    case "e":
+                        c.table.AddPlayer(new EasyBot(name));
+                        break;
+                    default:
+                        continue;
+                }
+            }
             c.table.Start();
 
             Console.ReadLine();
