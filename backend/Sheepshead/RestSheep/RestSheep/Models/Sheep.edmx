@@ -1,0 +1,961 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="SheepsheadModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012.Azure" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Blind">
+          <Key>
+            <PropertyRef Name="Blind_Game" />
+            <PropertyRef Name="Blind_Card" />
+          </Key>
+          <Property Name="Blind_Game" Type="int" Nullable="false" />
+          <Property Name="Blind_Card" Type="tinyint" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Bot">
+          <Key>
+            <PropertyRef Name="Player_ID" />
+          </Key>
+          <Property Name="Player_ID" Type="int" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="15" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Card">
+          <Key>
+            <PropertyRef Name="Card_ID" />
+          </Key>
+          <Property Name="Card_ID" Type="tinyint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Face" Type="nvarchar" MaxLength="2" Nullable="false" />
+          <Property Name="Suit" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="is_Trump" Type="bit" Nullable="false" />
+          <Property Name="Trump_Power" Type="int" Nullable="false" />
+          <Property Name="Card_Value" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Game">
+          <Key>
+            <PropertyRef Name="Game_ID" />
+          </Key>
+          <Property Name="Game_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Table_ID" Type="int" Nullable="false" />
+          <Property Name="Picker" Type="int" Nullable="false" />
+          <Property Name="Partner" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Game_Round">
+          <Key>
+            <PropertyRef Name="Round_ID" />
+          </Key>
+          <Property Name="Round_ID" Type="int" Nullable="false" />
+          <Property Name="Game_ID" Type="int" Nullable="false" />
+          <Property Name="Round_Num" Type="int" />
+          <Property Name="Player_Turn" Type="int" Nullable="false" />
+          <Property Name="Leading_Card" Type="tinyint" />
+        </EntityType>
+        <EntityType Name="Hand">
+          <Key>
+            <PropertyRef Name="Hand_Player" />
+            <PropertyRef Name="Hand_Game" />
+            <PropertyRef Name="Hand_Card" />
+          </Key>
+          <Property Name="Hand_Player" Type="int" Nullable="false" />
+          <Property Name="Hand_Game" Type="int" Nullable="false" />
+          <Property Name="Hand_Card" Type="tinyint" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Human">
+          <Key>
+            <PropertyRef Name="Player_ID" />
+          </Key>
+          <Property Name="Player_ID" Type="int" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="15" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Player">
+          <Key>
+            <PropertyRef Name="Player_ID" />
+          </Key>
+          <Property Name="Player_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="15" />
+        </EntityType>
+        <EntityType Name="Scoresheet">
+          <Key>
+            <PropertyRef Name="Score_ID" />
+          </Key>
+          <Property Name="Score_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Table_ID" Type="int" Nullable="false" />
+          <Property Name="Player_ID" Type="int" Nullable="false" />
+          <Property Name="Score" Type="int" />
+        </EntityType>
+        <EntityType Name="Table_Match">
+          <Key>
+            <PropertyRef Name="Table_ID" />
+          </Key>
+          <Property Name="Table_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Dealer" Type="int" Nullable="false" />
+          <Property Name="Host_Player" Type="int" Nullable="false" />
+          <Property Name="Game_Number" Type="int" />
+        </EntityType>
+        <EntityType Name="Table_Players">
+          <Key>
+            <PropertyRef Name="TP_Player_Id" />
+            <PropertyRef Name="TP_Table_ID" />
+          </Key>
+          <Property Name="TP_Player_Id" Type="int" Nullable="false" />
+          <Property Name="TP_Table_ID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Trick_Hand">
+          <Key>
+            <PropertyRef Name="Trick_Round" />
+            <PropertyRef Name="Trick_Card" />
+          </Key>
+          <Property Name="Trick_Round" Type="int" Nullable="false" />
+          <Property Name="Trick_Card" Type="tinyint" Nullable="false" />
+        </EntityType>
+        <Association Name="FK__Blind__Blind_Car__4F12BBB9">
+          <End Role="Card" Type="Self.Card" Multiplicity="1" />
+          <End Role="Blind" Type="Self.Blind" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Card">
+              <PropertyRef Name="Card_ID" />
+            </Principal>
+            <Dependent Role="Blind">
+              <PropertyRef Name="Blind_Card" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Blind__Blind_Gam__4E1E9780">
+          <End Role="Game" Type="Self.Game" Multiplicity="1" />
+          <End Role="Blind" Type="Self.Blind" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Game">
+              <PropertyRef Name="Game_ID" />
+            </Principal>
+            <Dependent Role="Blind">
+              <PropertyRef Name="Blind_Game" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Bot__Player_ID__3B0BC30C">
+          <End Role="Player" Type="Self.Player" Multiplicity="1" />
+          <End Role="Bot" Type="Self.Bot" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Player">
+              <PropertyRef Name="Player_ID" />
+            </Principal>
+            <Dependent Role="Bot">
+              <PropertyRef Name="Player_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Game__Partner__467D75B8">
+          <End Role="Player" Type="Self.Player" Multiplicity="1" />
+          <End Role="Game" Type="Self.Game" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Player">
+              <PropertyRef Name="Player_ID" />
+            </Principal>
+            <Dependent Role="Game">
+              <PropertyRef Name="Partner" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Game__Picker__4589517F">
+          <End Role="Player" Type="Self.Player" Multiplicity="1" />
+          <End Role="Game" Type="Self.Game" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Player">
+              <PropertyRef Name="Player_ID" />
+            </Principal>
+            <Dependent Role="Game">
+              <PropertyRef Name="Picker" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Game_Roun__Game___51EF2864">
+          <End Role="Game" Type="Self.Game" Multiplicity="1" />
+          <End Role="Game_Round" Type="Self.Game_Round" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Game">
+              <PropertyRef Name="Game_ID" />
+            </Principal>
+            <Dependent Role="Game_Round">
+              <PropertyRef Name="Game_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Game_Roun__Leadi__53D770D6">
+          <End Role="Card" Type="Self.Card" Multiplicity="0..1" />
+          <End Role="Game_Round" Type="Self.Game_Round" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Card">
+              <PropertyRef Name="Card_ID" />
+            </Principal>
+            <Dependent Role="Game_Round">
+              <PropertyRef Name="Leading_Card" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Game_Roun__Playe__52E34C9D">
+          <End Role="Player" Type="Self.Player" Multiplicity="1" />
+          <End Role="Game_Round" Type="Self.Game_Round" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Player">
+              <PropertyRef Name="Player_ID" />
+            </Principal>
+            <Dependent Role="Game_Round">
+              <PropertyRef Name="Player_Turn" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Hand__Hand_Card__4B422AD5">
+          <End Role="Card" Type="Self.Card" Multiplicity="1" />
+          <End Role="Hand" Type="Self.Hand" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Card">
+              <PropertyRef Name="Card_ID" />
+            </Principal>
+            <Dependent Role="Hand">
+              <PropertyRef Name="Hand_Card" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Hand__Hand_Game__4A4E069C">
+          <End Role="Game" Type="Self.Game" Multiplicity="1" />
+          <End Role="Hand" Type="Self.Hand" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Game">
+              <PropertyRef Name="Game_ID" />
+            </Principal>
+            <Dependent Role="Hand">
+              <PropertyRef Name="Hand_Game" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Hand__Hand_Playe__4959E263">
+          <End Role="Player" Type="Self.Player" Multiplicity="1" />
+          <End Role="Hand" Type="Self.Hand" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Player">
+              <PropertyRef Name="Player_ID" />
+            </Principal>
+            <Dependent Role="Hand">
+              <PropertyRef Name="Hand_Player" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Human__Player_ID__382F5661">
+          <End Role="Player" Type="Self.Player" Multiplicity="1" />
+          <End Role="Human" Type="Self.Human" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Player">
+              <PropertyRef Name="Player_ID" />
+            </Principal>
+            <Dependent Role="Human">
+              <PropertyRef Name="Player_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Scoreshee__Playe__5B78929E">
+          <End Role="Player" Type="Self.Player" Multiplicity="1" />
+          <End Role="Scoresheet" Type="Self.Scoresheet" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Player">
+              <PropertyRef Name="Player_ID" />
+            </Principal>
+            <Dependent Role="Scoresheet">
+              <PropertyRef Name="Player_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Scoreshee__Table__5A846E65">
+          <End Role="Table_Match" Type="Self.Table_Match" Multiplicity="1" />
+          <End Role="Scoresheet" Type="Self.Scoresheet" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Table_Match">
+              <PropertyRef Name="Table_ID" />
+            </Principal>
+            <Dependent Role="Scoresheet">
+              <PropertyRef Name="Table_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Table_Mat__Deale__3DE82FB7">
+          <End Role="Player" Type="Self.Player" Multiplicity="1" />
+          <End Role="Table_Match" Type="Self.Table_Match" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Player">
+              <PropertyRef Name="Player_ID" />
+            </Principal>
+            <Dependent Role="Table_Match">
+              <PropertyRef Name="Dealer" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Table_Mat__Host___3EDC53F0">
+          <End Role="Player" Type="Self.Player" Multiplicity="1" />
+          <End Role="Table_Match" Type="Self.Table_Match" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Player">
+              <PropertyRef Name="Player_ID" />
+            </Principal>
+            <Dependent Role="Table_Match">
+              <PropertyRef Name="Host_Player" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Table_Pla__TP_Pl__41B8C09B">
+          <End Role="Player" Type="Self.Player" Multiplicity="1" />
+          <End Role="Table_Players" Type="Self.Table_Players" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Player">
+              <PropertyRef Name="Player_ID" />
+            </Principal>
+            <Dependent Role="Table_Players">
+              <PropertyRef Name="TP_Player_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Table_Pla__TP_Ta__42ACE4D4">
+          <End Role="Table_Match" Type="Self.Table_Match" Multiplicity="1" />
+          <End Role="Table_Players" Type="Self.Table_Players" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Table_Match">
+              <PropertyRef Name="Table_ID" />
+            </Principal>
+            <Dependent Role="Table_Players">
+              <PropertyRef Name="TP_Table_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Trick_Han__Trick__56B3DD81">
+          <End Role="Game_Round" Type="Self.Game_Round" Multiplicity="1" />
+          <End Role="Trick_Hand" Type="Self.Trick_Hand" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Game_Round">
+              <PropertyRef Name="Round_ID" />
+            </Principal>
+            <Dependent Role="Trick_Hand">
+              <PropertyRef Name="Trick_Round" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Trick_Han__Trick__57A801BA">
+          <End Role="Card" Type="Self.Card" Multiplicity="1" />
+          <End Role="Trick_Hand" Type="Self.Trick_Hand" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Card">
+              <PropertyRef Name="Card_ID" />
+            </Principal>
+            <Dependent Role="Trick_Hand">
+              <PropertyRef Name="Trick_Card" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="SheepsheadModelStoreContainer">
+          <EntitySet Name="Blind" EntityType="Self.Blind" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Bot" EntityType="Self.Bot" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Card" EntityType="Self.Card" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Game" EntityType="Self.Game" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Game_Round" EntityType="Self.Game_Round" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Hand" EntityType="Self.Hand" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Human" EntityType="Self.Human" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Player" EntityType="Self.Player" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Scoresheet" EntityType="Self.Scoresheet" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Table_Match" EntityType="Self.Table_Match" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Table_Players" EntityType="Self.Table_Players" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Trick_Hand" EntityType="Self.Trick_Hand" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK__Blind__Blind_Car__4F12BBB9" Association="Self.FK__Blind__Blind_Car__4F12BBB9">
+            <End Role="Card" EntitySet="Card" />
+            <End Role="Blind" EntitySet="Blind" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Blind__Blind_Gam__4E1E9780" Association="Self.FK__Blind__Blind_Gam__4E1E9780">
+            <End Role="Game" EntitySet="Game" />
+            <End Role="Blind" EntitySet="Blind" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Bot__Player_ID__3B0BC30C" Association="Self.FK__Bot__Player_ID__3B0BC30C">
+            <End Role="Player" EntitySet="Player" />
+            <End Role="Bot" EntitySet="Bot" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Game__Partner__467D75B8" Association="Self.FK__Game__Partner__467D75B8">
+            <End Role="Player" EntitySet="Player" />
+            <End Role="Game" EntitySet="Game" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Game__Picker__4589517F" Association="Self.FK__Game__Picker__4589517F">
+            <End Role="Player" EntitySet="Player" />
+            <End Role="Game" EntitySet="Game" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Game_Roun__Game___51EF2864" Association="Self.FK__Game_Roun__Game___51EF2864">
+            <End Role="Game" EntitySet="Game" />
+            <End Role="Game_Round" EntitySet="Game_Round" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Game_Roun__Leadi__53D770D6" Association="Self.FK__Game_Roun__Leadi__53D770D6">
+            <End Role="Card" EntitySet="Card" />
+            <End Role="Game_Round" EntitySet="Game_Round" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Game_Roun__Playe__52E34C9D" Association="Self.FK__Game_Roun__Playe__52E34C9D">
+            <End Role="Player" EntitySet="Player" />
+            <End Role="Game_Round" EntitySet="Game_Round" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Hand__Hand_Card__4B422AD5" Association="Self.FK__Hand__Hand_Card__4B422AD5">
+            <End Role="Card" EntitySet="Card" />
+            <End Role="Hand" EntitySet="Hand" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Hand__Hand_Game__4A4E069C" Association="Self.FK__Hand__Hand_Game__4A4E069C">
+            <End Role="Game" EntitySet="Game" />
+            <End Role="Hand" EntitySet="Hand" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Hand__Hand_Playe__4959E263" Association="Self.FK__Hand__Hand_Playe__4959E263">
+            <End Role="Player" EntitySet="Player" />
+            <End Role="Hand" EntitySet="Hand" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Human__Player_ID__382F5661" Association="Self.FK__Human__Player_ID__382F5661">
+            <End Role="Player" EntitySet="Player" />
+            <End Role="Human" EntitySet="Human" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Scoreshee__Playe__5B78929E" Association="Self.FK__Scoreshee__Playe__5B78929E">
+            <End Role="Player" EntitySet="Player" />
+            <End Role="Scoresheet" EntitySet="Scoresheet" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Scoreshee__Table__5A846E65" Association="Self.FK__Scoreshee__Table__5A846E65">
+            <End Role="Table_Match" EntitySet="Table_Match" />
+            <End Role="Scoresheet" EntitySet="Scoresheet" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Table_Mat__Deale__3DE82FB7" Association="Self.FK__Table_Mat__Deale__3DE82FB7">
+            <End Role="Player" EntitySet="Player" />
+            <End Role="Table_Match" EntitySet="Table_Match" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Table_Mat__Host___3EDC53F0" Association="Self.FK__Table_Mat__Host___3EDC53F0">
+            <End Role="Player" EntitySet="Player" />
+            <End Role="Table_Match" EntitySet="Table_Match" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Table_Pla__TP_Pl__41B8C09B" Association="Self.FK__Table_Pla__TP_Pl__41B8C09B">
+            <End Role="Player" EntitySet="Player" />
+            <End Role="Table_Players" EntitySet="Table_Players" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Table_Pla__TP_Ta__42ACE4D4" Association="Self.FK__Table_Pla__TP_Ta__42ACE4D4">
+            <End Role="Table_Match" EntitySet="Table_Match" />
+            <End Role="Table_Players" EntitySet="Table_Players" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Trick_Han__Trick__56B3DD81" Association="Self.FK__Trick_Han__Trick__56B3DD81">
+            <End Role="Game_Round" EntitySet="Game_Round" />
+            <End Role="Trick_Hand" EntitySet="Trick_Hand" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Trick_Han__Trick__57A801BA" Association="Self.FK__Trick_Han__Trick__57A801BA">
+            <End Role="Card" EntitySet="Card" />
+            <End Role="Trick_Hand" EntitySet="Trick_Hand" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="SheepsheadModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Bot">
+          <Key>
+            <PropertyRef Name="Player_ID" />
+          </Key>
+          <Property Name="Player_ID" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="15" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Player" Relationship="Self.FK__Bot__Player_ID__3B0BC30C" FromRole="Bot" ToRole="Player" />
+        </EntityType>
+        <EntityType Name="Card">
+          <Key>
+            <PropertyRef Name="Card_ID" />
+          </Key>
+          <Property Name="Card_ID" Type="Byte" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Face" Type="String" MaxLength="2" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Suit" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="is_Trump" Type="Boolean" Nullable="false" />
+          <Property Name="Trump_Power" Type="Int32" Nullable="false" />
+          <Property Name="Card_Value" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Game_Round" Relationship="Self.FK__Game_Roun__Leadi__53D770D6" FromRole="Card" ToRole="Game_Round" />
+          <NavigationProperty Name="Hands" Relationship="Self.FK__Hand__Hand_Card__4B422AD5" FromRole="Card" ToRole="Hand" />
+          <NavigationProperty Name="Games" Relationship="Self.Blind" FromRole="Card" ToRole="Game" />
+          <NavigationProperty Name="Game_Round1" Relationship="Self.Trick_Hand" FromRole="Card" ToRole="Game_Round" />
+        </EntityType>
+        <EntityType Name="Game">
+          <Key>
+            <PropertyRef Name="Game_ID" />
+          </Key>
+          <Property Name="Game_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Table_ID" Type="Int32" Nullable="false" />
+          <Property Name="Picker" Type="Int32" Nullable="false" />
+          <Property Name="Partner" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Player" Relationship="Self.FK__Game__Partner__467D75B8" FromRole="Game" ToRole="Player" />
+          <NavigationProperty Name="Player1" Relationship="Self.FK__Game__Picker__4589517F" FromRole="Game" ToRole="Player" />
+          <NavigationProperty Name="Game_Round" Relationship="Self.FK__Game_Roun__Game___51EF2864" FromRole="Game" ToRole="Game_Round" />
+          <NavigationProperty Name="Hands" Relationship="Self.FK__Hand__Hand_Game__4A4E069C" FromRole="Game" ToRole="Hand" />
+          <NavigationProperty Name="Cards" Relationship="Self.Blind" FromRole="Game" ToRole="Card" />
+        </EntityType>
+        <EntityType Name="Game_Round">
+          <Key>
+            <PropertyRef Name="Round_ID" />
+          </Key>
+          <Property Name="Round_ID" Type="Int32" Nullable="false" />
+          <Property Name="Game_ID" Type="Int32" Nullable="false" />
+          <Property Name="Round_Num" Type="Int32" />
+          <Property Name="Player_Turn" Type="Int32" Nullable="false" />
+          <Property Name="Leading_Card" Type="Byte" />
+          <NavigationProperty Name="Card" Relationship="Self.FK__Game_Roun__Leadi__53D770D6" FromRole="Game_Round" ToRole="Card" />
+          <NavigationProperty Name="Game" Relationship="Self.FK__Game_Roun__Game___51EF2864" FromRole="Game_Round" ToRole="Game" />
+          <NavigationProperty Name="Player" Relationship="Self.FK__Game_Roun__Playe__52E34C9D" FromRole="Game_Round" ToRole="Player" />
+          <NavigationProperty Name="Cards" Relationship="Self.Trick_Hand" FromRole="Game_Round" ToRole="Card" />
+        </EntityType>
+        <EntityType Name="Hand">
+          <Key>
+            <PropertyRef Name="Hand_Player" />
+            <PropertyRef Name="Hand_Game" />
+            <PropertyRef Name="Hand_Card" />
+          </Key>
+          <Property Name="Hand_Player" Type="Int32" Nullable="false" />
+          <Property Name="Hand_Game" Type="Int32" Nullable="false" />
+          <Property Name="Hand_Card" Type="Byte" Nullable="false" />
+          <NavigationProperty Name="Card" Relationship="Self.FK__Hand__Hand_Card__4B422AD5" FromRole="Hand" ToRole="Card" />
+          <NavigationProperty Name="Game" Relationship="Self.FK__Hand__Hand_Game__4A4E069C" FromRole="Hand" ToRole="Game" />
+          <NavigationProperty Name="Player" Relationship="Self.FK__Hand__Hand_Playe__4959E263" FromRole="Hand" ToRole="Player" />
+        </EntityType>
+        <EntityType Name="Human">
+          <Key>
+            <PropertyRef Name="Player_ID" />
+          </Key>
+          <Property Name="Player_ID" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="15" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Player" Relationship="Self.FK__Human__Player_ID__382F5661" FromRole="Human" ToRole="Player" />
+        </EntityType>
+        <EntityType Name="Player">
+          <Key>
+            <PropertyRef Name="Player_ID" />
+          </Key>
+          <Property Name="Player_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Bot" Relationship="Self.FK__Bot__Player_ID__3B0BC30C" FromRole="Player" ToRole="Bot" />
+          <NavigationProperty Name="Games" Relationship="Self.FK__Game__Partner__467D75B8" FromRole="Player" ToRole="Game" />
+          <NavigationProperty Name="Games1" Relationship="Self.FK__Game__Picker__4589517F" FromRole="Player" ToRole="Game" />
+          <NavigationProperty Name="Game_Round" Relationship="Self.FK__Game_Roun__Playe__52E34C9D" FromRole="Player" ToRole="Game_Round" />
+          <NavigationProperty Name="Hands" Relationship="Self.FK__Hand__Hand_Playe__4959E263" FromRole="Player" ToRole="Hand" />
+          <NavigationProperty Name="Human" Relationship="Self.FK__Human__Player_ID__382F5661" FromRole="Player" ToRole="Human" />
+          <NavigationProperty Name="Scoresheets" Relationship="Self.FK__Scoreshee__Playe__5B78929E" FromRole="Player" ToRole="Scoresheet" />
+          <NavigationProperty Name="Table_Match" Relationship="Self.FK__Table_Mat__Deale__3DE82FB7" FromRole="Player" ToRole="Table_Match" />
+          <NavigationProperty Name="Table_Match1" Relationship="Self.FK__Table_Mat__Host___3EDC53F0" FromRole="Player" ToRole="Table_Match" />
+          <NavigationProperty Name="Table_Match2" Relationship="Self.Table_Players" FromRole="Player" ToRole="Table_Match" />
+        </EntityType>
+        <EntityType Name="Scoresheet">
+          <Key>
+            <PropertyRef Name="Score_ID" />
+          </Key>
+          <Property Name="Score_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Table_ID" Type="Int32" Nullable="false" />
+          <Property Name="Player_ID" Type="Int32" Nullable="false" />
+          <Property Name="Score" Type="Int32" />
+          <NavigationProperty Name="Player" Relationship="Self.FK__Scoreshee__Playe__5B78929E" FromRole="Scoresheet" ToRole="Player" />
+          <NavigationProperty Name="Table_Match" Relationship="Self.FK__Scoreshee__Table__5A846E65" FromRole="Scoresheet" ToRole="Table_Match" />
+        </EntityType>
+        <EntityType Name="Table_Match">
+          <Key>
+            <PropertyRef Name="Table_ID" />
+          </Key>
+          <Property Name="Table_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Dealer" Type="Int32" Nullable="false" />
+          <Property Name="Host_Player" Type="Int32" Nullable="false" />
+          <Property Name="Game_Number" Type="Int32" />
+          <NavigationProperty Name="Player" Relationship="Self.FK__Table_Mat__Deale__3DE82FB7" FromRole="Table_Match" ToRole="Player" />
+          <NavigationProperty Name="Player1" Relationship="Self.FK__Table_Mat__Host___3EDC53F0" FromRole="Table_Match" ToRole="Player" />
+          <NavigationProperty Name="Scoresheets" Relationship="Self.FK__Scoreshee__Table__5A846E65" FromRole="Table_Match" ToRole="Scoresheet" />
+          <NavigationProperty Name="Players" Relationship="Self.Table_Players" FromRole="Table_Match" ToRole="Player" />
+        </EntityType>
+        <Association Name="FK__Bot__Player_ID__3B0BC30C">
+          <End Role="Player" Type="Self.Player" Multiplicity="1" />
+          <End Role="Bot" Type="Self.Bot" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Player">
+              <PropertyRef Name="Player_ID" />
+            </Principal>
+            <Dependent Role="Bot">
+              <PropertyRef Name="Player_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Game_Roun__Leadi__53D770D6">
+          <End Role="Card" Type="Self.Card" Multiplicity="0..1" />
+          <End Role="Game_Round" Type="Self.Game_Round" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Card">
+              <PropertyRef Name="Card_ID" />
+            </Principal>
+            <Dependent Role="Game_Round">
+              <PropertyRef Name="Leading_Card" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Hand__Hand_Card__4B422AD5">
+          <End Role="Card" Type="Self.Card" Multiplicity="1" />
+          <End Role="Hand" Type="Self.Hand" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Card">
+              <PropertyRef Name="Card_ID" />
+            </Principal>
+            <Dependent Role="Hand">
+              <PropertyRef Name="Hand_Card" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Game__Partner__467D75B8">
+          <End Role="Player" Type="Self.Player" Multiplicity="1" />
+          <End Role="Game" Type="Self.Game" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Player">
+              <PropertyRef Name="Player_ID" />
+            </Principal>
+            <Dependent Role="Game">
+              <PropertyRef Name="Partner" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Game__Picker__4589517F">
+          <End Role="Player" Type="Self.Player" Multiplicity="1" />
+          <End Role="Game" Type="Self.Game" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Player">
+              <PropertyRef Name="Player_ID" />
+            </Principal>
+            <Dependent Role="Game">
+              <PropertyRef Name="Picker" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Game_Roun__Game___51EF2864">
+          <End Role="Game" Type="Self.Game" Multiplicity="1" />
+          <End Role="Game_Round" Type="Self.Game_Round" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Game">
+              <PropertyRef Name="Game_ID" />
+            </Principal>
+            <Dependent Role="Game_Round">
+              <PropertyRef Name="Game_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Hand__Hand_Game__4A4E069C">
+          <End Role="Game" Type="Self.Game" Multiplicity="1" />
+          <End Role="Hand" Type="Self.Hand" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Game">
+              <PropertyRef Name="Game_ID" />
+            </Principal>
+            <Dependent Role="Hand">
+              <PropertyRef Name="Hand_Game" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Game_Roun__Playe__52E34C9D">
+          <End Role="Player" Type="Self.Player" Multiplicity="1" />
+          <End Role="Game_Round" Type="Self.Game_Round" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Player">
+              <PropertyRef Name="Player_ID" />
+            </Principal>
+            <Dependent Role="Game_Round">
+              <PropertyRef Name="Player_Turn" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Hand__Hand_Playe__4959E263">
+          <End Role="Player" Type="Self.Player" Multiplicity="1" />
+          <End Role="Hand" Type="Self.Hand" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Player">
+              <PropertyRef Name="Player_ID" />
+            </Principal>
+            <Dependent Role="Hand">
+              <PropertyRef Name="Hand_Player" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Human__Player_ID__382F5661">
+          <End Role="Player" Type="Self.Player" Multiplicity="1" />
+          <End Role="Human" Type="Self.Human" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Player">
+              <PropertyRef Name="Player_ID" />
+            </Principal>
+            <Dependent Role="Human">
+              <PropertyRef Name="Player_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Scoreshee__Playe__5B78929E">
+          <End Role="Player" Type="Self.Player" Multiplicity="1" />
+          <End Role="Scoresheet" Type="Self.Scoresheet" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Player">
+              <PropertyRef Name="Player_ID" />
+            </Principal>
+            <Dependent Role="Scoresheet">
+              <PropertyRef Name="Player_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Table_Mat__Deale__3DE82FB7">
+          <End Role="Player" Type="Self.Player" Multiplicity="1" />
+          <End Role="Table_Match" Type="Self.Table_Match" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Player">
+              <PropertyRef Name="Player_ID" />
+            </Principal>
+            <Dependent Role="Table_Match">
+              <PropertyRef Name="Dealer" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Table_Mat__Host___3EDC53F0">
+          <End Role="Player" Type="Self.Player" Multiplicity="1" />
+          <End Role="Table_Match" Type="Self.Table_Match" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Player">
+              <PropertyRef Name="Player_ID" />
+            </Principal>
+            <Dependent Role="Table_Match">
+              <PropertyRef Name="Host_Player" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Scoreshee__Table__5A846E65">
+          <End Role="Table_Match" Type="Self.Table_Match" Multiplicity="1" />
+          <End Role="Scoresheet" Type="Self.Scoresheet" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Table_Match">
+              <PropertyRef Name="Table_ID" />
+            </Principal>
+            <Dependent Role="Scoresheet">
+              <PropertyRef Name="Table_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Blind">
+          <End Role="Card" Type="Self.Card" Multiplicity="*" />
+          <End Role="Game" Type="Self.Game" Multiplicity="*" />
+        </Association>
+        <Association Name="Table_Players">
+          <End Role="Player" Type="Self.Player" Multiplicity="*" />
+          <End Role="Table_Match" Type="Self.Table_Match" Multiplicity="*" />
+        </Association>
+        <Association Name="Trick_Hand">
+          <End Role="Game_Round" Type="Self.Game_Round" Multiplicity="*" />
+          <End Role="Card" Type="Self.Card" Multiplicity="*" />
+        </Association>
+        <EntityContainer Name="SheepsheadEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Bots" EntityType="Self.Bot" />
+          <EntitySet Name="Cards" EntityType="Self.Card" />
+          <EntitySet Name="Games" EntityType="Self.Game" />
+          <EntitySet Name="Game_Round" EntityType="Self.Game_Round" />
+          <EntitySet Name="Hands" EntityType="Self.Hand" />
+          <EntitySet Name="Humen" EntityType="Self.Human" />
+          <EntitySet Name="Players" EntityType="Self.Player" />
+          <EntitySet Name="Scoresheets" EntityType="Self.Scoresheet" />
+          <EntitySet Name="Table_Match" EntityType="Self.Table_Match" />
+          <AssociationSet Name="FK__Bot__Player_ID__3B0BC30C" Association="Self.FK__Bot__Player_ID__3B0BC30C">
+            <End Role="Player" EntitySet="Players" />
+            <End Role="Bot" EntitySet="Bots" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Game_Roun__Leadi__53D770D6" Association="Self.FK__Game_Roun__Leadi__53D770D6">
+            <End Role="Card" EntitySet="Cards" />
+            <End Role="Game_Round" EntitySet="Game_Round" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Hand__Hand_Card__4B422AD5" Association="Self.FK__Hand__Hand_Card__4B422AD5">
+            <End Role="Card" EntitySet="Cards" />
+            <End Role="Hand" EntitySet="Hands" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Game__Partner__467D75B8" Association="Self.FK__Game__Partner__467D75B8">
+            <End Role="Player" EntitySet="Players" />
+            <End Role="Game" EntitySet="Games" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Game__Picker__4589517F" Association="Self.FK__Game__Picker__4589517F">
+            <End Role="Player" EntitySet="Players" />
+            <End Role="Game" EntitySet="Games" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Game_Roun__Game___51EF2864" Association="Self.FK__Game_Roun__Game___51EF2864">
+            <End Role="Game" EntitySet="Games" />
+            <End Role="Game_Round" EntitySet="Game_Round" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Hand__Hand_Game__4A4E069C" Association="Self.FK__Hand__Hand_Game__4A4E069C">
+            <End Role="Game" EntitySet="Games" />
+            <End Role="Hand" EntitySet="Hands" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Game_Roun__Playe__52E34C9D" Association="Self.FK__Game_Roun__Playe__52E34C9D">
+            <End Role="Player" EntitySet="Players" />
+            <End Role="Game_Round" EntitySet="Game_Round" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Hand__Hand_Playe__4959E263" Association="Self.FK__Hand__Hand_Playe__4959E263">
+            <End Role="Player" EntitySet="Players" />
+            <End Role="Hand" EntitySet="Hands" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Human__Player_ID__382F5661" Association="Self.FK__Human__Player_ID__382F5661">
+            <End Role="Player" EntitySet="Players" />
+            <End Role="Human" EntitySet="Humen" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Scoreshee__Playe__5B78929E" Association="Self.FK__Scoreshee__Playe__5B78929E">
+            <End Role="Player" EntitySet="Players" />
+            <End Role="Scoresheet" EntitySet="Scoresheets" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Table_Mat__Deale__3DE82FB7" Association="Self.FK__Table_Mat__Deale__3DE82FB7">
+            <End Role="Player" EntitySet="Players" />
+            <End Role="Table_Match" EntitySet="Table_Match" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Table_Mat__Host___3EDC53F0" Association="Self.FK__Table_Mat__Host___3EDC53F0">
+            <End Role="Player" EntitySet="Players" />
+            <End Role="Table_Match" EntitySet="Table_Match" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Scoreshee__Table__5A846E65" Association="Self.FK__Scoreshee__Table__5A846E65">
+            <End Role="Table_Match" EntitySet="Table_Match" />
+            <End Role="Scoresheet" EntitySet="Scoresheets" />
+          </AssociationSet>
+          <AssociationSet Name="Blind" Association="Self.Blind">
+            <End Role="Card" EntitySet="Cards" />
+            <End Role="Game" EntitySet="Games" />
+          </AssociationSet>
+          <AssociationSet Name="Table_Players" Association="Self.Table_Players">
+            <End Role="Player" EntitySet="Players" />
+            <End Role="Table_Match" EntitySet="Table_Match" />
+          </AssociationSet>
+          <AssociationSet Name="Trick_Hand" Association="Self.Trick_Hand">
+            <End Role="Game_Round" EntitySet="Game_Round" />
+            <End Role="Card" EntitySet="Cards" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="SheepsheadModelStoreContainer" CdmEntityContainer="SheepsheadEntities">
+          <EntitySetMapping Name="Bots">
+            <EntityTypeMapping TypeName="SheepsheadModel.Bot">
+              <MappingFragment StoreEntitySet="Bot">
+                <ScalarProperty Name="Player_ID" ColumnName="Player_ID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Cards">
+            <EntityTypeMapping TypeName="SheepsheadModel.Card">
+              <MappingFragment StoreEntitySet="Card">
+                <ScalarProperty Name="Card_ID" ColumnName="Card_ID" />
+                <ScalarProperty Name="Face" ColumnName="Face" />
+                <ScalarProperty Name="Suit" ColumnName="Suit" />
+                <ScalarProperty Name="is_Trump" ColumnName="is_Trump" />
+                <ScalarProperty Name="Trump_Power" ColumnName="Trump_Power" />
+                <ScalarProperty Name="Card_Value" ColumnName="Card_Value" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Games">
+            <EntityTypeMapping TypeName="SheepsheadModel.Game">
+              <MappingFragment StoreEntitySet="Game">
+                <ScalarProperty Name="Game_ID" ColumnName="Game_ID" />
+                <ScalarProperty Name="Table_ID" ColumnName="Table_ID" />
+                <ScalarProperty Name="Picker" ColumnName="Picker" />
+                <ScalarProperty Name="Partner" ColumnName="Partner" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Game_Round">
+            <EntityTypeMapping TypeName="SheepsheadModel.Game_Round">
+              <MappingFragment StoreEntitySet="Game_Round">
+                <ScalarProperty Name="Round_ID" ColumnName="Round_ID" />
+                <ScalarProperty Name="Game_ID" ColumnName="Game_ID" />
+                <ScalarProperty Name="Round_Num" ColumnName="Round_Num" />
+                <ScalarProperty Name="Player_Turn" ColumnName="Player_Turn" />
+                <ScalarProperty Name="Leading_Card" ColumnName="Leading_Card" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Hands">
+            <EntityTypeMapping TypeName="SheepsheadModel.Hand">
+              <MappingFragment StoreEntitySet="Hand">
+                <ScalarProperty Name="Hand_Player" ColumnName="Hand_Player" />
+                <ScalarProperty Name="Hand_Game" ColumnName="Hand_Game" />
+                <ScalarProperty Name="Hand_Card" ColumnName="Hand_Card" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Humen">
+            <EntityTypeMapping TypeName="SheepsheadModel.Human">
+              <MappingFragment StoreEntitySet="Human">
+                <ScalarProperty Name="Player_ID" ColumnName="Player_ID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Players">
+            <EntityTypeMapping TypeName="SheepsheadModel.Player">
+              <MappingFragment StoreEntitySet="Player">
+                <ScalarProperty Name="Player_ID" ColumnName="Player_ID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Scoresheets">
+            <EntityTypeMapping TypeName="SheepsheadModel.Scoresheet">
+              <MappingFragment StoreEntitySet="Scoresheet">
+                <ScalarProperty Name="Score_ID" ColumnName="Score_ID" />
+                <ScalarProperty Name="Table_ID" ColumnName="Table_ID" />
+                <ScalarProperty Name="Player_ID" ColumnName="Player_ID" />
+                <ScalarProperty Name="Score" ColumnName="Score" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Table_Match">
+            <EntityTypeMapping TypeName="SheepsheadModel.Table_Match">
+              <MappingFragment StoreEntitySet="Table_Match">
+                <ScalarProperty Name="Table_ID" ColumnName="Table_ID" />
+                <ScalarProperty Name="Dealer" ColumnName="Dealer" />
+                <ScalarProperty Name="Host_Player" ColumnName="Host_Player" />
+                <ScalarProperty Name="Game_Number" ColumnName="Game_Number" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <AssociationSetMapping Name="Blind" TypeName="SheepsheadModel.Blind" StoreEntitySet="Blind">
+            <EndProperty Name="Card">
+              <ScalarProperty Name="Card_ID" ColumnName="Blind_Card" />
+            </EndProperty>
+            <EndProperty Name="Game">
+              <ScalarProperty Name="Game_ID" ColumnName="Blind_Game" />
+            </EndProperty>
+          </AssociationSetMapping>
+          <AssociationSetMapping Name="Table_Players" TypeName="SheepsheadModel.Table_Players" StoreEntitySet="Table_Players">
+            <EndProperty Name="Player">
+              <ScalarProperty Name="Player_ID" ColumnName="TP_Player_Id" />
+            </EndProperty>
+            <EndProperty Name="Table_Match">
+              <ScalarProperty Name="Table_ID" ColumnName="TP_Table_ID" />
+            </EndProperty>
+          </AssociationSetMapping>
+          <AssociationSetMapping Name="Trick_Hand" TypeName="SheepsheadModel.Trick_Hand" StoreEntitySet="Trick_Hand">
+            <EndProperty Name="Game_Round">
+              <ScalarProperty Name="Round_ID" ColumnName="Trick_Round" />
+            </EndProperty>
+            <EndProperty Name="Card">
+              <ScalarProperty Name="Card_ID" ColumnName="Trick_Card" />
+            </EndProperty>
+          </AssociationSetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
