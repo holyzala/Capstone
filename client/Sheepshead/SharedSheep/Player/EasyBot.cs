@@ -73,7 +73,7 @@ namespace SharedSheep.Player
                 }
                 else
                 {
-                    playThis = cards.Where(card => !card.IsTrump()).First();
+                    playThis = cards.DefaultIfEmpty(cards[0]).FirstOrDefault(card => !card.IsTrump());
                 }
             }
             else
@@ -81,6 +81,11 @@ namespace SharedSheep.Player
                 playThis = cards[0];
             }
             Hand.RemoveCard(playThis);
+            prompt(PromptType.BotPlayCard, new Dictionary<PromptData, object> {
+                { PromptData.Player, this },
+                { PromptData.Card, playThis },
+                { PromptData.Trick, rounds.Last().Trick }
+            });
             return playThis;
         }
 
