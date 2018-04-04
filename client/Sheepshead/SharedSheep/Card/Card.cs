@@ -16,8 +16,7 @@ namespace SharedSheep.Card
             Value = GetValue();
             this.Power = power;
             this.CardSuit = cardSuit;
-            if (ID == CardID.Queen || ID == CardID.Jack || CardSuit == Suit.Diamond)
-                isTrump = true;
+            isTrump = (ID == CardID.Queen || ID == CardID.Jack || CardSuit == Suit.Diamond);
         }
 
         private int GetValue()
