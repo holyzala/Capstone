@@ -1,4 +1,7 @@
-﻿using AndroidSheep.Models.Player;
+﻿using AndroidSheep.Models.Buttons;
+using AndroidSheep.Models.Player;
+using AndroidSheep.Models.States;
+using Microsoft.Xna.Framework.Graphics;
 using SharedSheep.Blind;
 using SharedSheep.Card;
 using SharedSheep.Game;
@@ -16,16 +19,21 @@ namespace AndroidSheep.Models
     {
         private ITable table;
         List<Tuple<IPlayer, AndroidPlayer>> _playerGraphicsPair;
-        public AndroidTable(List<Tuple<IPlayer, AndroidPlayer>> playerGraphicsPair)
+        GameContent _gameContent;
+        AndroidSheepGame _game;
+        private AndroidState _currentState;
+        private AndroidState _nextState;
+        public void ChangeState(AndroidState state)
+        {
+            _nextState = state;
+        }
+
+        public AndroidTable(List<Tuple<IPlayer, AndroidPlayer>> playerGraphicsPair, GameContent gameContent, AndroidSheepGame game)
         {
             _playerGraphicsPair = playerGraphicsPair;
-
-            //First player
+            _gameContent = gameContent;
+            _game = game;
             IPlayer host = new LocalPlayer("Me");
-            AndroidPlayer hostGraphics = new AndroidPlayer(host);
-            var playerOne = Tuple.Create(host, hostGraphics);
-            _playerGraphicsPair.Add(playerOne);
-
             table = new Table(new LocalPlayer("Me"), Prompt);
             table.AddPlayer(new SimpleBot("Bot1"));
             table.AddPlayer(new SimpleBot("Bot2"));
@@ -52,11 +60,32 @@ namespace AndroidSheep.Models
             IBlind blind = null;
             switch (prompt_type)
             {
+                case PromptType.CardsDealt:
+                    foreach(var addPlayer in table.Players)
+                    {
+                        AndroidPlayer hostGraphics = new AndroidPlayer(addPlayer);
+                        var playerOne = Tuple.Create(addPlayer, hostGraphics);
+                        _playerGraphicsPair.Add(playerOne);
+                    }
+
+                    foreach (var playerPair in _playerGraphicsPair)
+                    {
+                        var playerGraphicsHand = playerPair.Item2;
+                        var playerHand = playerPair.Item1.Hand;
+                        foreach(var card in playerHand)
+                        {
+                            Texture2D cardtexture = _gameContent.KingOfHearts;
+                            AndroidCard cardGraphics = new AndroidCard(cardtexture);
+                            playerGraphicsHand.AddCardToHand(cardGraphics);
+                        }
+                    }
+                    
+                    break;
+
                 case PromptType.Pick:
                     
                     prompt = "Your cards:\n";
                     player = (IPlayer)data[PromptData.Player];
-                    var playerPair = _playerGraphicsPair.Where(pair => pair.Item1 == player);
                     foreach (ICard card in player.Hand)
                     {
                         prompt += string.Format("{0}\n", card);

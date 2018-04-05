@@ -40,7 +40,7 @@ namespace AndroidSheep.Models.Buttons
             _playedVectors[3] = new Vector2(_screenWidth / 2 + 100, _screenHeight / 3);
             _playedVectors[4] = new Vector2(_screenWidth / 2 + 200, _screenHeight / 3);
         }
-
+        
         public AndroidCard[] AddCardToPlayArea(AndroidCard card)
         {
             if (numCards < 6)

@@ -7,7 +7,7 @@ namespace AndroidSheep.Models.States
     public abstract class AndroidState
     {
         #region Fields
-        protected ContentManager _content;
+        protected GameContent _gameContent;
         protected GraphicsDevice _graphicsDevice;
         protected AndroidSheepGame _table;
         #endregion
@@ -17,11 +17,11 @@ namespace AndroidSheep.Models.States
 
         public abstract void PostUpdate(GameTime gameTime);
 
-        public AndroidState(AndroidSheepGame table, GraphicsDevice graphicsDevice, ContentManager content)
+        public AndroidState(AndroidSheepGame table, GraphicsDevice graphicsDevice, GameContent gameContent)
         {
             _table = table;
             _graphicsDevice = graphicsDevice;
-            _content = content;
+            _gameContent = gameContent;
         }
         public abstract void Update(GameTime gameTime);
         #endregion

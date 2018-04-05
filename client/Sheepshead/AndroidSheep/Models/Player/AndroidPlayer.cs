@@ -20,10 +20,24 @@ namespace AndroidSheep.Models.Player
         public AndroidCard[] playableCards;
         public AndroidCard[] playedCards;
         public Prompt playerPrompt;
+        private int handCount;
+        public bool thisPlayerTurn;
 
         public AndroidPlayer(IPlayer player)
         {
             _player = player;
+            handCount = 0;
+            playableCards = new AndroidCard[6];
+            thisPlayerTurn = false;
+        }
+
+        public void AddCardToHand(AndroidCard card)
+        {
+            if(card != null)
+            {
+                playableCards[handCount] = card;
+                handCount++;
+            }
         }
     }
 }
