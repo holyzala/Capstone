@@ -38,6 +38,8 @@ namespace SharedSheep.Game
             while (missingTrump)
             {
                 IDeck Deck = new Piquet();
+                Deck.CardsFactory();
+                Deck.Shuffle();
                 int timesAround = Deck.Cards.Count / players.Count;
 
                 for (int i = 0; i < timesAround; ++i)

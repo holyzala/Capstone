@@ -1,15 +1,27 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 
 namespace SharedSheep.Card
 {
     public class Card : ICard
     {
+
+        [JsonProperty("Face")]
         public CardID ID { get; private set; }
+
+        [JsonProperty("Card_Value")]
         public int Value { get; private set; }
+
+        [JsonProperty("Trump_Power")]
         public CardPower Power { get; private set; }
+
+        [JsonProperty("Suit")]
         public Suit CardSuit { get; private set; }
+
+        [JsonProperty("is_Trump")]
         private bool isTrump = false;
 
+        public Card() { }
         public Card(CardID num, CardPower power, Suit cardSuit)
         {
             this.ID = num;

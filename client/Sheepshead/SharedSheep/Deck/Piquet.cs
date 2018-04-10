@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Security.Cryptography;
+using Newtonsoft.Json.Linq;
 using SharedSheep.Card;
+using SharedSheep.RequestHandler;
 
 namespace SharedSheep.Deck
 {
@@ -12,8 +14,8 @@ namespace SharedSheep.Deck
         public Piquet()
         {
             Cards = new List<ICard>();
-            SetAllCards();
-            Shuffle();
+            //SetAllCards();
+            //Shuffle();
         }
 
         public ICard GetTopCard()
@@ -96,6 +98,25 @@ namespace SharedSheep.Deck
                 }
                 ++pow;
             }
+        }
+        /*
+  "Card_ID": 1,
+  "Face": "7",
+  "Suit": "Hearts",
+  "is_Trump": false,
+  "Trump_Power": 1,
+  "Card_Value": 0
+  */
+        public void CardsFactory()
+        {
+            string url = "https://netsheep2.azurewebsites.net/api/Cards";
+            HttpClient<ICard> client = new HttpClient<ICard>();
+            JToken CardsJArray = client.Get(url);
+            foreach (JObject o in CardsJArray.Children())
+            {
+                Cards.Add(o.ToObject<Card.Card>());
+            }
+
         }
     }
 }
