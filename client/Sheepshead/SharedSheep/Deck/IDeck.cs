@@ -13,6 +13,5 @@ namespace SharedSheep.Deck
         void ResetDeck();
         bool RemoveCardByIndex(int index);
         ICard GetTopCard();
-        void CardsFactory();
     }
 }
