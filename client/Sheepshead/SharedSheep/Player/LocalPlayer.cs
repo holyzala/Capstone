@@ -1,8 +1,6 @@
 ﻿using SharedSheep.Blind;
 using SharedSheep.Card;
 using SharedSheep.Round;
-using SharedSheep.Trick;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -16,67 +14,97 @@ namespace SharedSheep.Player
         public override ICard PlayCard(Prompt prompt, List<IRound> rounds, IPlayer picker, IBlind blind, ICard partnerCard)
         {
             ICard card = null;
-            bool done = false;
-            ITrick currentTrick = rounds.Last().Trick;
-            while (!done)
+            var currentTrick = rounds.Last().Trick;
+            while (true)
             {
+                var cards = Hand.GetPlayableCards(currentTrick.LeadingCard());
+                var answer = prompt(PromptType.PlayCard, new Dictionary<PromptData, object>
+                {
+                    {PromptData.Player, this},
+                    {PromptData.Picker, picker},
+                    {PromptData.Trick, currentTrick},
+                    {PromptData.Cards, cards}
+                });
+                if (answer == "")
+                    continue;
+
                 try
                 {
-                    List<ICard> cards = Hand.GetPlayableCards(currentTrick.LeadingCard());
-                    string answer = prompt(PromptType.PlayCard, new Dictionary<PromptData, object>
-                    {
-                        { PromptData.Player, this},
-                        { PromptData.Picker, picker },
-                        { PromptData.Trick, currentTrick },
-                        { PromptData.Cards, cards }
-                    });
-                    card = cards[Int32.Parse(answer)];
-                    done = true;
+                    card = cards[int.Parse(answer)];
+                    break;
                 }
                 catch (System.FormatException)
                 {
-                    continue;
                 }
             }
+
             Hand.RemoveCard(card);
             return card;
         }
 
         public override bool WantPick(Prompt prompt, List<IPlayer> players)
         {
-            string answer = prompt(PromptType.Pick, new Dictionary<PromptData, object>
+            var answer = "";
+            while (true)
             {
-                { PromptData.Player, this }
-            });
-            if (answer.ToLower() == "yes" || answer.ToLower() == "y")
-            {
-                return true;
+                answer = prompt(PromptType.Pick, new Dictionary<PromptData, object>
+                {
+                    { PromptData.Player, this }
+                });
+                if (answer != "")
+                    break;
             }
-            return false;
+
+            return answer.ToLower() == "yes" || answer.ToLower() == "y";
         }
 
         public override ICard Pick(Prompt prompt, IBlind blind, bool forced, ICard partnerCard)
         {
             while (true)
             {
-                string answer = prompt(PromptType.PickBlind, new Dictionary<PromptData, object>
+                var answer = prompt(PromptType.PickBlind, new Dictionary<PromptData, object>
                 {
                     { PromptData.Player, this },
                     { PromptData.Blind, blind }
                 });
-                if (answer == "done" || answer == "")
+                if (answer == "")
+                    continue;
+                if (answer == "done")
                     break;
-                string[] split = answer.Split(' ');
-                int blindCard = Int32.Parse(split[0]);
-                int handCard = Int32.Parse(split[1]);
+
+                var split = answer.Split(' ');
+                int blindCard;
+                int handCard;
+                try
+                {
+                    blindCard = int.Parse(split[0]);
+                    handCard = int.Parse(split[1]);
+                }
+                catch (System.FormatException)
+                {
+                    continue;
+                }
+                catch (System.IndexOutOfRangeException)
+                {
+                    continue;
+                }
                 Hand.Cards[handCard] = blind.SwapCard(blindCard, Hand.Cards[handCard]);
             }
-            if (forced && (Hand.Cards.Contains(partnerCard) || blind.BlindCards.Contains(partnerCard)))
+
+            if (!forced || (!Hand.Cards.Contains(partnerCard) && !blind.BlindCards.Contains(partnerCard)))
+                return partnerCard;
             {
-                string answer = prompt(PromptType.CallUp, new Dictionary<PromptData, object>
+                var answer = "";
+                while (true)
                 {
-                    { PromptData.Player, this }
-                });
+                    answer = prompt(PromptType.CallUp, new Dictionary<PromptData, object>
+                    {
+                        {PromptData.Player, this}
+                    });
+                    if (answer != "")
+                        break;
+                }
+
                 if (answer.ToLower() == "yes" || answer.ToLower() == "y")
                     return CallUp(prompt, blind);
             }
