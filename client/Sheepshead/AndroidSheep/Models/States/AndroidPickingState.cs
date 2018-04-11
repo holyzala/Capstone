@@ -14,7 +14,7 @@ namespace AndroidSheep.Models.States
 {
     class AndroidPickingState : AndroidState
     {
-        private List<AndroidComponent> _components;
+        private List<AndroidButton> _components;
         private bool wantsToSwap = false;
         private bool isDone = false;
         private AndroidCard blindCard;
@@ -42,7 +42,7 @@ namespace AndroidSheep.Models.States
 
             swapButton.Click += SwapButton_Click;
             DoneButton.Click += DoneButton_Click;
-            _components = new List<AndroidComponent>()
+            _components = new List<AndroidButton>()
             {
                swapButton,
                DoneButton
@@ -92,6 +92,10 @@ namespace AndroidSheep.Models.States
         public override void Update(GameTime gameTime)
         {
 
+            foreach(var component in _components)
+            {
+                component.Update(gameTime);
+            }
             foreach (var card in _table._blindList)
             {
                 card.State = StateType.Picking;
@@ -138,26 +142,77 @@ namespace AndroidSheep.Models.States
         }
         public string PickingPrompt()
         {
+            prompt = "";
             if (isDone)
             {
                 prompt += "done";
             }
             else if (numCardsSelected == 2 && wantsToSwap)
             {
+                int cardOne = 0;
+                int cardTwo = 0;
                 IHand playerHand = player.Hand;
                 int index = 0;
                 foreach (var card in blind)
                 {
                     if (blindCard._card.Equals(card))
-                        prompt += string.Format("{0}) {1}\n", index++, card);
+                    {
+                        AndroidCard newCard = new AndroidCard(_table.gameContent.textureDict[card], card);
+                        newCard.Position = new Vector2(handCard.Position.X, handCard.Position.Y);
+                        newCard.Rectangle = handCard.Rectangle;
+                        _table._blindList[index] = newCard;
+                        cardOne = index;
+                        break;
+                    }
+                    index++;
                 }
                 index = 0;
                 foreach (var card in playerHand)
                 {
                     if (handCard._card.Equals(card))
-                        prompt += string.Format("{0}) {1}\n", index++, card);
+                    {
+                        AndroidCard newCard = new AndroidCard(_table.gameContent.textureDict[card], card);
+                        newCard.Position = blindCard.Position;
+                        newCard.State = blindCard.State;
+                        newCard.Rectangle = blindCard.Rectangle;
+
+                        graphicsPlayer.playableCards[index] = newCard;
+                        cardOne = index;
+                        break;
+                    }
+                    index++;
                 }
+                
+                prompt = string.Format("{1} {0}", cardOne, cardTwo);
                 wantsToSwap = false;
+                foreach(var component in _components)
+                {
+                    component.color = Color.White;
+                }
+                foreach (var card in _table._blindList)
+                {
+                    if (card.IsSelected)
+                    {
+                        card.ChangeSelectionPicking();
+                    }
+                }
+                foreach (var player in _table._playerGraphicsDict)
+                {
+                    if (player.Key is LocalPlayer)
+                    {
+                        var playerCards = player.Value.playableCards;
+                        foreach (var card in playerCards)
+                        {
+                            if (card.IsSelected)
+                            {
+                                card.ChangeSelectionPicking();
+                            }
+                        }
+                    }
+                }
+                numCardsSelected = 0;
+                handCard = null;
+                blindCard = null;
             }
             return prompt;
         }

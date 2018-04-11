@@ -13,13 +13,17 @@ namespace AndroidSheep.Models.Buttons
         private bool _isHovering;
         private TouchCollection _prevTouch;
         private Texture2D _texture;
+        private bool IsInputPressed;
         #endregion
 
         #region Properties
+        public string returnstring;
         public event EventHandler Click;
         public bool Clicked { get; set; }
         public Color PenColor { get; set; }
         public Vector2 Position { get; set; }
+        public Color color;
+
         public Rectangle Rectangle
         {
             get
@@ -35,16 +39,13 @@ namespace AndroidSheep.Models.Buttons
             _texture = texture;
             _font = font;
             PenColor = Color.Black;
+            color = Color.White;
         }
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            var color = Color.White;
-            if (_isHovering)
-            {
-                color = Color.Gray;
-            }
-            spriteBatch.Draw(_texture, Rectangle, color);
+             spriteBatch.Draw(_texture, Rectangle, color);
+            
 
             if (!string.IsNullOrEmpty(Text))
             {
@@ -57,26 +58,25 @@ namespace AndroidSheep.Models.Buttons
 
         public override void Update(GameTime gameTime)
         {
-            int y = 0;
             int x = 0;
-            _prevTouch = _currentTouch;
+            int y = 0;
+            IsInputPressed = false;
             _currentTouch = TouchPanel.GetState();
-
-            _isHovering = false;
-
             if (_currentTouch.Count >= 1)
             {
                 var touch = _currentTouch[0];
                 x = (int)touch.Position.X;
                 y = (int)touch.Position.Y;
                 var touchRectangle = new Rectangle(x, y, 1, 1);
-                if (touchRectangle.Intersects(Rectangle))
+                
+                if (TouchPanel.IsGestureAvailable)
                 {
-                    _isHovering = true;
-                }
-                if(touch.State == TouchLocationState.Pressed || touch.State == TouchLocationState.Moved)
-                {
-                    Click?.Invoke(this, new EventArgs());
+                    if (touchRectangle.Intersects(Rectangle) && TouchPanel.ReadGesture().GestureType == GestureType.DoubleTap)
+                    {
+                        color = Color.Gray;
+                        Click?.Invoke(this, new EventArgs());
+                    }
+                    IsInputPressed = touch.State == TouchLocationState.Pressed || touch.State == TouchLocationState.Moved;
                 }
             }
         }

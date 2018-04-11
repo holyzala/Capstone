@@ -34,14 +34,17 @@ namespace AndroidSheep
         Thread MainThread;
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
-        GameContent gameContent;
+        public GameContent gameContent;
         public static int screenHeight;
         public static int screenWidth;
         public AndroidBackground background;
-        private string prompt = "";
-        private AndroidState _currentState;
 
+        private AndroidState _currentState;
         public StateType state;
+
+        private AndroidPickingState pickingState;
+        private AndroidBlindState blindState;
+        private AndroidPlayState playingState;
 
         public void ChangeState(AndroidState state)
         {
@@ -93,6 +96,9 @@ namespace AndroidSheep
             background = new AndroidBackground(gameContent.TableTop, screenWidth, screenHeight);
             _blindList = new List<AndroidCard>();
             _currentState = null;
+            pickingState = new AndroidPickingState(this, graphics.GraphicsDevice, gameContent);
+            blindState = new AndroidBlindState(this, graphics.GraphicsDevice, gameContent);
+            playingState = new AndroidPlayState(this, graphics.GraphicsDevice, gameContent);
             LoadGame();
             MainThreadStart = new ThreadStart(table.Start);
             MainThread = new Thread(MainThreadStart);
@@ -198,12 +204,9 @@ namespace AndroidSheep
                     break;
                     
                 case PromptType.Pick:
-                    Debug.WriteLine("INSIDE OF PICK");
-                    AndroidBlindState blindState = new AndroidBlindState(this, graphics.GraphicsDevice, gameContent);
                     ChangeState(blindState);
                     state = StateType.Blind;
-                    
-
+                   
                     /*prompt = "Your cards:\n";
                     player = (IPlayer)data[PromptData.Player];
                     foreach (ICard card in player.Hand)
@@ -215,7 +218,6 @@ namespace AndroidSheep
                     break;
 
                 case PromptType.PlayCard:
-                    ChangeState(new AndroidPlayState(this, graphics.GraphicsDevice, gameContent));
                     state = StateType.Playing;                   
                     player = (IPlayer)data[PromptData.Player];
                     playerGraphics = _playerGraphicsDict[player];                  
@@ -224,6 +226,7 @@ namespace AndroidSheep
                     prompt = string.Format("Picker: {0}\n", picker);
                     prompt += "Cards Played\n";
                     trick = (ITrick)data[PromptData.Trick];
+                    ChangeState(playingState);
                     foreach ((IPlayer, ICard) playerCard in trick)
                     {
                         prompt += string.Format("{0}\n", playerCard);
@@ -239,14 +242,13 @@ namespace AndroidSheep
                     break;
 
                 case PromptType.PickBlind:
-                    AndroidPickingState pickingState = new AndroidPickingState(this, graphics.GraphicsDevice, gameContent);
                     state = StateType.Picking;
                     player = (IPlayer)data[PromptData.Player];
                     blind = (IBlind)data[PromptData.Blind];
                     pickingState.assignBlind(blind);
                     pickingState.assignPlayer(player);
                     ChangeState(pickingState);
-                    prompt = pickingState.PickingPrompt();                   
+                    prompt = pickingState.PickingPrompt();    
                     break;
 
                 case PromptType.RoundOver:
