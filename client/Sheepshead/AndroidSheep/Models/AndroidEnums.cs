@@ -1,4 +1,4 @@
 ﻿public enum StateType
 {
-    PreGame, Blind, Playing
+    PreGame, Blind, Picking,  Playing, RoundOver, GameOver, TableOver
 }

@@ -4,6 +4,7 @@ using AndroidSheep.Models.States;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input.Touch;
+using SharedSheep.Card;
 
 namespace AndroidSheep.Models.Buttons
 {
@@ -15,6 +16,9 @@ namespace AndroidSheep.Models.Buttons
         private Texture2D _texture;
         private Color _color;
         private bool isPlayable;
+        private int x;
+        private int y;
+        private bool IsInputPressed;
         #endregion
 
         #region Properties 
@@ -23,9 +27,6 @@ namespace AndroidSheep.Models.Buttons
         public event EventHandler Click;
         public bool Clicked { get; private set; }
         public Vector2 Position { get; set; }
-        public bool canClick { get; set; }
-        public bool canSwap { get; set; }
-        public bool isPicking { get; set; }
         public Rectangle Rectangle
         {
             get
@@ -35,167 +36,65 @@ namespace AndroidSheep.Models.Buttons
         }
         #endregion
 
-        public AndroidCard(Texture2D texture)
+        #region Blind
+        public ICard _card;
+        public bool IsBlind { get; set; }
+        public bool IsSelected { get; set; }
+        private Color _blindColor;
+        #endregion
+
+        #region Playing
+
+        #endregion
+
+
+        public AndroidCard(Texture2D texture, ICard card)
         {
             _texture = texture;
             _color = Color.White;
+            _card = card;
         }
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            switch (State)
+            _color = Color.White;
+            _blindColor = Color.Gray;
+
+            var prevRect = Rectangle;
+            if (IsSelected)
             {
-                case StateType.PreGame:
-                    DrawPreGame(gameTime, spriteBatch);
-                    break;
-                case StateType.Blind:
-                    DrawBlind(gameTime, spriteBatch);
-                    break;
-                case StateType.Playing:
-                    DrawPlay(gameTime, spriteBatch);
-                    break;
-                default:
-                    break;
+                _color = _blindColor;
             }
+            spriteBatch.Draw(_texture, Rectangle, _color);
         }
 
         public override void Update(GameTime gameTime)
         {
-            switch (State)
-            {
-                case StateType.PreGame:
-                    UpdatePreGame(gameTime);
-                    break;
-                case StateType.Blind:
-                    UpdateBlind(gameTime);
-                    break;
-                case StateType.Playing:
-                    UpdatePlay(gameTime);
-                    break;
-                default:
-                    break;
-            }
-        }
-
-        public void DrawPreGame(GameTime gameTime, SpriteBatch spriteBatch)
-        {
-            spriteBatch.Draw(_texture, Rectangle, _color);
-        }
-        public void UpdatePreGame(GameTime gameTime)
-        {
-
-        }
-
-        public void DrawBlind(GameTime gameTime, SpriteBatch spriteBatch)
-        {
-            var prevRect = Rectangle;
-            _color = Color.Gray;
-            prevRect = new Rectangle(150, 150, 1, 1);
-            if (_isHovering && canClick)
-            {
-                prevRect.Y = Rectangle.Y - 40;
-                _color = Color.Gray;
-            }
-            spriteBatch.Draw(_texture, prevRect, _color);
-
-        }
-
-        public void UpdateBlind(GameTime gameTime)
-        {
-            int y = 0;
-            int x = 0;
-            bool isInputPressed = false;
-            _isHovering = true;
-
+            IsInputPressed = false;
             _currentTouch = TouchPanel.GetState();
-            TouchPanel.EnabledGestures = GestureType.DoubleTap;
             if (_currentTouch.Count >= 1)
             {
                 var touch = _currentTouch[0];
                 x = (int)touch.Position.X;
                 y = (int)touch.Position.Y;
                 var touchRectangle = new Rectangle(x, y, 1, 1);
-                if (touchRectangle.Intersects(Rectangle))
+
+                if (TouchPanel.IsGestureAvailable)
                 {
-                    if (!isPicking && isPlayable)
+                    if (touchRectangle.Intersects(Rectangle) && TouchPanel.ReadGesture().GestureType == GestureType.DoubleTap)
                     {
-                        if (TouchPanel.IsGestureAvailable)
+                        IsSelected = IsSelected == true ? false : true;
+                        if (!IsBlind && IsSelected)
+                            Position = new Vector2(Position.X, Position.Y - 40);
+                        else if (!IsBlind)
                         {
-                            GestureSample gesture = TouchPanel.ReadGesture();
-                            if (gesture.GestureType == GestureType.DoubleTap)
-                            {
-
-                                isPlayable = false;
-                                Position += new Vector2(-50, -300);
-                            }
+                            Position = new Vector2(Position.X, Position.Y + 40);
                         }
+                        Click?.Invoke(this, new EventArgs());
                     }
-
-                    Click?.Invoke(this, new EventArgs());
-                    var color = Color.Gray;
-                    _isHovering = true;
+                    IsInputPressed = touch.State == TouchLocationState.Pressed || touch.State == TouchLocationState.Moved;
                 }
-
-                isInputPressed = touch.State == TouchLocationState.Pressed || touch.State == TouchLocationState.Moved;
-
             }
         }
-        public void DrawPlay(GameTime gameTime, SpriteBatch spriteBatch)
-        {
-            var prevRect = Rectangle;
-            _color = Color.Gray;
-            prevRect = new Rectangle(150, 150, 1, 1);
-            if (_isHovering)
-            {
-                prevRect.Y = Rectangle.Y - 40;
-                _color = Color.Gray;
-            }
-            spriteBatch.Draw(_texture, prevRect, _color);
-        }
-
-        public void UpdatePlay(GameTime gameTime)
-        {
-            int y = 0;
-            int x = 0;
-            bool isInputPressed = false;
-            _isHovering = false;
-
-            _currentTouch = TouchPanel.GetState();
-            TouchPanel.EnabledGestures = GestureType.DoubleTap;
-
-
-
-            if (_currentTouch.Count >= 1)
-            {
-                var touch = _currentTouch[0];
-                x = (int)touch.Position.X;
-                y = (int)touch.Position.Y;
-                var touchRectangle = new Rectangle(x, y, 1, 1);
-                if (touchRectangle.Intersects(Rectangle))
-                {
-                    if (!isPicking && isPlayable)
-                    {
-                        if (TouchPanel.IsGestureAvailable)
-                        {
-                            GestureSample gesture = TouchPanel.ReadGesture();
-                            if (gesture.GestureType == GestureType.DoubleTap)
-                            {
-
-                                isPlayable = false;
-                                Position += new Vector2(-50, -300);
-                            }
-                        }
-                    }
-
-                    Click?.Invoke(this, new EventArgs());
-                    var color = Color.Gray;
-                    _isHovering = true;
-                }
-
-                isInputPressed = touch.State == TouchLocationState.Pressed || touch.State == TouchLocationState.Moved;
-
-            }
-        }
-
     }
 }

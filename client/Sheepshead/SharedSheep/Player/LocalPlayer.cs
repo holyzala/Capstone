@@ -64,12 +64,15 @@ namespace SharedSheep.Player
                     { PromptData.Player, this },
                     { PromptData.Blind, blind }
                 });
-                if (answer == "done" || answer == "")
+                if (answer == "done")
                     break;
-                string[] split = answer.Split(' ');
-                int blindCard = Int32.Parse(split[0]);
-                int handCard = Int32.Parse(split[1]);
-                Hand.Cards[handCard] = blind.SwapCard(blindCard, Hand.Cards[handCard]);
+                else if (answer != "")
+                {
+                    string[] split = answer.Split(' ');
+                    int blindCard = Int32.Parse(split[0]);
+                    int handCard = Int32.Parse(split[1]);
+                    Hand.Cards[handCard] = blind.SwapCard(blindCard, Hand.Cards[handCard]);
+                }
             }
             if (forced && (Hand.Cards.Contains(partnerCard) || blind.BlindCards.Contains(partnerCard)))
             {

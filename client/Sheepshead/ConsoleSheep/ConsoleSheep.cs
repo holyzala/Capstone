@@ -50,6 +50,24 @@ namespace ConsoleSheep
                     prompt += "\nDo you want to pick? (yes/no)\n";
                     break;
 
+                case PromptType.PickBlind:
+                    Console.Clear();
+                    prompt = "Blind cards:\n";
+                    blind = (IBlind)data[PromptData.Blind];
+                    index = 0;
+                    foreach (ICard card in blind)
+                    {
+                        prompt += string.Format("{0}) {1}\n", index++, card);
+                    };
+                    prompt += "\nYour Cards:\n";
+                    index = 0;
+                    player = (IPlayer)data[PromptData.Player];
+                    foreach (ICard card in player.Hand)
+                    {
+                        prompt += string.Format("{0}) {1}\n", index++, card);
+                    };
+                    break;
+
                 case PromptType.PlayCard:
                     Console.Clear();
                     picker = (IPlayer)data[PromptData.Picker];
@@ -69,23 +87,7 @@ namespace ConsoleSheep
                     });
                     break;
 
-                case PromptType.PickBlind:
-                    Console.Clear();
-                    prompt = "Blind cards:\n";
-                    blind = (IBlind)data[PromptData.Blind];
-                    index = 0;
-                    foreach (ICard card in blind)
-                    {
-                        prompt += string.Format("{0}) {1}\n", index++, card);
-                    };
-                    prompt += "\nYour Cards:\n";
-                    index = 0;
-                    player = (IPlayer)data[PromptData.Player];
-                    foreach (ICard card in player.Hand)
-                    {
-                        prompt += string.Format("{0}) {1}\n", index++, card);
-                    };
-                    break;
+                
 
                 case PromptType.RoundOver:
                     trick = ((IRound)data[PromptData.Round]).Trick;

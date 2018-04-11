@@ -55,6 +55,7 @@ namespace AndroidSheep.Models
 
         public Texture2D TableTop { get; set; }
         public SpriteFont Font { get; set; }
+        public Texture2D Button { get; set; }
         public GameContent(ContentManager Content)
         {
             textureDict = new Dictionary<ICard, Texture2D>();
@@ -109,7 +110,7 @@ namespace AndroidSheep.Models
             }
 
             TableTop = Content.Load<Texture2D>("Table/darktexture");
-
+            Button = Content.Load<Texture2D>("Buttons/button");
             Font = Content.Load<SpriteFont>("Fonts/Font");
             //.Equals equatable
         }

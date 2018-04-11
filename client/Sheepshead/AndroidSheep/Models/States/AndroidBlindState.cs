@@ -9,13 +9,25 @@ namespace AndroidSheep.Models.States
 {
     class AndroidBlindState : AndroidState
     {
-        private AndroidCard cardSwapOne;
-        private AndroidCard cardSwapTwo;
         private List<AndroidComponent> _components;
 
         public AndroidBlindState(AndroidSheepGame table, GraphicsDevice graphicsDevice, GameContent gameContent) : base(table, graphicsDevice, gameContent)
         {
-            _components = new List<AndroidComponent>();
+            AndroidButton yesButton = new AndroidButton(gameContent.Button, gameContent.Font)
+            {
+                Position = new Vector2(200, 200),
+                Text = "Yes"
+            };
+            AndroidButton noButton = new AndroidButton(gameContent.Button, gameContent.Font)
+            {
+                Position = new Vector2(300, 200),
+                Text = "No"
+            };
+            _components = new List<AndroidComponent>()
+            {
+                yesButton,
+                noButton
+            };
         }
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
@@ -27,18 +39,14 @@ namespace AndroidSheep.Models.States
                     var playerCards = player.Value.playableCards;
               
                     foreach (var card in playerCards)
-                    {
-                        if (card.canSwap)
-                        {
-
-                        }
+                    { 
                         card.Draw(gameTime, spriteBatch);
                     }
                 }
             }
-            foreach (var card in _table._blindList)
+            foreach (var component in _components)
             {
-                card.Draw(gameTime, spriteBatch);
+                component.Draw(gameTime, spriteBatch);
             }
             spriteBatch.End();
         }
@@ -50,10 +58,9 @@ namespace AndroidSheep.Models.States
 
         public override void Update(GameTime gameTime)
         {
-            foreach (var card in _table._blindList)
+            foreach (var component in _components)
             {
-                card.State = StateType.Blind;
-                card.Update(gameTime);
+                component.Update(gameTime);
             }
             foreach (var player in _table._playerGraphicsDict)
             {

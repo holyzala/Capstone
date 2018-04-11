@@ -16,6 +16,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using AndroidSheep.Models.States;
+using System.Diagnostics;
+using Microsoft.Xna.Framework.Input.Touch;
 
 namespace AndroidSheep
 {
@@ -36,20 +38,23 @@ namespace AndroidSheep
         public static int screenHeight;
         public static int screenWidth;
         public AndroidBackground background;
-
+        private string prompt = "";
         private AndroidState _currentState;
-        private AndroidState _nextState;
+
         public StateType state;
 
         public void ChangeState(AndroidState state)
         {
-            _nextState = state;
+            _currentState = state;
         }
 
         public AndroidSheepGame()
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
+            IsFixedTimeStep = true;
+            this.TargetElapsedTime = TimeSpan.FromSeconds(1.0f / 100.0f);
+            graphics.SynchronizeWithVerticalRetrace = false;
 
             graphics.IsFullScreen = true;
             graphics.PreferredBackBufferWidth = 800;
@@ -67,7 +72,10 @@ namespace AndroidSheep
         {
             // TODO: Add your initialization logic here
             _playerGraphicsDict = new Dictionary<IPlayer, AndroidPlayer>();
-
+            TouchPanel.EnabledGestures =
+                GestureType.Hold |
+                GestureType.Tap |
+                GestureType.DoubleTap;
             screenHeight = graphics.PreferredBackBufferHeight;
             screenWidth = graphics.PreferredBackBufferWidth;
             base.Initialize();
@@ -78,8 +86,8 @@ namespace AndroidSheep
         /// all of your content.
         /// </summary>
         protected override void LoadContent()
-        {
-            
+        {   
+
             spriteBatch = new SpriteBatch(GraphicsDevice);
             gameContent = new GameContent(Content);
             background = new AndroidBackground(gameContent.TableTop, screenWidth, screenHeight);
@@ -88,8 +96,7 @@ namespace AndroidSheep
             LoadGame();
             MainThreadStart = new ThreadStart(table.Start);
             MainThread = new Thread(MainThreadStart);
-            MainThread.Start();
-            
+            MainThread.Start();      
         }
         /// <summary>
         /// UnloadContent will be called once per game and is the place to unload
@@ -122,33 +129,10 @@ namespace AndroidSheep
         protected override void Draw(GameTime gameTime)
         {
             background.Draw(gameTime, spriteBatch);
-            if (_nextState != null)
-            {
-                _currentState = _nextState;
-                _nextState = null;
-            }
-
             if (_currentState != null)
             {
                 _currentState.Draw(gameTime, spriteBatch);
             }
-            spriteBatch.Begin();
-
-            foreach (var player in _playerGraphicsDict)
-            {
-                if (player.Key is LocalPlayer)
-                {
-                    var playerCards = player.Value.playableCards;
-                    if (playerCards != null)
-                    {
-                        foreach (var card in playerCards)
-                        {
-                            card.Draw(gameTime, spriteBatch);
-                        }
-                    }
-                }
-            }
-            spriteBatch.End();
             base.Draw(gameTime);
         }
 
@@ -172,27 +156,25 @@ namespace AndroidSheep
             IPlayer picker = null;
             IBlind blind = null;
             AndroidPlayer playerGraphics = null;
-            bool currentTurn;
 
             switch (prompt_type)
             {
-                case PromptType.CardsDealt:
-                    
+                case PromptType.CardsDealt:   
                     var blinddata = (IBlind)data[PromptData.Blind];
                     foreach (var addPlayer in table.Players)
                     {
                         AndroidPlayer hostGraphics = new AndroidPlayer(addPlayer);
                         _playerGraphicsDict.Add(addPlayer, hostGraphics);
                     }
-
-                    var blindLoc = screenWidth / 2;
+                    var blindLoc = 250;
                     foreach (var addBlind in blinddata)
                     {
                         Texture2D cardtexture = gameContent.textureDict[addBlind];
-                        AndroidCard cardGraphics = new AndroidCard(cardtexture);
-                        cardGraphics.Position = new Vector2(blindLoc + 50, screenHeight / 4);
+                        AndroidCard cardGraphics = new AndroidCard(cardtexture, addBlind);
+                        cardGraphics.IsBlind = true;
+                        cardGraphics.Position = new Vector2(blindLoc, screenHeight / 4);
                         _blindList.Add(cardGraphics);
-                        blindLoc -= 50;
+                        blindLoc += 500;
                     }
                     foreach (var playerPair in _playerGraphicsDict)
                     {
@@ -202,7 +184,7 @@ namespace AndroidSheep
                         foreach (var card in playerHand)
                         {
                             Texture2D cardtexture = gameContent.textureDict[card];
-                            AndroidCard cardGraphics = new AndroidCard(cardtexture)
+                            AndroidCard cardGraphics = new AndroidCard(cardtexture, card)
                             {
                                 Position = new Vector2(screen, screenHeight - 200)
                             };
@@ -212,28 +194,29 @@ namespace AndroidSheep
                     }
                     ChangeState(new AndroidPreGameState(this, graphics.GraphicsDevice, gameContent));
                     state = StateType.PreGame;
+                    
                     break;
                     
-
                 case PromptType.Pick:
-                    ChangeState(new AndroidBlindState(this, graphics.GraphicsDevice, gameContent));
-                    while (state == StateType.Blind)
-                    {
-
-                    }
+                    Debug.WriteLine("INSIDE OF PICK");
+                    AndroidBlindState blindState = new AndroidBlindState(this, graphics.GraphicsDevice, gameContent);
+                    ChangeState(blindState);
                     state = StateType.Blind;
-                    blind = (IBlind)data[PromptData.Blind];
-                    player = (IPlayer)data[PromptData.Player];  
                     
+
+                    /*prompt = "Your cards:\n";
+                    player = (IPlayer)data[PromptData.Player];
+                    foreach (ICard card in player.Hand)
+                    {
+                        prompt += string.Format("{0}\n", card);
+                    };
+                    prompt += "\nDo you want to pick? (yes/no)\n";
+                    */
                     break;
 
                 case PromptType.PlayCard:
                     ChangeState(new AndroidPlayState(this, graphics.GraphicsDevice, gameContent));
-                    state = StateType.Playing;
-                    while(state == StateType.Playing)
-                    {
-
-                    }
+                    state = StateType.Playing;                   
                     player = (IPlayer)data[PromptData.Player];
                     playerGraphics = _playerGraphicsDict[player];                  
                     picker = (IPlayer)data[PromptData.Picker];
@@ -256,33 +239,19 @@ namespace AndroidSheep
                     break;
 
                 case PromptType.PickBlind:
+                    AndroidPickingState pickingState = new AndroidPickingState(this, graphics.GraphicsDevice, gameContent);
+                    state = StateType.Picking;
                     player = (IPlayer)data[PromptData.Player];
-                    playerGraphics = _playerGraphicsDict[player];
-                    currentTurn = playerGraphics.thisPlayerTurn = true;
-                    while (currentTurn)
-                    {
-                        foreach (var card in playerGraphics.playableCards)
-                        {
-                            card.canClick = true;
-                        }
-                    }
-                    prompt = "Blind cards:\n";
                     blind = (IBlind)data[PromptData.Blind];
-                    index = 0;
-                    foreach (ICard card in blind)
-                    {
-                        prompt += string.Format("{0}) {1}\n", index++, card);
-                    };
-                    prompt += "\nYour Cards:\n";
-                    index = 0;
-                    player = (IPlayer)data[PromptData.Player];
-                    foreach (ICard card in player.Hand)
-                    {
-                        prompt += string.Format("{0}) {1}\n", index++, card);
-                    };
+                    pickingState.assignBlind(blind);
+                    pickingState.assignPlayer(player);
+                    ChangeState(pickingState);
+                    prompt = pickingState.PickingPrompt();                   
                     break;
 
                 case PromptType.RoundOver:
+                    ChangeState(new AndroidRoundOverState(this, graphics.GraphicsDevice, gameContent));
+                    state = StateType.RoundOver;
                     trick = ((IRound)data[PromptData.Round]).Trick;
                     prompt = string.Format("{0} won the trick for {1} points\n", trick.TheWinnerPlayer(), trick.TrickValue());
                     prompt += "All cards played:\n";
@@ -293,6 +262,8 @@ namespace AndroidSheep
                     break;
 
                 case PromptType.GameOver:
+                    ChangeState(new AndroidGameOverState(this, graphics.GraphicsDevice, gameContent));
+                    state = StateType.GameOver;
                     game = (IGame)data[PromptData.Game];
                     prompt = string.Format("Picker {0} got {1} points\n", game.Picker, game.GetPickerScore());
                     prompt += "Scoresheet:\n";
@@ -304,6 +275,8 @@ namespace AndroidSheep
                     break;
 
                 case PromptType.TableOver:
+                    ChangeState(new AndroidTableOverState(this, graphics.GraphicsDevice, gameContent));
+                    state = StateType.TableOver;
                     prompt = "Totals:\n";
                     table.Players.ForEach(playerIt =>
                     {
@@ -322,8 +295,9 @@ namespace AndroidSheep
                 default:
                     return "";
             }
-            Console.WriteLine(prompt);
-            return Console.ReadLine();
+
+            return prompt;
         }
+       
     }
 }

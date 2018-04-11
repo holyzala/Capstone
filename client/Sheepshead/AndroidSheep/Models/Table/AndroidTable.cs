@@ -75,7 +75,7 @@ namespace AndroidSheep.Models
                         foreach(var card in playerHand)
                         {
                             Texture2D cardtexture = _gameContent.KingOfHearts;
-                            AndroidCard cardGraphics = new AndroidCard(cardtexture);
+                            AndroidCard cardGraphics = new AndroidCard(cardtexture, card);
                             playerGraphicsHand.AddCardToHand(cardGraphics);
                         }
                     }

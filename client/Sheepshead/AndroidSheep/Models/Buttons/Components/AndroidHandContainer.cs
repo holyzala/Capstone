@@ -9,7 +9,6 @@ namespace AndroidSheep.Models.Buttons.Components
     class AndroidHandContainer
     {
         private List<AndroidCard> _cardsInHand;
-        private bool isVisible;
         private IPlayer _player;
         private List<Vector2> _cardPositions;
         public Vector2 Position { get; set; }
