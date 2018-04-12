@@ -9,10 +9,10 @@ namespace SharedSheep.Table
 {
     public class Table : ITable
     {
-        public List<IPlayer> Players { get; private set; }
-        public List<IGame> Games { get; private set; }
-        public IPlayer Dealer { get; private set; }
-        public IScoreSheet ScrSheet { get; private set; }
+        public List<IPlayer> Players { get; }
+        public List<IGame> Games { get; }
+        public IPlayer Dealer { get; }
+        public IScoreSheet ScrSheet { get; }
 
         private Prompt prompt;
         private int GameIndex;

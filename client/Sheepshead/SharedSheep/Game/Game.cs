@@ -10,14 +10,13 @@ namespace SharedSheep.Game
 {
     public class Game : IGame
     {
-        public List<IRound> Rounds { get; private set; }
-        public bool IsCracked { get; private set; }
+        public List<IRound> Rounds { get; }
+        public bool IsCracked { get; }
         public IPlayer Picker { get; private set; }
         public IPlayer Partner { get; private set; }
         public IBlind Blind { get; private set; }
         public bool ForcedToPick { get; private set; }
         public ICard PartnerCard { get; private set; }
-        public bool CallOutForJack { get; private set; }
 
         public Game()
         {

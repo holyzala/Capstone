@@ -9,9 +9,9 @@ namespace SharedSheep.Player
     public abstract class AbstractPlayer : IPlayer
     {
         public IHand Hand { get; set; }
-        public string Name { get; protected set; }
+        public string Name { get; }
 
-        public AbstractPlayer(string name)
+        protected AbstractPlayer(string name)
         {
             Name = name;
             Hand = new Hand.Hand();

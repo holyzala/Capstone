@@ -9,10 +9,10 @@ namespace SharedSheep.Player
 {
     public class SimpleBot : AbstractPlayer
     {
-        public SimpleBot(String name) : base(name)
+        public SimpleBot(string name) : base(name)
         { }
 
-        public override Boolean WantPick(Prompt prompt, List<IPlayer> players)
+        public override bool WantPick(Prompt prompt, List<IPlayer> players)
         {
             ICard JD = new Card.Card(CardID.Jack, CardPower.JackDiamond, Suit.Diamond);
             if (Hand.Cards.Contains(JD)) return false;
