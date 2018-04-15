@@ -28,6 +28,11 @@ namespace SharedSheep.Player
             cards.Sort();
             cards.Reverse();
             Hand.RemoveCard(cards[0]);
+            prompt(PromptType.BotPlayCard, new Dictionary<PromptData, object> {
+                { PromptData.Player, this },
+                { PromptData.Card, cards[0] },
+                { PromptData.Trick, rounds.Last().Trick }
+            });
             return cards[0];
         }
 
