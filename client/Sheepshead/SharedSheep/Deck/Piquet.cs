@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Security.Cryptography;
+using Newtonsoft.Json.Linq;
 using SharedSheep.Card;
+using SharedSheep.RequestHandler;
 
 namespace SharedSheep.Deck
 {
@@ -11,8 +13,7 @@ namespace SharedSheep.Deck
 
         public Piquet()
         {
-            Cards = new List<ICard>();
-            SetAllCards();
+            Cards = Card.Card.CardsFactory();
             Shuffle();
         }
 
@@ -97,5 +98,6 @@ namespace SharedSheep.Deck
                 ++pow;
             }
         }
+
     }
 }

@@ -1,15 +1,30 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using SharedSheep.RequestHandler;
+using System;
+using System.Collections.Generic;
 
 namespace SharedSheep.Card
 {
     public class Card : ICard
     {
+
+        [JsonProperty("Face")]
         public CardID ID { get; private set; }
+
+        [JsonProperty("Card_Value")]
         public int Value { get; private set; }
+
+        [JsonProperty("Trump_Power")]
         public CardPower Power { get; private set; }
+
+        [JsonProperty("Suit")]
         public Suit CardSuit { get; private set; }
+
+        [JsonProperty("is_Trump")]
         private bool isTrump = false;
 
+        public Card() { }
         public Card(CardID num, CardPower power, Suit cardSuit)
         {
             this.ID = num;
@@ -74,6 +89,27 @@ namespace SharedSheep.Card
         public bool Equals(ICard other)
         {
             return (ID == other.ID) && (Value == other.Value) && (Power == other.Power) && (CardSuit == other.CardSuit);
+        }
+
+        /*
+"Card_ID": 1,
+"Face": "7",
+"Suit": "Hearts",
+"is_Trump": false,
+"Trump_Power": 1,
+"Card_Value": 0
+*/
+        public static List<ICard> CardsFactory()
+        {
+            List<ICard> Cards = new List<ICard>();
+            string url = "https://netsheep2.azurewebsites.net/api/Cards";
+            HttpClient<ICard> client = new HttpClient<ICard>();
+            JToken CardsJArray = client.Get(url);
+            foreach (JObject o in CardsJArray.Children())
+            {
+                Cards.Add(o.ToObject<Card>());
+            }
+            return Cards;
         }
     }
 }
