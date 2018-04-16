@@ -10,14 +10,11 @@ namespace AndroidSheep.Models.Buttons
         #region Fields
         private TouchCollection _currentTouch;
         private SpriteFont _font;
-        private bool _isHovering;
-        private TouchCollection _prevTouch;
         private Texture2D _texture;
         private bool IsInputPressed;
         #endregion
 
         #region Properties
-        public string returnstring;
         public event EventHandler Click;
         public bool Clicked { get; set; }
         public Color PenColor { get; set; }

@@ -12,11 +12,9 @@ using SharedSheep.Table;
 using SharedSheep.Trick;
 using System;
 using System.Threading;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using AndroidSheep.Models.States;
-using System.Diagnostics;
 using Microsoft.Xna.Framework.Input.Touch;
 
 namespace AndroidSheep
@@ -27,7 +25,7 @@ namespace AndroidSheep
     public class AndroidSheepGame : Microsoft.Xna.Framework.Game
     {
         public Dictionary<IPlayer, AndroidPlayer> _playerGraphicsDict;
-        public List<AndroidCard> _blindList;
+        public AndroidCard[] blindList;
 
         private ITable table;
         ThreadStart MainThreadStart;
@@ -35,13 +33,13 @@ namespace AndroidSheep
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         public GameContent gameContent;
-        public static int screenHeight;
-        public static int screenWidth;
+        public int screenHeight;
+        public int screenWidth;
         public AndroidBackground background;
 
         private AndroidState _currentState;
         public StateType state;
-
+        public AndroidCard[] playedCards;
         private AndroidPickingState pickingState;
         private AndroidBlindState blindState;
         private AndroidPlayState playingState;
@@ -74,13 +72,13 @@ namespace AndroidSheep
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
-            _playerGraphicsDict = new Dictionary<IPlayer, AndroidPlayer>();
             TouchPanel.EnabledGestures =
                 GestureType.Hold |
                 GestureType.Tap |
                 GestureType.DoubleTap;
             screenHeight = graphics.PreferredBackBufferHeight;
             screenWidth = graphics.PreferredBackBufferWidth;
+            graphics.PreferredDepthStencilFormat = DepthFormat.Depth24Stencil8;
             base.Initialize();
         }
 
@@ -94,7 +92,9 @@ namespace AndroidSheep
             spriteBatch = new SpriteBatch(GraphicsDevice);
             gameContent = new GameContent(Content);
             background = new AndroidBackground(gameContent.TableTop, screenWidth, screenHeight);
-            _blindList = new List<AndroidCard>();
+            blindList = new AndroidCard[2];
+            playedCards = new AndroidCard[6];
+
             _currentState = null;
             pickingState = new AndroidPickingState(this, graphics.GraphicsDevice, gameContent);
             blindState = new AndroidBlindState(this, graphics.GraphicsDevice, gameContent);
@@ -155,17 +155,15 @@ namespace AndroidSheep
         private string Prompt(PromptType prompt_type, Dictionary<PromptData, object> data)
         {
             string prompt = "";
-            int index;
             ITrick trick = null;
             IGame game = null;
             IPlayer player = null;
             IPlayer picker = null;
             IBlind blind = null;
-            AndroidPlayer playerGraphics = null;
-
             switch (prompt_type)
             {
-                case PromptType.CardsDealt:   
+                case PromptType.CardsDealt:
+                    _playerGraphicsDict = new Dictionary<IPlayer, AndroidPlayer>();
                     var blinddata = (IBlind)data[PromptData.Blind];
                     foreach (var addPlayer in table.Players)
                     {
@@ -173,13 +171,15 @@ namespace AndroidSheep
                         _playerGraphicsDict.Add(addPlayer, hostGraphics);
                     }
                     var blindLoc = 250;
+                    int blindIndex = 0;
                     foreach (var addBlind in blinddata)
                     {
                         Texture2D cardtexture = gameContent.textureDict[addBlind];
                         AndroidCard cardGraphics = new AndroidCard(cardtexture, addBlind);
                         cardGraphics.IsBlind = true;
                         cardGraphics.Position = new Vector2(blindLoc, screenHeight / 4);
-                        _blindList.Add(cardGraphics);
+                        blindList[blindIndex] = cardGraphics;
+                        blindIndex++;
                         blindLoc += 500;
                     }
                     foreach (var playerPair in _playerGraphicsDict)
@@ -206,39 +206,18 @@ namespace AndroidSheep
                 case PromptType.Pick:
                     ChangeState(blindState);
                     state = StateType.Blind;
-                   
-                    /*prompt = "Your cards:\n";
-                    player = (IPlayer)data[PromptData.Player];
-                    foreach (ICard card in player.Hand)
-                    {
-                        prompt += string.Format("{0}\n", card);
-                    };
-                    prompt += "\nDo you want to pick? (yes/no)\n";
-                    */
+                    prompt = "yes"; 
                     break;
 
                 case PromptType.PlayCard:
                     state = StateType.Playing;                   
-                    player = (IPlayer)data[PromptData.Player];
-                    playerGraphics = _playerGraphicsDict[player];                  
                     picker = (IPlayer)data[PromptData.Picker];
                     player = (IPlayer)data[PromptData.Player];
-                    prompt = string.Format("Picker: {0}\n", picker);
-                    prompt += "Cards Played\n";
                     trick = (ITrick)data[PromptData.Trick];
                     ChangeState(playingState);
-                    foreach ((IPlayer, ICard) playerCard in trick)
-                    {
-                        prompt += string.Format("{0}\n", playerCard);
-                    };
-                    prompt += "\nYour playable cards:\n";
+                    playingState.SetTrick(trick);
                     List<ICard> cards = (List<ICard>)data[PromptData.Cards];
-                    index = 0;
-                    cards.ForEach(card =>
-                    {
-                        prompt += string.Format("{0}) {1}\n", index++, card);
-                    });
-                    
+                    prompt = playingState.PickingPrompt();                   
                     break;
 
                 case PromptType.PickBlind:

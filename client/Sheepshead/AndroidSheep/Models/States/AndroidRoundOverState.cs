@@ -11,6 +11,7 @@ using Android.Views;
 using Android.Widget;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using SharedSheep.Player;
 
 namespace AndroidSheep.Models.States
 {
@@ -22,7 +23,28 @@ namespace AndroidSheep.Models.States
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            throw new NotImplementedException();
+            spriteBatch.Begin(SpriteSortMode.Immediate);
+
+            foreach (var player in _table._playerGraphicsDict)
+            {
+                if (player.Key is LocalPlayer)
+                {
+                    var playerCards = player.Value.playableCards;
+                    if (playerCards != null)
+                    {
+                        foreach (var card in playerCards)
+                        {
+                            card.Draw(gameTime, spriteBatch);
+                        }
+                    }
+                }
+            }
+            foreach (var card in _table.playedCards)
+            {
+                if (card != null)
+                    card.Draw(gameTime, spriteBatch);
+            }
+            spriteBatch.End();
         }
 
         public override void PostUpdate(GameTime gameTime)
@@ -32,7 +54,21 @@ namespace AndroidSheep.Models.States
 
         public override void Update(GameTime gameTime)
         {
-            throw new NotImplementedException();
+            foreach (var player in _table._playerGraphicsDict)
+            {
+                if (player.Key is LocalPlayer)
+                {
+                    var playerCards = player.Value.playableCards;
+                    if (playerCards != null)
+                    {
+                        foreach (var card in playerCards)
+                        {
+                            card.State = StateType.RoundOver;
+                            card.Update(gameTime);
+                        }
+                    }
+                }
+            }
         }
     }
 }

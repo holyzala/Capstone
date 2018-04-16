@@ -12,7 +12,7 @@ namespace AndroidSheep.Models.Buttons
     {
         #region Fields
         private TouchCollection _currentTouch;
-        private Texture2D _texture;
+        public Texture2D _texture { get; set; }
         private Color _color;
         private int x;
         private int y;
@@ -21,7 +21,6 @@ namespace AndroidSheep.Models.Buttons
 
         #region Properties 
         public StateType State { get; set; }
-        public Texture2D Texture { get; set; }
         public event EventHandler Click;
         public bool Clicked { get; private set; }
         public Vector2 Position { get; set; }
@@ -30,10 +29,6 @@ namespace AndroidSheep.Models.Buttons
             get
             {
                 return new Rectangle((int)Position.X, (int)Position.Y, _texture.Width / 2, _texture.Height / 2);
-            }
-            set
-            {
-                Rectangle = new Rectangle((int)Position.X, (int)Position.Y, _texture.Width / 2, _texture.Height / 2);
             }
         }
         #endregion
@@ -46,7 +41,7 @@ namespace AndroidSheep.Models.Buttons
         #endregion
 
         #region Playing
-
+        public bool played;
         #endregion
 
 
@@ -64,6 +59,9 @@ namespace AndroidSheep.Models.Buttons
                 case StateType.Picking:
                     DrawPicking(gameTime, spriteBatch);
                     break;
+                case StateType.Playing:
+                    DrawPlaying(gameTime, spriteBatch);
+                    break;
                 default:
                     break;
             }
@@ -76,9 +74,56 @@ namespace AndroidSheep.Models.Buttons
                 case StateType.Picking:
                     UpdatePicking(gameTime);
                     break;
+                case StateType.Playing:
+                    UpdatePlaying(gameTime);
+                    break;
                 default:
                     break;
             }
+        }
+
+        private void DrawPlaying(GameTime gameTime, SpriteBatch spriteBatch)
+        {
+            var tempColor = Color.White;
+            spriteBatch.Draw(_texture, Rectangle, tempColor);
+        }
+
+        private void UpdatePlaying(GameTime gameTime)
+        {
+            if (played)
+            {
+                return;
+            }
+            _currentTouch = TouchPanel.GetState();
+            if (_currentTouch.Count >= 1)
+            {
+                var touch = _currentTouch[0];
+                x = (int)touch.Position.X;
+                y = (int)touch.Position.Y;
+                var touchRectangle = new Rectangle(x, y, 1, 1);
+
+                if (TouchPanel.IsGestureAvailable)
+                {
+                    if (touchRectangle.Intersects(Rectangle) && TouchPanel.ReadGesture().GestureType == GestureType.DoubleTap)
+                    {
+                        played = true;
+                        Click?.Invoke(this, new EventArgs());
+                    }
+                    IsInputPressed = touch.State == TouchLocationState.Pressed || touch.State == TouchLocationState.Moved;
+                }
+            }
+        }
+    
+        private void DrawPicking(GameTime gameTime, SpriteBatch spriteBatch)
+        {
+            _color = Color.White;
+            _blindColor = Color.Gray;
+
+            if (IsSelected)
+            {
+                _color = _blindColor;
+            }
+            spriteBatch.Draw(_texture, Rectangle, _color);
         }
 
         private void UpdatePicking(GameTime gameTime)
@@ -96,27 +141,13 @@ namespace AndroidSheep.Models.Buttons
                 {
                     if (touchRectangle.Intersects(Rectangle) && TouchPanel.ReadGesture().GestureType == GestureType.DoubleTap)
                     {
-                        ChangeSelectionPicking();                   
+                       ChangeSelectionPicking();                   
                        if (!IsBlind && IsSelected)
-
                         Click?.Invoke(this, new EventArgs());
                     }
                     IsInputPressed = touch.State == TouchLocationState.Pressed || touch.State == TouchLocationState.Moved;
                 }
             }
-        }
-
-        private void DrawPicking(GameTime gameTime, SpriteBatch spriteBatch)
-        {
-            _color = Color.White;
-            _blindColor = Color.Gray;
-
-            var prevRect = Rectangle;
-            if (IsSelected)
-            {
-                _color = _blindColor;
-            }
-            spriteBatch.Draw(_texture, Rectangle, _color);
         }
 
         public void ChangeSelectionPicking()

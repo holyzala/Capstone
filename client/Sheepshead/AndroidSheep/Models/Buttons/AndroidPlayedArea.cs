@@ -47,9 +47,9 @@ namespace AndroidSheep.Models.Buttons
                 return;
             for (int i = 0; i < numCards; i++)
             {
-                Texture2D cardTexture = playedCards[i].Texture;
+                Texture2D cardTexture = playedCards[i]._texture;
                 Vector2 position = _playedVectors[i];
-                Vector2 origin = new Vector2(playedCards[i].Texture.Width / 2, playedCards[i].Texture.Height / 2);
+                Vector2 origin = new Vector2(playedCards[i]._texture.Width / 2, playedCards[i]._texture.Height / 2);
                 float scale = 0.25f;
                 spriteBatch.Draw(cardTexture, position, null, Color.White, 0f, origin, scale, SpriteEffects.None, 1);
             }

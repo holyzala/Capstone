@@ -43,7 +43,7 @@ namespace AndroidSheep.Models.States
 
         public override void Update(GameTime gameTime)
         {
-            foreach (var card in _table. _blindList)
+            foreach (var card in _table.blindList)
             {
                 card.State = StateType.PreGame;
                 card.Update(gameTime);

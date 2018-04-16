@@ -21,7 +21,6 @@ namespace AndroidSheep.Models
         List<Tuple<IPlayer, AndroidPlayer>> _playerGraphicsPair;
         GameContent _gameContent;
         AndroidSheepGame _game;
-        private AndroidState _currentState;
         private AndroidState _nextState;
         public void ChangeState(AndroidState state)
         {

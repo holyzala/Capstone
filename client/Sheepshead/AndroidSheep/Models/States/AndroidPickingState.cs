@@ -70,12 +70,12 @@ namespace AndroidSheep.Models.States
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            spriteBatch.Begin();
+            spriteBatch.Begin(SpriteSortMode.Immediate);
             foreach (var card in graphicsPlayer.playableCards)
             {
                 card.Draw(gameTime, spriteBatch);
             }
-            foreach (var card in _table._blindList)
+            foreach (var card in _table.blindList)
             {
                 card.Draw(gameTime, spriteBatch);
             }
@@ -96,7 +96,7 @@ namespace AndroidSheep.Models.States
             {
                 component.Update(gameTime);
             }
-            foreach (var card in _table._blindList)
+            foreach (var card in _table.blindList)
             {
                 card.State = StateType.Picking;
                 if (numCardsSelected > 2)
@@ -152,67 +152,47 @@ namespace AndroidSheep.Models.States
                 int cardOne = 0;
                 int cardTwo = 0;
                 IHand playerHand = player.Hand;
-                int index = 0;
+                AndroidCard newBlind = null;
+                AndroidCard newHand = null;
                 foreach (var card in blind)
                 {
                     if (blindCard._card.Equals(card))
                     {
-                        AndroidCard newCard = new AndroidCard(_table.gameContent.textureDict[card], card);
-                        newCard.Position = new Vector2(handCard.Position.X, handCard.Position.Y);
-                        newCard.Rectangle = handCard.Rectangle;
-                        _table._blindList[index] = newCard;
-                        cardOne = index;
+                        blindCard.ChangeSelectionPicking();
+                        newHand = new AndroidCard(blindCard._texture, blindCard._card);
+                        newHand.Position = new Vector2(handCard.Position.X, handCard.Position.Y + 40);
+                        newHand.State = handCard.State;
+                        newHand.IsBlind = true;
                         break;
                     }
-                    index++;
+                    cardOne++;
                 }
-                index = 0;
                 foreach (var card in playerHand)
                 {
                     if (handCard._card.Equals(card))
                     {
-                        AndroidCard newCard = new AndroidCard(_table.gameContent.textureDict[card], card);
-                        newCard.Position = blindCard.Position;
-                        newCard.State = blindCard.State;
-                        newCard.Rectangle = blindCard.Rectangle;
-
-                        graphicsPlayer.playableCards[index] = newCard;
-                        cardOne = index;
+                        handCard.ChangeSelectionPicking();
+                        newBlind = new AndroidCard(handCard._texture, handCard._card);
+                        newBlind.Position = new Vector2(blindCard.Position.X, blindCard.Position.Y);
+                        newBlind.State = blindCard.State;
+                        newBlind.IsBlind = false;
                         break;
                     }
-                    index++;
+                    cardTwo++;
                 }
                 
-                prompt = string.Format("{1} {0}", cardOne, cardTwo);
-                wantsToSwap = false;
+                prompt = string.Format("{0} {1}", cardOne, cardTwo);
                 foreach(var component in _components)
                 {
                     component.color = Color.White;
                 }
-                foreach (var card in _table._blindList)
-                {
-                    if (card.IsSelected)
-                    {
-                        card.ChangeSelectionPicking();
-                    }
-                }
-                foreach (var player in _table._playerGraphicsDict)
-                {
-                    if (player.Key is LocalPlayer)
-                    {
-                        var playerCards = player.Value.playableCards;
-                        foreach (var card in playerCards)
-                        {
-                            if (card.IsSelected)
-                            {
-                                card.ChangeSelectionPicking();
-                            }
-                        }
-                    }
-                }
+                _table.blindList[cardOne] = newBlind;
+                graphicsPlayer.playableCards[cardTwo] = newHand;
+
                 numCardsSelected = 0;
                 handCard = null;
                 blindCard = null;
+                wantsToSwap = false;
             }
             return prompt;
         }
