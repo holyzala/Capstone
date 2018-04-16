@@ -8,7 +8,6 @@ namespace SharedSheep.Card
 {
     public class Card : ICard
     {
-
         [JsonProperty("Face")]
         public CardID ID { get; private set; }
 
@@ -24,7 +23,10 @@ namespace SharedSheep.Card
         [JsonProperty("is_Trump")]
         private bool isTrump = false;
 
-        public Card() { }
+        public Card()
+        {
+        }
+
         public Card(CardID num, CardPower power, Suit cardSuit)
         {
             this.ID = num;
@@ -78,7 +80,7 @@ namespace SharedSheep.Card
 
         public override string ToString()
         {
-            return String.Format("ID: {0}, Value: {1}, Power: {2}, Suit: {3}", ID, Value, (int)Power, CardSuit);
+            return string.Format("ID: {0}, Value: {1}, Power: {2}, Suit: {3}", ID, Value, (int)Power, CardSuit);
         }
 
         public int CompareTo(ICard other)
@@ -99,17 +101,19 @@ namespace SharedSheep.Card
 "Trump_Power": 1,
 "Card_Value": 0
 */
+
         public static List<ICard> CardsFactory()
         {
-            List<ICard> Cards = new List<ICard>();
-            string url = "https://netsheep2.azurewebsites.net/api/Cards";
-            HttpClient<ICard> client = new HttpClient<ICard>();
-            JToken CardsJArray = client.Get(url);
-            foreach (JObject o in CardsJArray.Children())
+            var cards = new List<ICard>();
+            const string url = "https://netsheep2.azurewebsites.net/api/Cards";
+            var client = new HttpClient<ICard>();
+            var cardsJArray = client.Get(url);
+            foreach (var jToken in cardsJArray.Children())
             {
-                Cards.Add(o.ToObject<Card>());
+                var o = (JObject)jToken;
+                cards.Add(o.ToObject<Card>());
             }
-            return Cards;
+            return cards;
         }
     }
 }

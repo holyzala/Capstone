@@ -1,7 +1,7 @@
-﻿using SharedSheep.Blind;
+﻿using System;
+using SharedSheep.Blind;
 using SharedSheep.Card;
 using SharedSheep.Round;
-using SharedSheep.Trick;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -9,7 +9,7 @@ namespace SharedSheep.Player
 {
     public class EasyBot : AbstractPlayer
     {
-        private bool IsPartner;
+        private bool _isPartner;
 
         public EasyBot(string name) : base(name)
         { }
@@ -19,8 +19,8 @@ namespace SharedSheep.Player
             Hand.AddCard(blind.BlindCards[0]);
             Hand.AddCard(blind.BlindCards[1]);
             Hand.Cards.Sort((one, two) => two.Value - one.Value);
-            int added = 0;
-            int i = 0;
+            var added = 0;
+            var i = 0;
             while (i < Hand.Cards.Count)
             {
                 if (added == 2) break;
@@ -55,30 +55,56 @@ namespace SharedSheep.Player
 
         public override ICard PlayCard(Prompt prompt, List<IRound> rounds, IPlayer picker, IBlind blind, ICard partnerCard)
         {
-            ITrick trick = rounds.Last().Trick;
-            List<ICard> cards = Hand.GetPlayableCards(trick.LeadingCard());
+            var trick = rounds.Last().Trick;
+            var cards = Hand.GetPlayableCards(trick.LeadingCard());
             cards.Sort();
             cards.Reverse();
-            ICard playThis = null;
-            if (trick.Count() == 0)
+            ICard playThis;
+            if (!_isPartner && picker != this)
+                _isPartner = Hand.Contains(partnerCard);
+            if (!trick.Any())
             {
                 if (picker == this)
                 {
                     playThis = cards[0];
                 }
-                else if (IsPartner || Hand.Contains(partnerCard))
+                else if (_isPartner)
                 {
-                    IsPartner = true;
                     playThis = cards[0];
                 }
                 else
                 {
-                    playThis = cards.DefaultIfEmpty(cards[0]).FirstOrDefault(card => !card.IsTrump());
+                    playThis = cards.Aggregate((acc, next) => acc.IsTrump() && !next.IsTrump() ? next : acc);
                 }
             }
             else
             {
-                playThis = cards[0];
+                var winCard = trick.TheWinnerCard();
+                var isPickerWinning = trick.TheWinnerPlayer() == picker;
+                if (isPickerWinning && _isPartner)
+                {
+                    playThis = cards.Aggregate((acc, next) => acc.Value >= next.Value ? acc : next);
+                }
+                else if (!isPickerWinning && _isPartner)
+                {
+                    playThis = cards[0];
+                }
+                else if (isPickerWinning && !_isPartner)
+                {
+                    if (cards[0].Power > winCard.Power)
+                    {
+                        playThis = cards[0];
+                    }
+                    else
+                    {
+                        cards.Sort();
+                        playThis = cards.Aggregate((acc, next) => acc.Value <= next.Value ? acc : next);
+                    }
+                }
+                else
+                {
+                    playThis = cards[0].Power > winCard.Power ? cards[0] : cards.Last();
+                }
             }
             Hand.RemoveCard(playThis);
             prompt(PromptType.BotPlayCard, new Dictionary<PromptData, object> {
@@ -91,29 +117,28 @@ namespace SharedSheep.Player
 
         public override bool WantPick(Prompt prompt, List<IPlayer> players)
         {
-            ICard JD = new Card.Card(CardID.Jack, CardPower.JackDiamond, Suit.Diamond);
+            var jd = new Card.Card(CardID.Jack, CardPower.JackDiamond, Suit.Diamond);
             Hand.Cards.Sort();
             if (Hand.Cards[0].Power >= CardPower.JackDiamond)
                 return true;
-            ICard QC = new Card.Card(CardID.Queen, CardPower.QueenClub, Suit.Clubs);
-            ICard QS = new Card.Card(CardID.Queen, CardPower.QueenSpade, Suit.Spades);
-            int trumpCount = 0;
-            int queenCount = 0;
-            int pointCards = 0;
-            foreach (ICard card in Hand)
+            var qc = new Card.Card(CardID.Queen, CardPower.QueenClub, Suit.Clubs);
+            var qs = new Card.Card(CardID.Queen, CardPower.QueenSpade, Suit.Spades);
+            var trumpCount = 0;
+            var queenCount = 0;
+            var pointCards = 0;
+            foreach (var card in Hand)
             {
                 if (card.IsTrump()) ++trumpCount;
                 if (card.ID == CardID.Queen) ++queenCount;
                 if (card.Value >= 10) ++pointCards;
             }
             if (queenCount == 4) return true;
-            if (Hand.Cards.Contains(JD)) return false;
-            if ((players.First() == this || players.Last() == this) && Hand.Cards.Contains(QC) && Hand.Cards.Contains(QS))
+            if (Hand.Cards.Contains(jd)) return false;
+            if ((players.First() == this || players.Last() == this) && Hand.Cards.Contains(qc) && Hand.Cards.Contains(qs))
                 return true;
             if (queenCount >= 2 && trumpCount >= 3 && pointCards >= 1) return true;
             if (queenCount >= 1 && trumpCount >= 4 && pointCards >= 1) return true;
-            if (trumpCount >= 5) return true;
-            return false;
+            return trumpCount >= 5;
         }
     }
 }

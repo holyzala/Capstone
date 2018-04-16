@@ -9,6 +9,6 @@ namespace SharedSheep.Card
         CardPower Power { get; }
         Suit CardSuit { get; }
 
-        Boolean IsTrump();
+        bool IsTrump();
     }
 }
