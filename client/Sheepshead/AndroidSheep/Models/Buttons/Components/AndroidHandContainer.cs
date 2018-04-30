@@ -18,15 +18,16 @@ namespace AndroidSheep.Models.Buttons.Components
             _cardsInHand = cardsInHand;
             SetCardPositions();
             _player = player;
+            _cardPositions = new List<Vector2>();
         }
         
         private void SetCardPositions()
         {
-            _cardPositions.Add(new Vector2(-300, 0));
+            _cardPositions.Add(new Vector2(-500, 0));
             _cardPositions.Add(new Vector2(-150, 0));
             _cardPositions.Add(new Vector2(0, 0));
-            _cardPositions.Add(new Vector2(150, 0));
-            _cardPositions.Add(new Vector2(300, 0));
+            _cardPositions.Add(new Vector2(250, 0));
+            _cardPositions.Add(new Vector2(500, 0));
         }
     }
 }

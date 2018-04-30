@@ -70,6 +70,7 @@
     <Compile Include="Models\Buttons\AndroidComponent.cs" />
     <Compile Include="Models\Buttons\AndroidPlayedArea.cs" />
     <Compile Include="Models\Buttons\Components\AndroidHandContainer.cs" />
+    <Compile Include="Models\Buttons\Components\AndroidLeaderBoardPanel.cs" />
     <Compile Include="Models\ContentManager\GameContent.cs" />
     <Compile Include="Models\Player\AndroidPlayer.cs" />
     <Compile Include="Models\States\AndroidBlindState.cs" />

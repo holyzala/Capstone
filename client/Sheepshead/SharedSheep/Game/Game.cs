@@ -99,10 +99,15 @@ namespace SharedSheep.Game
                 Rounds.Add(newRound);
                 int i = players.IndexOf(roundStarter);
                 roundStarter = newRound.Start(prompt, players.Skip(i).Concat(players.Take(i)).ToList(), Rounds, Picker, Blind, PartnerCard);
-                prompt(PromptType.RoundOver, new Dictionary<PromptData, object>
+                while (true)
                 {
-                    { PromptData.Round, newRound }
-                });
+                    var answer = prompt(PromptType.RoundOver, new Dictionary<PromptData, object>
+                    {
+                        {PromptData.Round, newRound}
+                    });
+                    if (answer == "done")
+                        break;
+                }
             }
         }
 

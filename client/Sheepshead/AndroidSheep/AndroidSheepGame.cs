@@ -16,6 +16,7 @@ using System.Collections.Generic;
 using System.Linq;
 using AndroidSheep.Models.States;
 using Microsoft.Xna.Framework.Input.Touch;
+using SharedSheep.ScoreSheet;
 
 namespace AndroidSheep
 {
@@ -36,13 +37,14 @@ namespace AndroidSheep
         public int screenHeight;
         public int screenWidth;
         public AndroidBackground background;
-
+        public List<AndroidCard> playableCards;
         private AndroidState _currentState;
         public StateType state;
         public AndroidCard[] playedCards;
         private AndroidPickingState pickingState;
         private AndroidBlindState blindState;
         private AndroidPlayState playingState;
+        private AndroidRoundOverState roundOverState;
 
         public void ChangeState(AndroidState state)
         {
@@ -99,6 +101,7 @@ namespace AndroidSheep
             pickingState = new AndroidPickingState(this, graphics.GraphicsDevice, gameContent);
             blindState = new AndroidBlindState(this, graphics.GraphicsDevice, gameContent);
             playingState = new AndroidPlayState(this, graphics.GraphicsDevice, gameContent);
+            roundOverState = new AndroidRoundOverState(this, graphics.GraphicsDevice, gameContent);
             LoadGame();
             MainThreadStart = new ThreadStart(table.Start);
             MainThread = new Thread(MainThreadStart);
@@ -160,6 +163,7 @@ namespace AndroidSheep
             IPlayer player = null;
             IPlayer picker = null;
             IBlind blind = null;
+            IScoreSheet score = null;
             switch (prompt_type)
             {
                 case PromptType.CardsDealt:
@@ -216,8 +220,29 @@ namespace AndroidSheep
                     trick = (ITrick)data[PromptData.Trick];
                     ChangeState(playingState);
                     playingState.SetTrick(trick);
-                    List<ICard> cards = (List<ICard>)data[PromptData.Cards];
-                    prompt = playingState.PickingPrompt();                   
+                    playingState.SetScore(score);
+                    var cards = (List<ICard>)data[PromptData.Cards];
+                    playableCards = new List<AndroidCard>();
+                    _playerGraphicsDict.TryGetValue(player, out var playergraphics);
+                    foreach (var card in cards)
+                    {
+                        foreach (var cardgraphics in playergraphics.playableCards)
+                        {
+                            if (card.Equals(cardgraphics._card))
+                            {
+                                playableCards.Add(cardgraphics);
+                                cardgraphics.isPlayable = true;
+                                break;
+                            }
+                        }
+                    }
+                    prompt = playingState.PickingPrompt();
+                    if (prompt != "")
+                    {
+                        playingState.isTrickSet = false;
+                        playingState.LeaderboardSet = false;
+                    }
+
                     break;
 
                 case PromptType.PickBlind:
@@ -231,15 +256,15 @@ namespace AndroidSheep
                     break;
 
                 case PromptType.RoundOver:
-                    ChangeState(new AndroidRoundOverState(this, graphics.GraphicsDevice, gameContent));
-                    state = StateType.RoundOver;
                     trick = ((IRound)data[PromptData.Round]).Trick;
-                    prompt = string.Format("{0} won the trick for {1} points\n", trick.TheWinnerPlayer(), trick.TrickValue());
-                    prompt += "All cards played:\n";
-                    foreach ((IPlayer, ICard) playerCard in trick)
+                    ChangeState(roundOverState);
+                    state = StateType.RoundOver;
+                    roundOverState.SetTrick(trick);
+                    prompt = roundOverState.PickingPrompt();
+                    if (prompt != "")
                     {
-                        prompt += string.Format("{0}\n", playerCard);
-                    };
+                       roundOverState = new AndroidRoundOverState(this, graphics.GraphicsDevice, gameContent);
+                    }
                     break;
 
                 case PromptType.GameOver:

@@ -42,6 +42,8 @@ namespace AndroidSheep.Models.Buttons
 
         #region Playing
         public bool played;
+        public bool isPlayable;
+        public bool isTrick;
         #endregion
 
 
@@ -84,13 +86,22 @@ namespace AndroidSheep.Models.Buttons
 
         private void DrawPlaying(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            var tempColor = Color.White;
+            var tempColor = Color.Gray;
+            if (isPlayable || isTrick)
+            {
+                tempColor = Color.White;
+            }
+
+            if (played)
+            {
+                tempColor = Color.Yellow;
+            }
             spriteBatch.Draw(_texture, Rectangle, tempColor);
         }
 
         private void UpdatePlaying(GameTime gameTime)
         {
-            if (played)
+            if (!isPlayable)
             {
                 return;
             }
@@ -101,12 +112,12 @@ namespace AndroidSheep.Models.Buttons
                 x = (int)touch.Position.X;
                 y = (int)touch.Position.Y;
                 var touchRectangle = new Rectangle(x, y, 1, 1);
-
                 if (TouchPanel.IsGestureAvailable)
                 {
                     if (touchRectangle.Intersects(Rectangle) && TouchPanel.ReadGesture().GestureType == GestureType.DoubleTap)
                     {
                         played = true;
+                        isPlayable = false;
                         Click?.Invoke(this, new EventArgs());
                     }
                     IsInputPressed = touch.State == TouchLocationState.Pressed || touch.State == TouchLocationState.Moved;
