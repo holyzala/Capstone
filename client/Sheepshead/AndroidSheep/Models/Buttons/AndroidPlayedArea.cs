@@ -6,51 +6,49 @@ namespace AndroidSheep.Models.Buttons
 {
     public class AndroidPlayedArea : AndroidComponent
     {
-        public AndroidCard[] playedCards;
-        private Vector2[] _playedVectors;
-        private int _screenHeight;
-        private int _screenWidth;
-        public int numCards;
+        public AndroidCard[] PlayedCards;
+        private readonly Vector2[] _playedVectors;
+        private readonly int _screenHeight;
+        private readonly int _screenWidth;
+        public int NumCards;
 
         public AndroidPlayedArea(int screenWidth, int screenHeight)
         {
-            playedCards = new AndroidCard[5];
+            PlayedCards = new AndroidCard[5];
             _playedVectors = new Vector2[5];
             _screenHeight = screenHeight;
             _screenWidth = screenWidth;
-            numCards = 0;
+            NumCards = 0;
             this.SetVectors();
         }
 
         private void SetVectors()
         {
-            _playedVectors[0] = new Vector2(_screenWidth / 2 - 200, _screenHeight / 3);
-            _playedVectors[1] = new Vector2(_screenWidth / 2 - 100, _screenHeight / 3);
-            _playedVectors[2] = new Vector2(_screenWidth / 2, _screenHeight / 3);
-            _playedVectors[3] = new Vector2(_screenWidth / 2 + 100, _screenHeight / 3);
-            _playedVectors[4] = new Vector2(_screenWidth / 2 + 200, _screenHeight / 3);
+            _playedVectors[0] = new Vector2((_screenWidth / 2.0f) - 200, _screenHeight / 3.0f);
+            _playedVectors[1] = new Vector2((_screenWidth / 2.0f) - 100, _screenHeight / 3.0f);
+            _playedVectors[2] = new Vector2((_screenWidth / 2.0f), _screenHeight / 3.0f);
+            _playedVectors[3] = new Vector2((_screenWidth / 2.0f) + 100, _screenHeight / 3.0f);
+            _playedVectors[4] = new Vector2((_screenWidth / 2.0f) + 200, _screenHeight / 3.0f);
         }
         
         public AndroidCard[] AddCardToPlayArea(AndroidCard card)
         {
-            if (numCards < 6)
-            {
-                playedCards[numCards] = card;
-                numCards++;
-            }
-            return playedCards;
+            if (NumCards >= 6) return PlayedCards;
+            PlayedCards[NumCards] = card;
+            NumCards++;
+            return PlayedCards;
         }
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            if (numCards == 0)
+            if (NumCards == 0)
                 return;
-            for (int i = 0; i < numCards; i++)
+            var scale = 0.25f;
+            for (var i = 0; i < NumCards; i++)
             {
-                Texture2D cardTexture = playedCards[i]._texture;
-                Vector2 position = _playedVectors[i];
-                Vector2 origin = new Vector2(playedCards[i]._texture.Width / 2, playedCards[i]._texture.Height / 2);
-                float scale = 0.25f;
+                var cardTexture = PlayedCards[i].Texture;
+                var position = _playedVectors[i];
+                var origin = new Vector2(PlayedCards[i].Texture.Width / 2.0f, PlayedCards[i].Texture.Height / 2.0f);
                 spriteBatch.Draw(cardTexture, position, null, Color.White, 0f, origin, scale, SpriteEffects.None, 1);
             }
 
@@ -58,7 +56,7 @@ namespace AndroidSheep.Models.Buttons
 
         public override void Update(GameTime gameTime)
         {
-            throw new NotImplementedException();
+            return;
         }
     }
 }

@@ -14,22 +14,21 @@ namespace AndroidSheep.Models.States
 {
     class AndroidPickingState : AndroidState
     {
-        private List<AndroidButton> _components;
-        private bool wantsToSwap = false;
-        private bool isDone = false;
-        private AndroidCard blindCard;
-        private AndroidCard handCard;
-        //ADD Prompts
-        //1. DisplayBlock
-        //2. SwapBUtton
-        public string prompt = "";
-        private int numCardsSelected;
-        public IPlayer player { get; set; }
-        public IBlind blind { get; set; }
-        private AndroidPlayer graphicsPlayer;
+        private readonly List<AndroidButton> _components;
+        private bool _wantsToSwap = false;
+        private bool _isDone = false;
+        private AndroidCard _blindCard;
+        private AndroidCard _handCard;
+        private int _numCardsSelected;
+        private AndroidPlayer _graphicsPlayer;
+
+        public string Prompt = "";
+        public IPlayer Player { get; set; }
+        public IBlind Blind { get; set; }
+
         public AndroidPickingState(AndroidSheepGame table, GraphicsDevice graphicsDevice, GameContent gameContent) : base(table, graphicsDevice, gameContent)
         {
-            AndroidButton DoneButton = new AndroidButton(gameContent.Button, gameContent.Font)
+            AndroidButton doneButton = new AndroidButton(gameContent.Button, gameContent.Font)
             {
                 Position = new Vector2(250, 50),
                 Text = "Done?"
@@ -41,41 +40,41 @@ namespace AndroidSheep.Models.States
             };
 
             swapButton.Click += SwapButton_Click;
-            DoneButton.Click += DoneButton_Click;
+            doneButton.Click += DoneButton_Click;
             _components = new List<AndroidButton>()
             {
                swapButton,
-               DoneButton
+               doneButton
             };
-            numCardsSelected = 0;
+            _numCardsSelected = 0;
         }
-        public void assignPlayer(IPlayer player)
+        public void AssignPlayer(IPlayer player)
         {
-            this.player = player;
-            _table._playerGraphicsDict.TryGetValue(player, out graphicsPlayer);
+            this.Player = player;
+            Table.PlayerGraphicsDict.TryGetValue(player, out _graphicsPlayer);
         }
-        public void assignBlind(IBlind blind)
+        public void AssignBlind(IBlind blind)
         {
-            this.blind = blind;
+            this.Blind = blind;
         }
         private void DoneButton_Click(object sender, EventArgs e)
         {
-            isDone = true;
+            _isDone = true;
         }
 
         private void SwapButton_Click(object sender, EventArgs e)
         {
-            wantsToSwap = true;
+            _wantsToSwap = true;
         }
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             spriteBatch.Begin(SpriteSortMode.Immediate);
-            foreach (var card in graphicsPlayer.playableCards)
+            foreach (var card in _graphicsPlayer.PlayableCards)
             {
                 card.Draw(gameTime, spriteBatch);
             }
-            foreach (var card in _table.blindList)
+            foreach (var card in Table.BlindList)
             {
                 card.Draw(gameTime, spriteBatch);
             }
@@ -85,10 +84,7 @@ namespace AndroidSheep.Models.States
             }
             spriteBatch.End();                        
         }
-        public override void PostUpdate(GameTime gameTime)
-        {
-            throw new NotImplementedException();
-        }
+
         public override void Update(GameTime gameTime)
         {
 
@@ -96,105 +92,104 @@ namespace AndroidSheep.Models.States
             {
                 component.Update(gameTime);
             }
-            foreach (var card in _table.blindList)
+            foreach (var card in Table.BlindList)
             {
                 card.State = StateType.Picking;
-                if (numCardsSelected > 2)
+                if (_numCardsSelected > 2)
                 {
                     card.IsSelected = false;
-                    numCardsSelected--;
+                    _numCardsSelected--;
                 }
                 if (card.IsSelected)
                 {
-                    blindCard = card;
-                    numCardsSelected++;
+                    _blindCard = card;
+                    _numCardsSelected++;
                 }
                 card.Update(gameTime);
 
             }
-            foreach (var player in _table._playerGraphicsDict)
+            foreach (var player in Table.PlayerGraphicsDict)
             {
-                if (player.Key is LocalPlayer)
+                if (!(player.Key is LocalPlayer)) continue;
+                var playerCards = player.Value.PlayableCards;
+                if (playerCards == null) continue;
+                foreach (var card in playerCards)
                 {
-                    var playerCards = player.Value.playableCards;
-                    if (playerCards != null)
+                    card.State = StateType.Picking;
+                    if (_numCardsSelected > 2)
                     {
-                        foreach (var card in playerCards)
-                        {
-                            card.State = StateType.Picking;
-                            if (numCardsSelected > 2)
-                            {
-                                card.IsSelected = false;
-                                numCardsSelected--;
-                            }
-
-                            if (card.IsSelected)
-                            {
-                                handCard = card;
-                                numCardsSelected++;
-
-                            }
-                            card.Update(gameTime);             
-                        }
+                        card.IsSelected = false;
+                        _numCardsSelected--;
                     }
+
+                    if (card.IsSelected)
+                    {
+                        _handCard = card;
+                        _numCardsSelected++;
+
+                    }
+                    card.Update(gameTime);             
                 }
             }
         }
         public string PickingPrompt()
         {
-            prompt = "";
-            if (isDone)
+            Prompt = "";
+            if (_isDone)
             {
-                prompt += "done";
+                Prompt += "done";
             }
-            else if (numCardsSelected == 2 && wantsToSwap)
+            else if (_numCardsSelected == 2 && _wantsToSwap)
             {
                 int cardOne = 0;
                 int cardTwo = 0;
-                IHand playerHand = player.Hand;
+                IHand playerHand = Player.Hand;
                 AndroidCard newBlind = null;
                 AndroidCard newHand = null;
-                foreach (var card in blind)
+                foreach (var card in Blind)
                 {
-                    if (blindCard._card.Equals(card))
+                    if (_blindCard.Card.Equals(card))
                     {
-                        blindCard.ChangeSelectionPicking();
-                        newHand = new AndroidCard(blindCard._texture, blindCard._card);
-                        newHand.Position = new Vector2(handCard.Position.X, handCard.Position.Y + 40);
-                        newHand.State = handCard.State;
-                        newHand.IsBlind = true;
+                        _blindCard.ChangeSelectionPicking();
+                        newHand = new AndroidCard(_blindCard.Texture, _blindCard.Card)
+                        {
+                            Position = new Vector2(_handCard.Position.X, _handCard.Position.Y + 40),
+                            State = _handCard.State,
+                            IsBlind = true
+                        };
                         break;
                     }
                     cardOne++;
                 }
                 foreach (var card in playerHand)
                 {
-                    if (handCard._card.Equals(card))
+                    if (_handCard.Card.Equals(card))
                     {
-                        handCard.ChangeSelectionPicking();
-                        newBlind = new AndroidCard(handCard._texture, handCard._card);
-                        newBlind.Position = new Vector2(blindCard.Position.X, blindCard.Position.Y);
-                        newBlind.State = blindCard.State;
-                        newBlind.IsBlind = false;
+                        _handCard.ChangeSelectionPicking();
+                        newBlind = new AndroidCard(_handCard.Texture, _handCard.Card)
+                        {
+                            Position = new Vector2(_blindCard.Position.X, _blindCard.Position.Y),
+                            State = _blindCard.State,
+                            IsBlind = false
+                        };
                         break;
                     }
                     cardTwo++;
                 }
                 
-                prompt = string.Format("{0} {1}", cardOne, cardTwo);
+                Prompt = $"{cardOne} {cardTwo}";
                 foreach(var component in _components)
                 {
-                    component.color = Color.White;
+                    component.Color = Color.White;
                 }
-                _table.blindList[cardOne] = newBlind;
-                graphicsPlayer.playableCards[cardTwo] = newHand;
-
-                numCardsSelected = 0;
-                handCard = null;
-                blindCard = null;
-                wantsToSwap = false;
+                Table.BlindList[cardOne] = newBlind;
+                _graphicsPlayer.PlayableCards[cardTwo] = newHand;
+                _numCardsSelected = 0;
+                _handCard = null;
+                _blindCard = null;
+                _wantsToSwap = false;
             }
-            return prompt;
+            return Prompt;
         }
     }
 }

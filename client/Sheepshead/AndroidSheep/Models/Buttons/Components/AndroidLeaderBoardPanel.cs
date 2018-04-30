@@ -18,15 +18,9 @@ namespace AndroidSheep.Models.Buttons.Components
         public bool Clicked { get; set; }
         public Color PenColor { get; set; }
         public Vector2 Position { get; set; }
-        public Color color;
-        public AndroidCard card;
-        public Rectangle Rectangle
-        {
-            get
-            {
-                return new Rectangle((int)Position.X, (int)Position.Y, _texture.Width / 2, _texture.Height / 2);
-            }
-        }
+        public Color Color;
+        public AndroidCard Card;
+        public Rectangle Rectangle => new Rectangle((int)Position.X, (int)Position.Y, _texture.Width / 2, _texture.Height / 2);
         public string Text;
         public string PlayerName;
         #endregion
@@ -36,14 +30,12 @@ namespace AndroidSheep.Models.Buttons.Components
             _texture = texture;
             _font = font;
             PenColor = Color.Black;
-            color = Color.White;
+            Color = Color.White;
         }
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(_texture, Rectangle, color);
-
-
+            spriteBatch.Draw(_texture, Rectangle, Color);
             if (!string.IsNullOrEmpty(Text))
             {
                 var x = (Rectangle.X + (Rectangle.Width / 2)) - (_font.MeasureString(Text).X / 2);
@@ -61,7 +53,7 @@ namespace AndroidSheep.Models.Buttons.Components
             }
             var cardX = (Rectangle.X + Rectangle.Width / 2) - 25;
             var cardY = (Rectangle.Y + Rectangle.Height / 2) - 15;
-            spriteBatch.Draw(card._texture, new Vector2(cardX, cardY), null, Color.White, 0f,
+            spriteBatch.Draw(Card.Texture, new Vector2(cardX, cardY), null, Color.White, 0f,
                 Vector2.Zero, 0.1f, SpriteEffects.None, 0f);
         }
 

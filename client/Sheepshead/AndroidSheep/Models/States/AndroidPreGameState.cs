@@ -9,58 +9,41 @@ namespace AndroidSheep.Models.States
 {
     class AndroidPreGameState : AndroidState
     {
-        private List<AndroidComponent> _components;
-
         public AndroidPreGameState(AndroidSheepGame table, GraphicsDevice graphicsDevice, GameContent gameContent) : base(table, graphicsDevice, gameContent)
         {
-            _components = new List<AndroidComponent>();
         }
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             spriteBatch.Begin();
-
-            foreach (var player in _table._playerGraphicsDict)
+            foreach (var player in Table.PlayerGraphicsDict)
             {
-                if (player.Key is LocalPlayer)
+                if (!(player.Key is LocalPlayer)) continue;
+                var playerCards = player.Value.PlayableCards;
+                if (playerCards == null) continue;
+                foreach (var card in playerCards)
                 {
-                    var playerCards = player.Value.playableCards;
-                    if (playerCards != null)
-                    {
-                        foreach (var card in playerCards)
-                        {
-                            card.Draw(gameTime, spriteBatch);
-                        }
-                    }
+                    card.Draw(gameTime, spriteBatch);
                 }
             }
             spriteBatch.End();
         }
 
-        public override void PostUpdate(GameTime gameTime)
-        {
-            throw new NotImplementedException();
-        }
-
         public override void Update(GameTime gameTime)
         {
-            foreach (var card in _table.blindList)
+            foreach (var card in Table.BlindList)
             {
                 card.State = StateType.PreGame;
                 card.Update(gameTime);
             }
-            foreach (var player in _table._playerGraphicsDict)
+            foreach (var player in Table.PlayerGraphicsDict)
             {
-                if (player.Key is LocalPlayer)
+                if (!(player.Key is LocalPlayer)) continue;
+                var playerCards = player.Value.PlayableCards;
+                if (playerCards == null) continue;
+                foreach (var card in playerCards)
                 {
-                    var playerCards = player.Value.playableCards;
-                    if (playerCards != null)
-                    {
-                        foreach (var card in playerCards)
-                        {
-                            card.State = StateType.PreGame;
-                            card.Update(gameTime);
-                        }
-                    }
+                    card.State = StateType.PreGame;
+                    card.Update(gameTime);
                 }
             }
         }

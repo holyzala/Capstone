@@ -11,7 +11,7 @@ namespace AndroidSheep.Models
     {
         public List<ICard> Cards { get; set; }
         public List<Texture2D> CardGraphics { get; set; }
-        public Dictionary<ICard, Texture2D> textureDict;
+        public Dictionary<ICard, Texture2D> TextureDict;
 
         public Texture2D QueenOfSpades { get; set; }
         public Texture2D KingOfSpades { get; set; }
@@ -59,76 +59,82 @@ namespace AndroidSheep.Models
         public Texture2D Button2 { get; set; }
         public Texture2D Button3 { get; set; }
         public Texture2D LeaderboardPanel { get; set; }
-        public GameContent(ContentManager Content)
+        public GameContent(ContentManager content)
         {
-            textureDict = new Dictionary<ICard, Texture2D>();
+            TextureDict = new Dictionary<ICard, Texture2D>();
             Cards = new List<ICard>();
             CardGraphics = new List<Texture2D>();
 
             SetAllCards();
 
-            CardGraphics.Add(SevenOfDiamonds = Content.Load<Texture2D>("Diamonds/7_of_diamonds"));
-            CardGraphics.Add(SevenOfHearts = Content.Load<Texture2D>("Hearts/7_of_hearts"));
-            CardGraphics.Add(SevenOfSpades = Content.Load<Texture2D>("Spades/7_of_spades"));
-            CardGraphics.Add(SevenOfClubs = Content.Load<Texture2D>("Clubs/7_of_clubs"));
+            CardGraphics.Add(SevenOfDiamonds = content.Load<Texture2D>("Diamonds/7_of_diamonds"));
+            CardGraphics.Add(SevenOfHearts = content.Load<Texture2D>("Hearts/7_of_hearts"));
+            CardGraphics.Add(SevenOfSpades = content.Load<Texture2D>("Spades/7_of_spades"));
+            CardGraphics.Add(SevenOfClubs = content.Load<Texture2D>("Clubs/7_of_clubs"));
 
-            CardGraphics.Add(EightOfDiamonds = Content.Load<Texture2D>("Diamonds/8_of_diamonds"));
-            CardGraphics.Add(EightOfHearts = Content.Load<Texture2D>("Hearts/8_of_hearts"));
-            CardGraphics.Add(EightOfSpades = Content.Load<Texture2D>("Spades/8_of_spades"));
-            CardGraphics.Add(EightOfClubs = Content.Load<Texture2D>("Clubs/8_of_clubs"));
+            CardGraphics.Add(EightOfDiamonds = content.Load<Texture2D>("Diamonds/8_of_diamonds"));
+            CardGraphics.Add(EightOfHearts = content.Load<Texture2D>("Hearts/8_of_hearts"));
+            CardGraphics.Add(EightOfSpades = content.Load<Texture2D>("Spades/8_of_spades"));
+            CardGraphics.Add(EightOfClubs = content.Load<Texture2D>("Clubs/8_of_clubs"));
 
-            CardGraphics.Add(NineOfDiamonds = Content.Load<Texture2D>("Diamonds/9_of_diamonds"));
-            CardGraphics.Add(NineOfHearts = Content.Load<Texture2D>("Hearts/9_of_hearts"));
-            CardGraphics.Add(NineOfSpades = Content.Load<Texture2D>("Spades/9_of_spades"));
-            CardGraphics.Add(NineOfClubs = Content.Load<Texture2D>("Clubs/9_of_clubs"));
+            CardGraphics.Add(NineOfDiamonds = content.Load<Texture2D>("Diamonds/9_of_diamonds"));
+            CardGraphics.Add(NineOfHearts = content.Load<Texture2D>("Hearts/9_of_hearts"));
+            CardGraphics.Add(NineOfSpades = content.Load<Texture2D>("Spades/9_of_spades"));
+            CardGraphics.Add(NineOfClubs = content.Load<Texture2D>("Clubs/9_of_clubs"));
 
-            CardGraphics.Add(KingOfDiamonds = Content.Load<Texture2D>("Diamonds/king_of_diamonds2"));
-            CardGraphics.Add(KingOfHearts = Content.Load<Texture2D>("Hearts/king_of_hearts2"));
-            CardGraphics.Add(KingOfSpades = Content.Load<Texture2D>("Spades/king_of_spades2"));
-            CardGraphics.Add(KingOfClubs = Content.Load<Texture2D>("Clubs/king_of_clubs2"));
+            CardGraphics.Add(KingOfDiamonds = content.Load<Texture2D>("Diamonds/king_of_diamonds2"));
+            CardGraphics.Add(KingOfHearts = content.Load<Texture2D>("Hearts/king_of_hearts2"));
+            CardGraphics.Add(KingOfSpades = content.Load<Texture2D>("Spades/king_of_spades2"));
+            CardGraphics.Add(KingOfClubs = content.Load<Texture2D>("Clubs/king_of_clubs2"));
 
-            CardGraphics.Add(TenOfDiamonds = Content.Load<Texture2D>("Diamonds/10_of_diamonds"));
-            CardGraphics.Add(TenOfHearts = Content.Load<Texture2D>("Hearts/10_of_hearts"));
-            CardGraphics.Add(TenOfSpades = Content.Load<Texture2D>("Spades/10_of_spades"));
-            CardGraphics.Add(TenOfClubs = Content.Load<Texture2D>("Clubs/10_of_clubs"));
+            CardGraphics.Add(TenOfDiamonds = content.Load<Texture2D>("Diamonds/10_of_diamonds"));
+            CardGraphics.Add(TenOfHearts = content.Load<Texture2D>("Hearts/10_of_hearts"));
+            CardGraphics.Add(TenOfSpades = content.Load<Texture2D>("Spades/10_of_spades"));
+            CardGraphics.Add(TenOfClubs = content.Load<Texture2D>("Clubs/10_of_clubs"));
 
-            CardGraphics.Add(AceOfDiamonds = Content.Load<Texture2D>("Diamonds/ace_of_diamonds"));
-            CardGraphics.Add(AceOfHearts = Content.Load<Texture2D>("Hearts/ace_of_hearts"));
-            CardGraphics.Add(AceOfSpades = Content.Load<Texture2D>("Spades/ace_of_spades"));
-            CardGraphics.Add(AceOfClubs = Content.Load<Texture2D>("Clubs/ace_of_clubs"));
+            CardGraphics.Add(AceOfDiamonds = content.Load<Texture2D>("Diamonds/ace_of_diamonds"));
+            CardGraphics.Add(AceOfHearts = content.Load<Texture2D>("Hearts/ace_of_hearts"));
+            CardGraphics.Add(AceOfSpades = content.Load<Texture2D>("Spades/ace_of_spades"));
+            CardGraphics.Add(AceOfClubs = content.Load<Texture2D>("Clubs/ace_of_clubs"));
 
-            CardGraphics.Add(JackOfDiamonds = Content.Load<Texture2D>("Diamonds/jack_of_diamonds2"));
-            CardGraphics.Add(JackOfHearts = Content.Load<Texture2D>("Hearts/jack_of_hearts2"));
-            CardGraphics.Add(JackOfSpades = Content.Load<Texture2D>("Spades/jack_of_spades2"));
-            CardGraphics.Add(JackOfClubs = Content.Load<Texture2D>("Clubs/jack_of_clubs2"));
+            CardGraphics.Add(JackOfDiamonds = content.Load<Texture2D>("Diamonds/jack_of_diamonds2"));
+            CardGraphics.Add(JackOfHearts = content.Load<Texture2D>("Hearts/jack_of_hearts2"));
+            CardGraphics.Add(JackOfSpades = content.Load<Texture2D>("Spades/jack_of_spades2"));
+            CardGraphics.Add(JackOfClubs = content.Load<Texture2D>("Clubs/jack_of_clubs2"));
 
-            CardGraphics.Add(QueenOfDiamonds = Content.Load<Texture2D>("Diamonds/queen_of_diamonds2"));
-            CardGraphics.Add(QueenOfHearts = Content.Load<Texture2D>("Hearts/queen_of_hearts2"));
-            CardGraphics.Add(QueenOfSpades = Content.Load<Texture2D>("Spades/queen_of_spades2"));
-            CardGraphics.Add(QueenOfClubs = Content.Load<Texture2D>("Clubs/queen_of_clubs2"));
+            CardGraphics.Add(QueenOfDiamonds = content.Load<Texture2D>("Diamonds/queen_of_diamonds2"));
+            CardGraphics.Add(QueenOfHearts = content.Load<Texture2D>("Hearts/queen_of_hearts2"));
+            CardGraphics.Add(QueenOfSpades = content.Load<Texture2D>("Spades/queen_of_spades2"));
+            CardGraphics.Add(QueenOfClubs = content.Load<Texture2D>("Clubs/queen_of_clubs2"));
 
-            for(int i = 0; i < Cards.Count; i++)
+            for(var i = 0; i < Cards.Count; i++)
             {
-                textureDict.Add(Cards[i], CardGraphics[i]);
+                TextureDict.Add(Cards[i], CardGraphics[i]);
             }
 
-            TableTop = Content.Load<Texture2D>("Table/darktexture");
-            Button = Content.Load<Texture2D>("Buttons/button");
-            Button2 = Content.Load<Texture2D>("Buttons/button2");
-            Button3 = Content.Load<Texture2D>("Buttons/button3");
-            Font = Content.Load<SpriteFont>("Fonts/Font");
-            LeaderboardPanel = Content.Load<Texture2D>("Buttons/leaderboardpanel");
+            TableTop = content.Load<Texture2D>("Table/darktexture");
+            Button = content.Load<Texture2D>("Buttons/button");
+            Button2 = content.Load<Texture2D>("Buttons/button2");
+            Button3 = content.Load<Texture2D>("Buttons/button3");
+            Font = content.Load<SpriteFont>("Fonts/Font");
+            LeaderboardPanel = content.Load<Texture2D>("Buttons/leaderboardpanel");
             //.Equals equatable
         }
+
         private void SetAllCards()
         {
-            CardPower pow = CardPower.SevenFail;
+            var pow = CardPower.SevenFail;
             foreach (CardID cID in Enum.GetValues(typeof(CardID)))
             {
-                if (cID == CardID.Jack)
-                    pow = CardPower.JackDiamond;
-                if (cID == CardID.Queen)
-                    pow = CardPower.QueenDiamond;
+                switch (cID)
+                {
+                    case CardID.Jack:
+                        pow = CardPower.JackDiamond;
+                        break;
+                    case CardID.Queen:
+                        pow = CardPower.QueenDiamond;
+                        break;
+                }
 
                 foreach (Suit suit in Enum.GetValues(typeof(Suit)))
                 {
@@ -145,10 +151,7 @@ namespace AndroidSheep.Models
                             break;
 
                         default:
-                            if (suit == Suit.Diamond)
-                                Cards.Add(new Card(cID, pow + 6, suit));
-                            else
-                                Cards.Add(new Card(cID, pow, suit));
+                            Cards.Add(suit == Suit.Diamond ? new Card(cID, pow + 6, suit) : new Card(cID, pow, suit));
                             break;
                     }
                 }

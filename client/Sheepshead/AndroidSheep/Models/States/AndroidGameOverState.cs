@@ -17,7 +17,7 @@ namespace AndroidSheep.Models.States
 {
     class AndroidGameOverState : AndroidState
     {
-        private List<AndroidButton> leaderboardpanel;
+        private List<AndroidButton> _leaderboardpanel;
         public AndroidGameOverState(AndroidSheepGame table, GraphicsDevice graphicsDevice, GameContent gameContent) : base(table, graphicsDevice, gameContent)
         {
             var offset = 0;
@@ -45,7 +45,7 @@ namespace AndroidSheep.Models.States
             {
                 Position = new Vector2(0, offset)
             };
-            leaderboardpanel = new List<AndroidButton>()
+            _leaderboardpanel = new List<AndroidButton>()
             {
                 playerOneScore,
                 playerTwoScore,
@@ -55,10 +55,6 @@ namespace AndroidSheep.Models.States
             };
         }
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
-        {
-        }
-
-        public override void PostUpdate(GameTime gameTime)
         {
         }
 

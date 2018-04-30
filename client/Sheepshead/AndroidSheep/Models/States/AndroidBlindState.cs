@@ -9,7 +9,7 @@ namespace AndroidSheep.Models.States
 {
     class AndroidBlindState : AndroidState
     {
-        private List<AndroidComponent> _components;
+        private readonly List<AndroidComponent> _components;
 
         public AndroidBlindState(AndroidSheepGame table, GraphicsDevice graphicsDevice, GameContent gameContent) : base(table, graphicsDevice, gameContent)
         {
@@ -32,16 +32,14 @@ namespace AndroidSheep.Models.States
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             spriteBatch.Begin();
-            foreach (var player in _table._playerGraphicsDict)
+            foreach (var player in Table.PlayerGraphicsDict)
             {
-                if (player.Key is LocalPlayer)
-                {
-                    var playerCards = player.Value.playableCards;
+                if (!(player.Key is LocalPlayer)) continue;
+                var playerCards = player.Value.PlayableCards;
               
-                    foreach (var card in playerCards)
-                    { 
-                        card.Draw(gameTime, spriteBatch);
-                    }
+                foreach (var card in playerCards)
+                { 
+                    card.Draw(gameTime, spriteBatch);
                 }
             }
             foreach (var component in _components)
@@ -51,22 +49,17 @@ namespace AndroidSheep.Models.States
             spriteBatch.End();
         }
 
-        public override void PostUpdate(GameTime gameTime)
-        {
-            throw new NotImplementedException();
-        }
-
         public override void Update(GameTime gameTime)
         {
             foreach (var component in _components)
             {
                 component.Update(gameTime);
             }
-            foreach (var player in _table._playerGraphicsDict)
+            foreach (var player in Table.PlayerGraphicsDict)
             {
                 if (player.Key is LocalPlayer)
                 {
-                    var playerCards = player.Value.playableCards;
+                    var playerCards = player.Value.PlayableCards;
                     if (playerCards != null)
                     {
                         foreach (var card in playerCards)

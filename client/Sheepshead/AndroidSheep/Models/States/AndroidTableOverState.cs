@@ -24,10 +24,6 @@ namespace AndroidSheep.Models.States
             throw new NotImplementedException();
         }
 
-        public override void PostUpdate(GameTime gameTime)
-        {
-            throw new NotImplementedException();
-        }
 
         public override void Update(GameTime gameTime)
         {
