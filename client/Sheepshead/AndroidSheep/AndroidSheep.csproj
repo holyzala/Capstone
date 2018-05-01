@@ -47,6 +47,9 @@
     <WarningLevel>4</WarningLevel>
     <AndroidUseSharedRuntime>False</AndroidUseSharedRuntime>
     <AndroidLinkMode>SdkOnly</AndroidLinkMode>
+    <AotAssemblies>false</AotAssemblies>
+    <EnableLLVM>false</EnableLLVM>
+    <BundleAssemblies>false</BundleAssemblies>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Mono.Android" />
@@ -61,17 +64,31 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AndroidSheepGame.cs" />
     <Compile Include="MainAcitivity.cs" />
-    <Compile Include="Models\Camera\DebugCamera.cs" />
-    <Compile Include="Models\Camera\ICamera.cs" />
-    <Compile Include="Models\Camera\PlayerCamera.cs" />
-    <Compile Include="Models\Player\IPlayer.cs" />
-    <Compile Include="Models\TableTop\TableTop.cs" />
-    <Compile Include="Table.cs" />
+    <Compile Include="Models\AndroidEnums.cs" />
+    <Compile Include="Models\Buttons\AndroidBackground.cs" />
+    <Compile Include="Models\Buttons\AndroidButton.cs" />
+    <Compile Include="Models\Buttons\AndroidCard.cs" />
+    <Compile Include="Models\Buttons\AndroidComponent.cs" />
+    <Compile Include="Models\Buttons\AndroidPlayedArea.cs" />
+    <Compile Include="Models\Buttons\Components\AndroidHandContainer.cs" />
+    <Compile Include="Models\Buttons\Components\AndroidLeaderBoardPanel.cs" />
+    <Compile Include="Models\ContentManager\GameContent.cs" />
+    <Compile Include="Models\Player\AndroidPlayer.cs" />
+    <Compile Include="Models\States\AndroidBlindState.cs" />
+    <Compile Include="Models\States\AndroidGameOverState.cs" />
+    <Compile Include="Models\States\AndroidPickingState.cs" />
+    <Compile Include="Models\States\AndroidPlayState.cs" />
+    <Compile Include="Models\States\AndroidPreGameState.cs" />
+    <Compile Include="Models\States\AndroidRoundOverState.cs" />
+    <Compile Include="Models\States\AndroidState.cs" />
+    <Compile Include="Models\States\AndroidTableOverState.cs" />
     <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Content\Fonts\Font.spritefont" />
     <None Include="Resources\AboutResources.txt" />
     <None Include="Assets\AboutAssets.txt" />
   </ItemGroup>
@@ -82,8 +99,6 @@
     <AndroidResource Include="Resources\Drawable\Icon.png" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Models\Buttons\" />
-    <Folder Include="Models\Card\" />
     <Folder Include="Resources\Layout\" />
   </ItemGroup>
   <ItemGroup>
@@ -111,6 +126,18 @@
     <Content Include="Content\Clubs\king_of_clubs2.png" />
     <Content Include="Content\Clubs\queen_of_clubs.png" />
     <Content Include="Content\Clubs\queen_of_clubs2.png" />
+    <Content Include="Content\Diamonds\10_of_diamonds.png" />
+    <Content Include="Content\Diamonds\6_of_diamonds.png" />
+    <Content Include="Content\Diamonds\7_of_diamonds.png" />
+    <Content Include="Content\Diamonds\8_of_diamonds.png" />
+    <Content Include="Content\Diamonds\9_of_diamonds.png" />
+    <Content Include="Content\Diamonds\ace_of_diamonds.png" />
+    <Content Include="Content\Diamonds\jack_of_diamonds.png" />
+    <Content Include="Content\Diamonds\jack_of_diamonds2.png" />
+    <Content Include="Content\Diamonds\king_of_diamonds.png" />
+    <Content Include="Content\Diamonds\king_of_diamonds2.png" />
+    <Content Include="Content\Diamonds\queen_of_diamonds.png" />
+    <Content Include="Content\Diamonds\queen_of_diamonds2.png" />
     <Content Include="Content\Hearts\10_of_hearts.png" />
     <Content Include="Content\Hearts\6_of_hearts.png" />
     <Content Include="Content\Hearts\7_of_hearts.png" />
@@ -150,6 +177,12 @@
     <Content Include="Content\Trumps\king_of_diamonds2.png" />
     <Content Include="Content\Trumps\queen_of_diamonds.png" />
     <Content Include="Content\Trumps\queen_of_diamonds2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SharedSheep\SharedSheep.csproj">
+      <Project>{2b7d5964-2091-4433-ad98-80e0776aeb34}</Project>
+      <Name>SharedSheep</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Novell\Novell.MonoDroid.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\MonoGame\v3.0\MonoGame.Content.Builder.targets" />
