@@ -47,6 +47,8 @@ namespace AndroidSheep
         private AndroidBlindState _blindState;
         private AndroidPlayState _playingState;
         private AndroidRoundOverState _roundOverState;
+        private AndroidGameOverState _gameOverState;
+        private AndroidTableOverState _tableOverstate;
         #endregion
 
         public void ChangeState(AndroidState state)
@@ -100,7 +102,8 @@ namespace AndroidSheep
             _blindState = new AndroidBlindState(this, _graphics.GraphicsDevice, GameContent);
             _playingState = new AndroidPlayState(this, _graphics.GraphicsDevice, GameContent);
             _roundOverState = new AndroidRoundOverState(this, _graphics.GraphicsDevice, GameContent);
-
+            _gameOverState = new AndroidGameOverState(this, _graphics.GraphicsDevice, GameContent);
+            _tableOverstate = new AndroidTableOverState(this, _graphics.GraphicsDevice, GameContent);
             LoadGame();
             _mainThreadStart = new ThreadStart(_table.Start);
             _mainThread = new Thread(_mainThreadStart);
@@ -205,6 +208,9 @@ namespace AndroidSheep
                     prompt = "yes"; 
                     break;
 
+                case PromptType.BotPlayCard:
+                    break;
+
                 case PromptType.PlayCard:
                     State = StateType.Playing;                   
                     picker = (IPlayer)data[PromptData.Picker];
@@ -258,20 +264,17 @@ namespace AndroidSheep
                     break;
 
                 case PromptType.GameOver:
-                    ChangeState(new AndroidGameOverState(this, _graphics.GraphicsDevice, GameContent));
+                    ChangeState(_gameOverState);
                     State = StateType.GameOver;
                     var game = (IGame)data[PromptData.Game];
-                    prompt = string.Format("Picker {0} got {1} points\n", game.Picker, game.GetPickerScore());
-                    prompt += "Scoresheet:\n";
-                    _table.Players.ForEach(playerIt =>
-                    {
-                        prompt += string.Format("{0}: {1}  ", playerIt, _table.ScrSheet.Scores[playerIt][_table.Games.Count - 1]);
-                    });
-                    prompt += "\n";
+                    _gameOverState.SetGame(game);
+                    _gameOverState.SetSharedSheepTable(_table);
+                    _gameOverState.SetScoreSheet(_table.ScrSheet);
+                    prompt = _gameOverState.PickingPrompt();
                     break;
 
                 case PromptType.TableOver:
-                    ChangeState(new AndroidTableOverState(this, _graphics.GraphicsDevice, GameContent));
+                    ChangeState(_tableOverstate);
                     State = StateType.TableOver;
                     prompt = "Totals:\n";
                     _table.Players.ForEach(playerIt =>

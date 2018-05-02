@@ -25,17 +25,18 @@ namespace AndroidSheep.Models.States
         public string Prompt = "";
         public IPlayer Player { get; set; }
         public IBlind Blind { get; set; }
+        private AndroidButton swapButton;
 
         public AndroidPickingState(AndroidSheepGame table, GraphicsDevice graphicsDevice, GameContent gameContent) : base(table, graphicsDevice, gameContent)
         {
             AndroidButton doneButton = new AndroidButton(gameContent.Button, gameContent.Font)
             {
-                Position = new Vector2(250, 50),
+                Position = new Vector2(240, 50),
                 Text = "Done?"
             };
-            AndroidButton swapButton = new AndroidButton(gameContent.Button, gameContent.Font)
+            swapButton = new AndroidButton(gameContent.Button, gameContent.Font)
             {
-                Position = new Vector2(750, 50),
+                Position = new Vector2(740, 50),
                 Text = "Swap?"
             };
 
@@ -64,11 +65,12 @@ namespace AndroidSheep.Models.States
 
         private void SwapButton_Click(object sender, EventArgs e)
         {
-            _wantsToSwap = true;
+           _wantsToSwap = true;
         }
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
+
             spriteBatch.Begin(SpriteSortMode.Immediate);
             foreach (var card in _graphicsPlayer.PlayableCards)
             {

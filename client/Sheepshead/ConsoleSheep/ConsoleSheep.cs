@@ -106,6 +106,7 @@ namespace ConsoleSheep
 
                 case PromptType.RoundOver:
                     trick = ((IRound)data[PromptData.Round]).Trick;
+                    trick = ((IRound)data[PromptData.Round]).Trick;
                     prompt = string.Format("{0} won the trick for {1} points\n", trick.TheWinnerPlayer(), trick.TrickValue());
                     prompt += "All cards played:\n";
                     foreach ((IPlayer, ICard) playerCard in trick)
