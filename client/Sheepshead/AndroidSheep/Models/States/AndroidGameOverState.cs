@@ -10,42 +10,73 @@ using Android.Runtime;
 using Android.Views;
 using Android.Widget;
 using AndroidSheep.Models.Buttons;
+using AndroidSheep.Models.Buttons.Components;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using SharedSheep.Game;
+using SharedSheep.ScoreSheet;
+using SharedSheep.Table;
 
 namespace AndroidSheep.Models.States
 {
     class AndroidGameOverState : AndroidState
     {
-        private List<AndroidButton> _leaderboardpanel;
+        private readonly List<AndroidGameOverScores> _leaderboardpanel;
+        private readonly List<AndroidButton> _components;
+        private bool _nextGame;
+        private IGame _game;
+        private IScoreSheet _scoresheet;
+        private ITable _table;
+        private AndroidGameOverScores _pickerScore;
         public AndroidGameOverState(AndroidSheepGame table, GraphicsDevice graphicsDevice, GameContent gameContent) : base(table, graphicsDevice, gameContent)
         {
-            var offset = 0;
-            AndroidButton playerOneScore = new AndroidButton(gameContent.Button2, gameContent.Font)
+            _nextGame = false;
+            AndroidButton doneButton = new AndroidButton(gameContent.Button, gameContent.Font)
             {
-                Position = new Vector2(0, offset)
+                Position = new Vector2(Table.ScreenWidth / 2 - 150, Table.ScreenHeight / 2 - 300),
+                Text = "Next Round",
+                Color = Color.White
             };
-            offset += gameContent.Button2.Height /2;
-            AndroidButton playerTwoScore = new AndroidButton(gameContent.Button2, gameContent.Font)
+
+            doneButton.Click += DoneButton_Click;
+
+            _pickerScore = new AndroidGameOverScores(gameContent.Button3, gameContent.Font)
             {
-                Position = new Vector2(0, offset)
+                Position = new Vector2(Table.ScreenWidth / 2.0f - 125, Table.ScreenWidth / 5.0f - 20)
             };
-            offset += gameContent.Button2.Height / 2;
-            AndroidButton playerThreeScore = new AndroidButton(gameContent.Button2, gameContent.Font)
+
+            _components = new List<AndroidButton>()
             {
-                Position = new Vector2(0, offset)
+                doneButton,
             };
-            offset += gameContent.Button2.Height / 2;
-            AndroidButton playerFourScore = new AndroidButton(gameContent.Button2, gameContent.Font)
+            var offset = 50;
+            var halfscreen = table.ScreenHeight / 2;
+
+            AndroidGameOverScores playerOneScore = new AndroidGameOverScores(gameContent.Button3, gameContent.Font)
             {
-                Position = new Vector2(0, offset)
+                Position = new Vector2(offset, halfscreen)
             };
-            offset += gameContent.Button2.Height / 2;
-            AndroidButton playerFiveScore = new AndroidButton(gameContent.Button2, gameContent.Font)
+            offset += gameContent.Button2.Width - 50;
+            AndroidGameOverScores playerTwoScore = new AndroidGameOverScores(gameContent.Button3, gameContent.Font)
             {
-                Position = new Vector2(0, offset)
+                Position = new Vector2(offset, halfscreen)
             };
-            _leaderboardpanel = new List<AndroidButton>()
+            offset += gameContent.Button2.Width - 50;
+            AndroidGameOverScores playerThreeScore = new AndroidGameOverScores(gameContent.Button3, gameContent.Font)
+            {
+                Position = new Vector2(offset, halfscreen)
+            };
+            offset += gameContent.Button2.Width - 50;
+            AndroidGameOverScores playerFourScore = new AndroidGameOverScores(gameContent.Button3, gameContent.Font)
+            {
+                Position = new Vector2(offset, halfscreen)
+            };
+            offset += gameContent.Button2.Width - 50;
+            AndroidGameOverScores playerFiveScore = new AndroidGameOverScores(gameContent.Button3, gameContent.Font)
+            {
+                Position = new Vector2(offset, halfscreen)
+            };
+            _leaderboardpanel = new List<AndroidGameOverScores>()
             {
                 playerOneScore,
                 playerTwoScore,
@@ -54,12 +85,73 @@ namespace AndroidSheep.Models.States
                 playerFiveScore
             };
         }
+
+        private void DoneButton_Click(object sender, EventArgs e)
+        {
+            _nextGame = true;
+        }
+
+        public void SetGame(IGame game)
+        {
+            _game = game;
+            _pickerScore.PlayerName = "Picker: " + game.Picker.Name;
+            _pickerScore.Score = "Points: " + game.GetPickerScore().ToString();
+        }
+
+        public void SetSharedSheepTable(ITable table)
+        {
+            _table = table;
+        }
+        public void SetScoreSheet(IScoreSheet scoresheet)
+        {
+            _scoresheet = scoresheet;
+            var index = 0;
+            foreach (var pair in Table.PlayerGraphicsDict)
+            {
+                var player = pair.Key;
+                _leaderboardpanel[index].PlayerName = player.Name;
+                var score = scoresheet.Scores[player][_table.Games.Count - 1];
+                _leaderboardpanel[index++].Score = "Current Score: " + score.ToString();
+            }
+        }
+
+        public string PickingPrompt()
+        {
+            var prompt = "";
+            if (_nextGame)
+            {
+                prompt = "done";
+            }
+
+            _nextGame = false;
+            return prompt;
+        }
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
+            spriteBatch.Begin(SpriteSortMode.Immediate);
+            if (_leaderboardpanel == null) return;
+            foreach (var component in _leaderboardpanel)
+            {
+                component?.Draw(gameTime, spriteBatch);
+            }
+
+            if (_components == null) return;
+            foreach (var component in _components)
+            {
+                component?.Draw(gameTime, spriteBatch);
+            }
+            _pickerScore?.Draw(gameTime, spriteBatch);
+
+            spriteBatch.End();
         }
 
         public override void Update(GameTime gameTime)
         {
+            _pickerScore?.Update(gameTime);
+            foreach (var component in _components)
+            {
+                component?.Update(gameTime);
+            }
         }
     }
 }

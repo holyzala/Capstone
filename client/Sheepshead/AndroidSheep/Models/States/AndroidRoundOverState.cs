@@ -27,7 +27,7 @@ namespace AndroidSheep.Models.States
             AndroidButton doneButton = new AndroidButton(gameContent.Button, gameContent.Font)
             {
                 Position = new Vector2(Table.ScreenWidth / 2 - 125, Table.ScreenHeight / 2 - 300),
-                Text = "Next Round"
+                Text = "Next Game"
             };
 
             doneButton.Click += DoneButton_Click;
