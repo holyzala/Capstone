@@ -75,10 +75,15 @@ namespace SharedSheep.Table
                 StartNewGame();
                 ++GameIndex;
             }
-            prompt(PromptType.TableOver, new Dictionary<PromptData, object>
+
+            while (true)
             {
-                { PromptData.Scores, ScrSheet }
-            });
+                var answer = prompt(PromptType.TableOver, new Dictionary<PromptData, object>
+                {
+                    {PromptData.Scores, ScrSheet}
+                });
+                if (answer == "playAgain") break;
+            }
         }
     }
 }

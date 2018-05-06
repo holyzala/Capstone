@@ -55,10 +55,17 @@ namespace AndroidSheep.Models
 
         public Texture2D TableTop { get; set; }
         public SpriteFont Font { get; set; }
+        public SpriteFont FinalScoreFont { get; set; }
+
         public Texture2D Button { get; set; }
         public Texture2D Button2 { get; set; }
         public Texture2D Button3 { get; set; }
+        public Texture2D Button4 { get; set; }
+
         public Texture2D LeaderboardPanel { get; set; }
+        public Texture2D Logo { get; set; }
+        public Texture2D Ranks { get; set; }
+        public Texture2D PickWords { get; set; }
         public GameContent(ContentManager content)
         {
             TextureDict = new Dictionary<ICard, Texture2D>();
@@ -116,9 +123,13 @@ namespace AndroidSheep.Models
             Button = content.Load<Texture2D>("Buttons/button");
             Button2 = content.Load<Texture2D>("Buttons/button2");
             Button3 = content.Load<Texture2D>("Buttons/button3");
+            Button4 = content.Load<Texture2D>("Buttons/button4");
+            Ranks = content.Load<Texture2D>("Table/ranks");
             Font = content.Load<SpriteFont>("Fonts/Font");
+            FinalScoreFont = content.Load<SpriteFont>("Fonts/FinalScoreFont");
+            PickWords = content.Load<Texture2D>("Table/pickwords");
             LeaderboardPanel = content.Load<Texture2D>("Buttons/leaderboardpanel");
-            //.Equals equatable
+            Logo = content.Load<Texture2D>("Table/logo");
         }
 
         private void SetAllCards()
