@@ -14,7 +14,7 @@ namespace AndroidSheep.Models.States
         }
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            spriteBatch.Begin();
+            spriteBatch.Begin(SpriteSortMode.Immediate);
             foreach (var player in Table.PlayerGraphicsDict)
             {
                 if (!(player.Key is LocalPlayer)) continue;

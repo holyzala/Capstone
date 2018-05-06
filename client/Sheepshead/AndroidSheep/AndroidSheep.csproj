@@ -72,6 +72,7 @@
     <Compile Include="Models\Buttons\AndroidCard.cs" />
     <Compile Include="Models\Buttons\AndroidComponent.cs" />
     <Compile Include="Models\Buttons\AndroidPlayedArea.cs" />
+    <Compile Include="Models\Buttons\Components\AndroidFinalScoreBanner.cs" />
     <Compile Include="Models\Buttons\Components\AndroidGameOverScores.cs" />
     <Compile Include="Models\Buttons\Components\AndroidHandContainer.cs" />
     <Compile Include="Models\Buttons\Components\AndroidLeaderBoardPanel.cs" />
@@ -85,6 +86,7 @@
     <Compile Include="Models\States\AndroidRoundOverState.cs" />
     <Compile Include="Models\States\AndroidState.cs" />
     <Compile Include="Models\States\AndroidTableOverState.cs" />
+    <Compile Include="Models\States\AndroidTitleScreen.cs" />
     <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

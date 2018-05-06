@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using SharedSheep.Player;
 using SharedSheep.ScoreSheet;
+using SharedSheep.Table;
 using SharedSheep.Trick;
 
 namespace AndroidSheep.Models.States
@@ -23,7 +24,8 @@ namespace AndroidSheep.Models.States
         private AndroidCard _selectedPlayCard;
         private bool _wantsToPlay;
         private bool _areBarsSet;
-
+        private IPlayer _picker;
+        private AndroidButton _pickerInfo;
         public bool IsTrickSet;
         public bool LeaderboardSet;
 
@@ -34,17 +36,26 @@ namespace AndroidSheep.Models.States
             IsTrickSet = false;
             _areBarsSet = false;
             LeaderboardSet = false;
-            AndroidButton leadingCard = new AndroidButton(Table.GameContent.Button2, Table.GameContent.Font)
+            AndroidButton rankInfo = new AndroidButton(Table.GameContent.Ranks, Table.GameContent.Font)
             {
-                Position = new Vector2(Table.ScreenWidth * 0.8f, Table.ScreenHeight * 0.25f),
-                Text = "Lead Card"
+                Position = new Vector2(0, Table.ScreenHeight / 2 - 100)
             };
+            _pickerInfo = new AndroidButton(Table.GameContent.Button3, Table.GameContent.Font)
+            {
+                Position = new Vector2(Table.ScreenWidth * 0.8f, Table.ScreenHeight * 0.25f)
+           };
             _components = new List<AndroidButton>()
             {
-                leadingCard
+                rankInfo,
+                _pickerInfo
             };
         }
 
+        public void SetPicker(IPlayer picker)
+        {
+            _picker = picker;
+            _pickerInfo.Text = "Picker: "  + _picker.Name;
+        }
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             spriteBatch.Begin(SpriteSortMode.Immediate);
@@ -76,7 +87,6 @@ namespace AndroidSheep.Models.States
                     component?.Draw(gameTime, spriteBatch);
                 }
             }
-
             spriteBatch.End();
         }
 
@@ -135,7 +145,7 @@ namespace AndroidSheep.Models.States
                 trickCard.IsTrick = true;
                 var player = cardPlayerPair.Item1;
                 _leaderboardpanel[_playedIndex].PlayerName = player.Name;
-                _leaderboardpanel[_playedIndex].Text = "Last Played Card: ";
+                _leaderboardpanel[_playedIndex].Text = "Card Played: ";
                 _leaderboardpanel[_playedIndex].Card = trickCard;
 
                 Table.PlayedCards[_playedIndex++] = trickCard;
@@ -231,6 +241,10 @@ namespace AndroidSheep.Models.States
                         }
                     }
                     player.Value.PlayableCards = newPlayableCards;
+                    foreach (var card in playerCards)
+                    {
+                        card.IsPlayable = false;
+                    }
                 }
             }
             return _prompt;

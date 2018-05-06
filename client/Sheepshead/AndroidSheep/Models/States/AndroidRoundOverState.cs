@@ -27,7 +27,7 @@ namespace AndroidSheep.Models.States
             AndroidButton doneButton = new AndroidButton(gameContent.Button, gameContent.Font)
             {
                 Position = new Vector2(Table.ScreenWidth / 2 - 125, Table.ScreenHeight / 2 - 300),
-                Text = "Next Game"
+                Text = "Next Round"
             };
 
             doneButton.Click += DoneButton_Click;
@@ -40,10 +40,13 @@ namespace AndroidSheep.Models.States
             AndroidButton trickWinner = new AndroidButton(gameContent.Button, gameContent.Font)
             {
                 Position = new Vector2(Table.ScreenWidth / 2 - 125, Table.ScreenHeight / 2 + 200),
+                Color = Color.White
             };
             AndroidButton trickScore = new AndroidButton(gameContent.Button, gameContent.Font)
             {
                 Position = new Vector2(Table.ScreenWidth / 2 - 125, Table.ScreenHeight / 2 + 300),
+                Color = Color.White
+
             };
 
             _roundStats = new List<AndroidButton>()

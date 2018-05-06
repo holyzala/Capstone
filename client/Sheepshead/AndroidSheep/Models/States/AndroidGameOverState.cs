@@ -33,8 +33,8 @@ namespace AndroidSheep.Models.States
             _nextGame = false;
             AndroidButton doneButton = new AndroidButton(gameContent.Button, gameContent.Font)
             {
-                Position = new Vector2(Table.ScreenWidth / 2 - 150, Table.ScreenHeight / 2 - 300),
-                Text = "Next Round",
+                Position = new Vector2(Table.ScreenWidth / 2 - 130, Table.ScreenHeight / 2 - 300),
+                Text = "Next Game",
                 Color = Color.White
             };
 
@@ -42,7 +42,7 @@ namespace AndroidSheep.Models.States
 
             _pickerScore = new AndroidGameOverScores(gameContent.Button3, gameContent.Font)
             {
-                Position = new Vector2(Table.ScreenWidth / 2.0f - 125, Table.ScreenWidth / 5.0f - 20)
+                Position = new Vector2(Table.ScreenWidth / 2.0f - 115, Table.ScreenWidth / 5.0f - 20)
             };
 
             _components = new List<AndroidButton>()
@@ -96,6 +96,10 @@ namespace AndroidSheep.Models.States
             _game = game;
             _pickerScore.PlayerName = "Picker: " + game.Picker.Name;
             _pickerScore.Score = "Points: " + game.GetPickerScore().ToString();
+            foreach (var component in _components)
+            {
+                component.Color = Color.White;
+            }
         }
 
         public void SetSharedSheepTable(ITable table)
@@ -129,18 +133,23 @@ namespace AndroidSheep.Models.States
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             spriteBatch.Begin(SpriteSortMode.Immediate);
-            if (_leaderboardpanel == null) return;
-            foreach (var component in _leaderboardpanel)
+            if (_leaderboardpanel != null)
             {
-                component?.Draw(gameTime, spriteBatch);
+                foreach (var component in _leaderboardpanel)
+                {
+                    component?.Draw(gameTime, spriteBatch);
+                }
             }
 
-            if (_components == null) return;
-            foreach (var component in _components)
+            if (_components != null)
             {
-                component?.Draw(gameTime, spriteBatch);
+                foreach (var component in _components)
+                {
+                    component?.Draw(gameTime, spriteBatch);
+                }
+
+                _pickerScore?.Draw(gameTime, spriteBatch);
             }
-            _pickerScore?.Draw(gameTime, spriteBatch);
 
             spriteBatch.End();
         }

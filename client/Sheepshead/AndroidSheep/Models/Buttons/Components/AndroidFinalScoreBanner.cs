@@ -11,11 +11,10 @@ using Android.Views;
 using Android.Widget;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using SharedSheep.Card;
 
 namespace AndroidSheep.Models.Buttons.Components
 {
-    class AndroidGameOverScores : AndroidComponent
+    class AndroidFinalScoreBanner : AndroidComponent
     {
         #region Fields
         private SpriteFont _font;
@@ -33,30 +32,31 @@ namespace AndroidSheep.Models.Buttons.Components
         public string PlayerName;
         #endregion
 
-        public AndroidGameOverScores(Texture2D texture, SpriteFont font)
+        public AndroidFinalScoreBanner(Texture2D texture, SpriteFont font)
         {
             _texture = texture;
             _font = font;
             PenColor = Color.Black;
             Color = Color.White;
         }
+
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             spriteBatch.Draw(_texture, Rectangle, Color);
+            if (!string.IsNullOrEmpty(PlayerName))
+            {
+                var x = (Rectangle.X + (Rectangle.Width / 2) - 100) - (_font.MeasureString(Score).X / 2 - 25);
+                var y = (Rectangle.Y + (Rectangle.Height / 2) - 30) - (_font.MeasureString(PlayerName).Y / 2);
+
+                spriteBatch.DrawString(_font, PlayerName, new Vector2(x, y), PenColor);
+            }
+
             if (!string.IsNullOrEmpty(Score))
             {
                 var x = (Rectangle.X + (Rectangle.Width / 2)) - (_font.MeasureString(Score).X / 2);
-                var y = (Rectangle.Y + (Rectangle.Height / 2)) - (_font.MeasureString(PlayerName).Y / 2);
+                var y = (Rectangle.Y + (Rectangle.Height / 2)) - (_font.MeasureString(Score).Y / 2);
 
                 spriteBatch.DrawString(_font, Score, new Vector2(x, y), PenColor);
-            }
-
-            if (string.IsNullOrEmpty(PlayerName)) return;
-            {
-                var x = (Rectangle.X + (Rectangle.Width / 2)) - (_font.MeasureString(PlayerName).X / 2);
-                var y = (Rectangle.Y + (Rectangle.Height / 2) - 40) - (_font.MeasureString(PlayerName).Y / 2);
-
-                spriteBatch.DrawString(_font, PlayerName, new Vector2(x, y), PenColor);
             }
         }
 

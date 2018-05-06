@@ -32,12 +32,14 @@ namespace AndroidSheep.Models.States
             AndroidButton doneButton = new AndroidButton(gameContent.Button, gameContent.Font)
             {
                 Position = new Vector2(240, 50),
-                Text = "Done?"
+                Text = "Done?",
+                Color = Color.White
             };
             swapButton = new AndroidButton(gameContent.Button, gameContent.Font)
             {
                 Position = new Vector2(740, 50),
-                Text = "Swap?"
+                Text = "Swap?",
+                Color = Color.White
             };
 
             swapButton.Click += SwapButton_Click;
@@ -57,6 +59,10 @@ namespace AndroidSheep.Models.States
         public void AssignBlind(IBlind blind)
         {
             this.Blind = blind;
+            foreach (var component in _components)
+            {
+                component.Color = Color.White;
+            }
         }
         private void DoneButton_Click(object sender, EventArgs e)
         {
@@ -191,6 +197,8 @@ namespace AndroidSheep.Models.States
                 _blindCard = null;
                 _wantsToSwap = false;
             }
+
+            _isDone = false;
             return Prompt;
         }
     }
