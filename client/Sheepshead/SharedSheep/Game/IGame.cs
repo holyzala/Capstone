@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using SharedSheep.Round;
-using SharedSheep.Deck;
 using SharedSheep.Player;
 using SharedSheep.Blind;
 using SharedSheep.Card;
@@ -18,7 +15,6 @@ namespace SharedSheep.Game
         IBlind Blind { get; }
         bool ForcedToPick { get; }
         ICard PartnerCard { get; }
-        bool CallOutForJack { get; }
 
         void StartGame(List<IPlayer> players, Prompt prompt);
 

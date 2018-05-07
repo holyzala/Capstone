@@ -51,7 +51,6 @@ namespace ConsoleSheep
             string prompt = "";
             int index;
             ITrick trick = null;
-            IGame game = null;
             IPlayer player = null;
             IPlayer picker = null;
             IBlind blind = null;
@@ -117,7 +116,7 @@ namespace ConsoleSheep
                     break;
 
                 case PromptType.GameOver:
-                    game = (IGame)data[PromptData.Game];
+                    var game = (IGame)data[PromptData.Game];
                     prompt = string.Format("Picker {0} got {1} points\n", game.Picker, game.GetPickerScore());
                     prompt += "Scoresheet:\n";
                     table.Players.ForEach(playerIt =>
