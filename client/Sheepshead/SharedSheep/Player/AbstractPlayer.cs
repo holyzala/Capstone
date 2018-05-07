@@ -9,9 +9,9 @@ namespace SharedSheep.Player
     public abstract class AbstractPlayer : IPlayer
     {
         public IHand Hand { get; set; }
-        public string Name { get; protected set; }
+        public string Name { get; }
 
-        public AbstractPlayer(string name)
+        protected AbstractPlayer(string name)
         {
             Name = name;
             Hand = new Hand.Hand();
@@ -35,7 +35,7 @@ namespace SharedSheep.Player
 
         protected ICard CallUp(Prompt prompt, IBlind blind)
         {
-            List<ICard> callUp = new List<ICard> {
+            var callUp = new List<ICard> {
                     new Card.Card(CardID.Jack, CardPower.JackHeart, Suit.Hearts),
                     new Card.Card(CardID.Jack, CardPower.JackSpade, Suit.Spades),
                     new Card.Card(CardID.Jack, CardPower.JackClub, Suit.Clubs),
@@ -44,16 +44,15 @@ namespace SharedSheep.Player
                     new Card.Card(CardID.Queen, CardPower.QueenSpade, Suit.Spades),
                     new Card.Card(CardID.Queen, CardPower.QueenClub, Suit.Clubs)
                 };
-            foreach (ICard card in callUp)
+            foreach (var card in callUp)
             {
-                if (!Hand.Cards.Contains(card) && !blind.BlindCards.Contains(card))
+                if (Hand.Cards.Contains(card) || blind.BlindCards.Contains(card))
+                    continue;
+                prompt(PromptType.CalledUp, new Dictionary<PromptData, object>
                 {
-                    prompt(PromptType.CalledUp, new Dictionary<PromptData, object>
-                    {
-                        { PromptData.Card, card }
-                    });
-                    return card;
-                }
+                    { PromptData.Card, card }
+                });
+                return card;
             }
             return null;
         }

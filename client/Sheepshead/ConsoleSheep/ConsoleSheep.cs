@@ -19,7 +19,8 @@ namespace ConsoleSheep
         {
             ConsoleSheep c = new ConsoleSheep();
             c.table = new Table(new LocalPlayer("Me"), c.Prompt);
-            while (c.table.Players.Count() < 5) {
+            while (c.table.Players.Count() < 5)
+            {
                 Console.Clear();
                 Console.WriteLine(String.Format("Add {0} more bots", 5 - c.table.Players.Count()));
                 Console.WriteLine("S for Simple");
@@ -31,9 +32,11 @@ namespace ConsoleSheep
                     case "s":
                         c.table.AddPlayer(new SimpleBot(name));
                         break;
+
                     case "e":
                         c.table.AddPlayer(new EasyBot(name));
                         break;
+
                     default:
                         continue;
                 }
@@ -102,8 +105,6 @@ namespace ConsoleSheep
                     });
                     break;
 
-                
-
                 case PromptType.RoundOver:
                     trick = ((IRound)data[PromptData.Round]).Trick;
                     trick = ((IRound)data[PromptData.Round]).Trick;
@@ -139,7 +140,7 @@ namespace ConsoleSheep
                     break;
 
                 case PromptType.CalledUp:
-                    prompt = string.Format("\nPicker called up to {0}\n", table.Games.Last().PartnerCard);
+                    prompt = string.Format("\nPicker called up to {0}\n", (ICard)data[PromptData.Card]);
                     break;
 
                 default:
